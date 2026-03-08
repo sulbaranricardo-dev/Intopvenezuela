@@ -3,342 +3,192 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>INTOP | Soluciones Hidroneumáticas B2B Premium</title>
+    <title>INTOP | Ingeniería Hidroneumática de Élite</title>
     
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
 
     <style>
         :root {
+            --azul-deep: #020d1c;
             --azul-primario: #004a99;
-            --azul-brillante: #00a8ff;
-            --azul-oscuro: #001a33;
+            --azul-neon: #00d2ff;
+            --azul-claro: #3a86ff;
             --blanco: #ffffff;
-            --gris-claro: #f8fafc;
-            --text-main: #334155;
-            --glass-bg: rgba(255, 255, 255, 0.8);
-            --glass-border: rgba(255, 255, 255, 0.3);
+            --gris-bg: #f8fafc;
+            --text-dark: #0f172a;
+            --text-light: #64748b;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Montserrat', sans-serif; /* Aplicada Montserrat globalmente */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Montserrat', sans-serif; }
+        html { scroll-behavior: smooth; }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: var(--azul-deep); }
+        ::-webkit-scrollbar-thumb { background: var(--azul-primario); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--azul-neon); }
+
+        body { background-color: var(--gris-bg); color: var(--text-dark); overflow-x: hidden; }
+
+        /* --- PRELOADER --- */
+        #preloader {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--azul-deep); display: flex; justify-content: center; align-items: center;
+            z-index: 9999; transition: opacity 0.8s ease, visibility 0.8s ease;
         }
+        #preloader img { width: 150px; animation: pulse 1.5s infinite alternate; filter: drop-shadow(0 0 20px rgba(0, 210, 255, 0.5)); }
+        @keyframes pulse { 0% { transform: scale(0.9); opacity: 0.7; } 100% { transform: scale(1.1); opacity: 1; filter: drop-shadow(0 0 40px rgba(0, 210, 255, 0.9)); } }
 
-        html {
-            scroll-behavior: smooth;
-        }
+        /* --- NAVEGACIÓN --- */
+        .header-container { position: fixed; top: 25px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 1100px; z-index: 1000; }
+        nav { display: flex; justify-content: space-between; align-items: center; padding: 10px 40px; background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-radius: 60px; border: 1px solid rgba(255, 255, 255, 0.5); box-shadow: 0 15px 35px rgba(0, 74, 153, 0.1); transition: all 0.3s ease; }
+        nav:hover { box-shadow: 0 20px 45px rgba(0, 210, 255, 0.15); }
+        .logo { display: flex; align-items: center; height: 100%; }
+        .logo img { height: 35px; display: block; transition: transform 0.4s; filter: brightness(0) saturate(100%) invert(18%) sepia(95%) deg(211deg) saturate(3135%) brightness(95%) contrast(101%);}
+        .logo img:hover { transform: scale(1.05); }
+        .nav-links { list-style: none; display: flex; align-items: center; gap: 35px; margin: 0; }
+        .nav-links a { color: var(--azul-deep); text-decoration: none; font-weight: 600; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1.5px; transition: 0.3s; position: relative; display: flex; align-items: center; gap: 8px; }
+        .nav-links a i { color: var(--azul-claro); font-size: 0.9rem; transition: 0.3s;}
+        .nav-links a::after { content: ''; position: absolute; bottom: -5px; left: 0; width: 0%; height: 2px; background: var(--azul-neon); transition: 0.3s; }
+        .nav-links a:hover { color: var(--azul-primario); }
+        .nav-links a:hover i { color: var(--azul-neon); transform: translateY(-2px);}
+        .nav-links a:hover::after { width: 100%; }
 
-        body {
-            background-color: var(--gris-claro);
-            color: var(--text-main);
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
+        /* --- HERO --- */
+        .hero { position: relative; min-height: 100vh; display: flex; align-items: center; padding: 0 5%; background: radial-gradient(circle at 80% 20%, #001a33 0%, var(--azul-deep) 100%); overflow: hidden; }
+        .blob { position: absolute; border-radius: 50%; filter: blur(80px); z-index: 1; animation: floatBlob 10s infinite alternate ease-in-out; }
+        .blob-1 { top: -10%; right: 10%; width: 400px; height: 400px; background: rgba(0, 210, 255, 0.15); }
+        .blob-2 { bottom: -20%; left: -10%; width: 500px; height: 500px; background: rgba(0, 74, 153, 0.2); animation-delay: -5s;}
+        @keyframes floatBlob { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(50px, 50px) scale(1.1); } }
+        .hero-container { display: flex; align-items: center; justify-content: center; width: 100%; max-width: 1100px; margin: 50px auto 0 auto; gap: 40px; z-index: 2; }
+        .hero-text { flex: 1; color: white; max-width: 550px; }
+        .hero-text h1 { font-size: 4rem; font-weight: 800; line-height: 1.1; margin-bottom: 20px; background: linear-gradient(90deg, #ffffff, var(--azul-neon)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero-text p { font-size: 1.1rem; font-weight: 300; color: #cbd5e1; margin-bottom: 40px; }
+        .hero-image { flex: 1; display: flex; justify-content: center; position: relative; max-width: 500px;}
+        .hero-image img { width: 100%; max-width: 480px; animation: floatImg 4s ease-in-out infinite; filter: drop-shadow(0 20px 30px rgba(0, 210, 255, 0.3)); }
+        @keyframes floatImg { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
 
-        /* --- NAVEGACIÓN FLOTANTE --- */
-        .header-container {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 90%;
-            max-width: 1200px;
-            z-index: 1000;
-        }
+        /* --- TÍTULOS DE SECCIÓN --- */
+        .section-title { text-align: center; font-size: 2.8rem; color: var(--azul-deep); margin-bottom: 70px; font-weight: 800; position: relative; }
+        .section-title span { color: var(--azul-primario); }
+        .section-title::after { content: ''; position: absolute; bottom: -15px; left: 50%; transform: translateX(-50%); width: 60px; height: 4px; background: var(--azul-neon); border-radius: 5px; }
 
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 30px;
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-radius: 50px;
-            border: 1px solid var(--glass-border);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-        }
+        /* --- BENTO BOX NOSOTROS --- */
+        .bento-section { padding: 120px 8% 60px; background-color: #ffffff; background-image: radial-gradient(#cbd5e1 1px, transparent 1px); background-size: 40px 40px; }
+        .bento-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; max-width: 1200px; margin: 0 auto; }
+        .bento-card { background: #ffffff; border-radius: 30px; padding: 40px; box-shadow: 0 15px 35px rgba(0,0,0,0.04); border: 1px solid rgba(0, 74, 153, 0.05); transition: transform 0.4s ease; display: flex; flex-direction: column; justify-content: center; }
+        .bento-card:hover { transform: translateY(-5px); box-shadow: 0 25px 50px rgba(0, 74, 153, 0.1); }
+        .bento-span-2 { grid-column: span 2; }
+        .bento-dark { background: linear-gradient(135deg, var(--azul-deep) 0%, var(--azul-primario) 100%); color: white; text-align: center; }
+        .bento-card h3 { color: var(--azul-deep); margin-bottom: 20px; font-size: 1.5rem; font-weight: 700; display: flex; align-items: center; gap: 15px; }
+        .bento-card h3 i { color: var(--azul-primario); font-size: 1.8rem; }
+        .bento-dark h3 { color: white; justify-content: center;}
+        .bento-card p { color: var(--text-light); font-size: 1rem; line-height: 1.7; font-weight: 400;}
+        .bento-dark p { color: #cbd5e1; }
+        .stat-number { font-size: 4.5rem; font-weight: 800; line-height: 1; margin-bottom: 10px; background: linear-gradient(90deg, #ffffff, var(--azul-neon)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .ops-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        .ops-table td { padding: 12px 0; border-bottom: 1px solid #f1f5f9; font-size: 0.95rem; color: var(--text-dark); }
+        .ops-table td i { color: var(--azul-primario); margin-right: 10px; width: 20px; text-align: center;}
+        .ops-table td:nth-child(2) { font-weight: 600; text-align: right; }
 
-        .logo img {
-            height: 40px; /* Ajuste para el nuevo logo */
-            transition: transform 0.3s;
-        }
-
-        .nav-links {
-            list-style: none;
-            display: flex;
-            align-items: center;
-        }
-
-        .nav-links li { margin-left: 25px; }
-
-        .nav-links a {
-            color: var(--azul-oscuro);
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .nav-links a i {
-            color: var(--azul-primario);
-            font-size: 0.9rem;
-        }
-
-        .nav-links a:hover { color: var(--azul-brillante); }
-
-        /* --- HERO SECTION --- */
-        .hero {
-            height: 100vh;
-            background: linear-gradient(rgba(0, 26, 51, 0.5), rgba(0, 74, 153, 0.7)), 
-                        url('https://images.unsplash.com/photo-1518173946687-a4c8892bbd9f?q=80&w=1920');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            color: white;
-            padding: 0 20px;
-        }
-
-        .hero-content h1 {
-            font-size: 3.5rem;
-            font-weight: 700;
-            margin-bottom: 20px;
-            text-shadow: 0 4px 10px rgba(0,0,0,0.2);
-            line-height: 1.2;
-        }
-
-        .hero-content p {
-            font-size: 1.2rem;
-            margin-bottom: 40px;
-            max-width: 700px;
-            margin-left: auto;
-            margin-right: auto;
-            opacity: 0.9;
-            font-weight: 300;
-        }
-
-        /* --- SECCIONES GENERALES --- */
-        .section-title {
-            text-align: center;
-            font-size: 2.5rem;
-            color: var(--azul-oscuro);
-            margin-bottom: 60px;
-            font-weight: 700;
-        }
-
-        .section-title span {
-            border-bottom: 4px solid var(--azul-brillante);
-            padding-bottom: 5px;
-        }
-
-        /* --- NOSOTROS (Corrección de legibilidad) --- */
-        .nosotros {
-            padding: 120px 8%;
-            background: url('https://images.unsplash.com/photo-1581094160933-728b4998781a?q=80&w=1920') no-repeat center;
-            background-size: cover;
-            background-attachment: fixed;
-            position: relative;
-        }
-
-        .glass-overlay {
-            background: rgba(0, 26, 51, 0.6); /* Fondo más oscuro para contraste */
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            padding: 80px 60px;
-            border-radius: 30px;
-            border: 1px solid rgba(255,255,255,0.1);
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 50px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
-        }
-
-        .nosotros-text h2 { color: white; font-size: 2.5rem; margin-bottom: 25px; font-weight: 700;}
-        .nosotros-text p { color: rgba(255,255,255,0.9); font-size: 1rem; font-weight: 300;}
-
-        .glass-card {
-            background: rgba(255, 255, 255, 1); /* Opaco para legibilidad máxima */
-            padding: 35px;
-            border-radius: 20px;
-            transition: 0.3s;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            color: var(--text-main); /* Texto oscuro */
-        }
-
-        .glass-card:hover { transform: translateY(-5px); }
-
-        .glass-card h3 { 
-            color: var(--azul-primario); 
-            margin-bottom: 15px; 
-            display: flex; 
-            align-items: center; 
-            gap: 12px; 
-            font-size: 1.3rem;
-            font-weight: 600;
-        }
-        .glass-card h3 i { color: var(--azul-brillante); }
-        .glass-card p { font-size: 0.95rem; font-weight: 400; color: #475569;}
+        /* --- NUEVO: CINTA DE CERTIFICACIONES (Trust Factor) --- */
+        .trust-marquee { background: var(--azul-deep); padding: 25px 0; overflow: hidden; position: relative; border-top: 1px solid rgba(255,255,255,0.1); border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .trust-marquee::before, .trust-marquee::after { content: ""; position: absolute; top: 0; width: 150px; height: 100%; z-index: 2; }
+        .trust-marquee::before { left: 0; background: linear-gradient(to right, var(--azul-deep), transparent); }
+        .trust-marquee::after { right: 0; background: linear-gradient(to left, var(--azul-deep), transparent); }
+        .marquee-content { display: flex; width: max-content; animation: scroll-left 25s linear infinite; }
+        .marquee-item { color: rgba(255,255,255,0.6); font-size: 1.2rem; font-weight: 600; display: flex; align-items: center; gap: 10px; margin: 0 40px; text-transform: uppercase; letter-spacing: 2px;}
+        .marquee-item i { color: var(--azul-neon); font-size: 1.5rem; }
+        @keyframes scroll-left { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
         /* --- PRODUCTOS --- */
-        .productos { padding: 120px 8%; background-color: white; }
+        .productos { padding: 120px 8%; background-color: var(--gris-bg); position: relative;}
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 40px; max-width: 1200px; margin: 0 auto; }
+        .product-card { background: var(--blanco); border-radius: 30px; padding: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.04); border: 1px solid rgba(0,0,0,0.02); transform-style: preserve-3d; }
+        .img-container { background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); border-radius: 20px; height: 280px; display: flex; align-items: center; justify-content: center; position: relative; transform: translateZ(50px); }
+        .img-container img { max-width: 85%; max-height: 85%; object-fit: contain; filter: drop-shadow(0 15px 15px rgba(0,0,0,0.1)); }
+        .product-info { padding: 30px 10px 10px; transform: translateZ(30px); }
+        .product-info h3 { color: var(--azul-deep); margin-bottom: 20px; font-size: 1.3rem; font-weight: 700;}
+        .info-table { width: 100%; font-size: 0.85rem; margin-bottom: 25px; border-collapse: collapse; }
+        .info-table td { padding: 12px 0; border-bottom: 1px dashed #cbd5e1; color: var(--text-light); font-weight: 500; }
+        .info-table td i { margin-right: 12px; color: var(--azul-claro); width: 20px; text-align: center; }
+        .info-table td:nth-child(2) { text-align: right; font-weight: 700; color: var(--azul-deep); }
 
-        .product-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 35px;
-        }
+        /* --- NUEVO: BENEFICIOS B2B --- */
+        .beneficios { padding: 100px 8%; background: white; }
+        .b2b-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; max-width: 1200px; margin: 0 auto; }
+        .b2b-card { text-align: center; padding: 40px 20px; border-radius: 20px; transition: 0.3s; }
+        .b2b-card:hover { transform: translateY(-10px); background: var(--gris-bg); box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        .icon-wrapper { width: 80px; height: 80px; background: rgba(0, 74, 153, 0.05); border-radius: 50%; display: flex; justify-content: center; align-items: center; margin: 0 auto 25px auto; font-size: 2rem; color: var(--azul-primario); transition: 0.4s; }
+        .b2b-card:hover .icon-wrapper { background: var(--azul-primario); color: white; box-shadow: 0 10px 20px rgba(0, 74, 153, 0.3); }
+        .b2b-card h4 { font-size: 1.2rem; color: var(--azul-deep); margin-bottom: 15px; font-weight: 700; }
+        .b2b-card p { font-size: 0.95rem; color: var(--text-light); }
 
-        .product-card {
-            background: var(--gris-claro);
-            border-radius: 25px;
-            overflow: hidden;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.03);
-            transition: 0.4s ease-in-out;
-            position: relative;
-            border: 1px solid #eee;
-        }
+        /* --- NUEVO: SOPORTE Y GARANTÍA --- */
+        .soporte { padding: 100px 8%; background: var(--azul-deep); color: white; display: flex; align-items: center; justify-content: center; }
+        .soporte-container { display: flex; max-width: 1200px; gap: 60px; align-items: center; }
+        .soporte-text { flex: 1; }
+        .soporte-text h2 { font-size: 2.5rem; margin-bottom: 20px; color: white; }
+        .soporte-text span { color: var(--azul-neon); }
+        .soporte-list { list-style: none; margin-top: 30px; }
+        .soporte-list li { margin-bottom: 20px; display: flex; align-items: flex-start; gap: 15px; font-size: 1.05rem; color: #cbd5e1; }
+        .soporte-list i { color: var(--azul-neon); font-size: 1.5rem; margin-top: 2px; }
+        .soporte-img { flex: 1; position: relative; }
+        .soporte-img img { width: 100%; border-radius: 20px; opacity: 0.8; }
+        .soporte-badge { position: absolute; bottom: -20px; left: -20px; background: var(--azul-primario); padding: 20px 30px; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.2); }
+        .soporte-badge h4 { font-size: 2rem; margin: 0; color: white; }
+        .soporte-badge p { margin: 0; color: var(--azul-neon); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; font-size: 0.8rem; }
 
-        .product-card:hover { transform: translateY(-15px); box-shadow: 0 20px 60px rgba(0,74,153,0.1); border-color: rgba(0,74,153,0.1); }
-
-        .img-container {
-            position: relative;
-            overflow: hidden;
-            background: #fff;
-            height: 280px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .img-container img {
-            max-width: 85%;
-            max-height: 85%;
-            object-fit: contain;
-            padding: 10px;
-        }
-
-        .img-container::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 50%;
-            height: 100%;
-            background: linear-gradient(to right, transparent, rgba(255,255,255,0.7), transparent);
-            transform: skewX(-25deg);
-            transition: 0.8s;
-        }
-
-        .product-card:hover .img-container::before { left: 150%; }
-
-        .product-info { padding: 30px; }
-
-        .product-info h3 { color: var(--azul-oscuro); margin-bottom: 20px; font-size: 1.2rem; font-weight: 600;}
-
-        .info-table {
-            width: 100%;
-            font-size: 0.85rem;
-            margin-bottom: 25px;
-            border-collapse: collapse;
-        }
-
-        .info-table td {
-            padding: 10px 0;
-            border-bottom: 1px solid #e2e8f0;
-            color: var(--text-main);
-            font-weight: 400;
-        }
-
-        .info-table td i { margin-right: 10px; color: var(--azul-primario); width: 20px; text-align: center; font-size: 0.9rem;}
-
-        .info-table td:nth-child(2) {
-            text-align: right;
-            font-weight: 600;
-            color: var(--azul-oscuro);
-        }
+        /* --- NUEVO: FORMULARIO DE CAPTACIÓN B2B --- */
+        .captacion { padding: 120px 8%; background: url('https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?q=80&w=1920') center/cover fixed; position: relative; }
+        .captacion::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(2, 13, 28, 0.85); backdrop-filter: blur(5px); }
+        .form-container { position: relative; z-index: 2; max-width: 700px; margin: 0 auto; background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); padding: 50px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 30px 60px rgba(0,0,0,0.5); text-align: center; }
+        .form-container h2 { color: white; font-size: 2.2rem; margin-bottom: 10px; }
+        .form-container p { color: #cbd5e1; margin-bottom: 30px; }
+        .form-group { margin-bottom: 20px; text-align: left; }
+        .form-group label { display: block; color: var(--azul-neon); font-size: 0.85rem; font-weight: 600; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
+        .form-control { width: 100%; padding: 15px 20px; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.2); border-radius: 12px; color: white; font-size: 1rem; transition: 0.3s; font-family: 'Montserrat', sans-serif;}
+        .form-control:focus { outline: none; border-color: var(--azul-neon); background: rgba(0,0,0,0.4); box-shadow: 0 0 15px rgba(0, 210, 255, 0.2); }
+        .form-control::placeholder { color: rgba(255,255,255,0.4); }
+        .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
 
         /* --- BOTONES --- */
-        .btn {
-            display: inline-block;
-            padding: 14px 35px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: 0.3s;
-            cursor: pointer;
-            border: none;
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .btn-blue {
-            background: var(--azul-primario);
-            color: white;
-            box-shadow: 0 5px 20px rgba(0, 74, 153, 0.3);
-        }
-
-        .btn-blue:hover { background: var(--azul-brillante); transform: scale(1.03); box-shadow: 0 8px 25px rgba(0, 74, 153, 0.4); }
-
-        /* SweetAlert Montserrat */
-        .swal2-popup { font-family: 'Montserrat', sans-serif !h; }
-
-        .swal-tech-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
-            font-size: 0.85rem;
-            text-align: left;
-        }
-        .swal-tech-table th, .swal-tech-table td {
-            padding: 12px;
-            border-bottom: 1px solid #eee;
-            font-weight: 400;
-        }
-        .swal-tech-table th { background-color: #f8fafc; color: var(--azul-oscuro); font-weight: 600;}
+        .btn { display: inline-block; padding: 15px 40px; border-radius: 50px; text-decoration: none; font-weight: 600; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1.5px; cursor: pointer; border: none; position: relative; overflow: hidden; z-index: 1; transition: 0.4s; }
+        .btn-neon { background: var(--azul-neon); color: var(--azul-deep); box-shadow: 0 10px 25px rgba(0, 210, 255, 0.4); }
+        .btn-neon::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent); transition: 0.5s; z-index: -1; }
+        .btn-neon:hover::before { left: 100%; }
+        .btn-neon:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(0, 210, 255, 0.6); }
+        .btn-outline { background: transparent; border: 2px solid var(--azul-primario); color: var(--azul-primario); width: 100%; text-align: center; }
+        .btn-outline:hover { background: var(--azul-primario); color: white; }
 
         /* --- FOOTER --- */
-        footer {
-            background: var(--azul-oscuro);
-            color: rgba(255,255,255,0.7);
-            padding: 80px 8% 30px;
-            text-align: center;
-        }
+        footer { background: var(--azul-deep); color: #cbd5e1; padding: 80px 8% 30px; position: relative; overflow: hidden; border-top: 1px solid rgba(255,255,255,0.05); }
+        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 50px; margin-bottom: 60px; max-width: 1200px; margin: 0 auto 50px auto;}
+        .footer-grid h4 { color: white; margin-bottom: 25px; font-size: 1.1rem; font-weight: 700; letter-spacing: 1px;}
+        .footer-grid p { margin-bottom: 12px; font-size: 0.9rem; font-weight: 300;}
 
-        .footer-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 50px;
-            margin-bottom: 50px;
-            text-align: left;
-        }
-
-        .footer-grid h4 { color: white; margin-bottom: 20px; font-size: 1rem; font-weight: 600;}
-        .footer-grid p { margin-bottom: 10px; font-size: 0.9rem; font-weight: 300;}
-
+        /* --- RESPONSIVE --- */
         @media (max-width: 992px) {
-            .hero-content h1 { font-size: 2.5rem; }
-            .glass-overlay { grid-template-columns: 1fr; padding: 40px;}
+            .hero-container { flex-direction: column; text-align: center; margin-top: 100px;}
+            .hero-text { padding-right: 0; margin-bottom: 40px; }
+            .hero-text h1 { font-size: 3rem; }
             .nav-links { display: none; }
+            .bento-grid { grid-template-columns: 1fr; }
+            .bento-span-2 { grid-column: span 1; }
+            .soporte-container { flex-direction: column; }
+            .row-2 { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
+
+    <div id="preloader"><img src="https://i.postimg.cc/j5BPB72H/INTOP-BETTER-TOGETHER-transparente-copia.png" alt="Cargando INTOP"></div>
 
     <div class="header-container">
         <nav>
@@ -346,154 +196,290 @@
                 <img src="https://i.postimg.cc/j5BPB72H/INTOP-BETTER-TOGETHER-transparente-copia.png" alt="INTOP Logo">
             </div>
             <ul class="nav-links">
-                <li><a href="#inicio"><i class="fa-solid fa-house"></i>Inicio</a></li>
-                <li><a href="#nosotros"><i class="fa-solid fa-building"></i>Nosotros</a></li>
-                <li><a href="#productos"><i class="fa-solid fa-boxes-stacked"></i>Productos</a></li>
-                <li><a href="#contacto"><i class="fa-solid fa-envelope"></i>Contacto</a></li>
+                <li><a href="#inicio"><i class="fa-solid fa-house"></i> Inicio</a></li>
+                <li><a href="#nosotros"><i class="fa-solid fa-building"></i> Corporativo</a></li>
+                <li><a href="#productos"><i class="fa-solid fa-microchip"></i> Tecnología</a></li>
+                <li><a href="#unete"><i class="fa-solid fa-handshake"></i> Red B2B</a></li>
             </ul>
         </nav>
     </div>
 
     <section id="inicio" class="hero">
-        <div class="hero-content" data-aos="fade-up">
-            <h1>Ingeniería Hidráulica <br>para <span style="color: var(--azul-brillante);">Profesionales</span></h1>
-            <p>Distribución exclusiva y soporte técnico de alto nivel para tu red comercial.</p>
-            <button class="btn btn-blue" onclick="alertaVenta()">Solicitar Catálogo B2B</button>
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="hero-container">
+            <div class="hero-text" data-aos="fade-right">
+                <p style="color: var(--azul-neon); font-weight: 600; letter-spacing: 2px; margin-bottom: 10px;">EXCLUSIVO PARA DISTRIBUIDORES</p>
+                <h1>Potencia & Precisión Hidráulica.</h1>
+                <p>Equipamiento industrial de última generación. Optimiza tu catálogo con tecnología que garantiza rendimiento extremo y rentabilidad.</p>
+                <a href="#unete" class="btn btn-neon"><i class="fa-solid fa-bolt" style="margin-right: 8px;"></i> Portal Mayorista</a>
+            </div>
+            <div class="hero-image" data-aos="fade-left" data-aos-delay="300">
+                <img src="https://i.postimg.cc/WbTPgfbs/Generated_Image_February_17_2026_1_37PM_Photoroom.png" alt="Tecnología de Bombeo INTOP">
+            </div>
         </div>
     </section>
 
-    <section id="nosotros" class="nosotros">
-        <div class="glass-overlay" data-aos="zoom-in">
-            <div class="nosotros-text">
-                <h2>INTOP Suministros</h2>
-                <p>No somos solo un proveedor; somos tu socio estratégico. Nos especializamos en equipamiento hidroneumático de alta gama, garantizando a nuestros distribuidores productos certificados, tiempos de respuesta inmediatos y un margen comercial competitivo.</p>
+    <section id="nosotros" class="bento-section">
+        <h2 class="section-title">Infraestructura <span>Corporativa</span></h2>
+        <div class="bento-grid" data-aos="fade-up">
+            <div class="bento-card bento-span-2">
+                <h3><i class="fa-solid fa-crosshairs"></i> Identidad y Misión</h3>
+                <p>No competimos, establecemos el parámetro. Proveemos soluciones hidroneumáticas diseñadas bajo rigurosos controles de ingeniería. Nuestra misión es dotar a la industria de equipos de presurización que maximicen la eficiencia energética y operativa, garantizando altos márgenes comerciales.</p>
             </div>
-            <div class="nosotros-cards">
-                <div class="glass-card" style="margin-bottom: 25px;">
-                    <h3><i class="fa-solid fa-rocket"></i>Nuestra Misión</h3>
-                    <p>Potenciar el crecimiento de nuestros aliados comerciales mediante tecnología hidráulica eficiente y duradera.</p>
-                </div>
-                <div class="glass-card">
-                    <h3><i class="fa-solid fa-eye"></i>Nuestra Visión</h3>
-                    <p>Liderar el mercado de distribución hidroneumática en el continente para el 2030, reconocidos por la excelencia técnica.</p>
-                </div>
+            <div class="bento-card bento-dark">
+                <div class="stat-number">< 0.1%</div>
+                <h3 style="margin-bottom: 5px;">Tasa de Fallo</h3>
+                <p>Calidad industrial certificada</p>
+            </div>
+            <div class="bento-card">
+                <h3><i class="fa-solid fa-map-location-dot"></i> Hub Operativo</h3>
+                <p>Gestión logística centralizada para garantizar entregas ágiles a toda nuestra red.</p>
+                <table class="ops-table">
+                    <tr><td><i class="fa-solid fa-location-crosshairs"></i> Sede:</td><td>Maturín, Venezuela</td></tr>
+                    <tr><td><i class="fa-solid fa-truck-fast"></i> Cobertura:</td><td>Nacional</td></tr>
+                    <tr><td><i class="fa-solid fa-boxes-stacked"></i> Stock:</td><td>Continuo 365</td></tr>
+                </table>
+            </div>
+            <div class="bento-card bento-span-2">
+                <h3><i class="fa-solid fa-eye"></i> Nuestra Visión 2030</h3>
+                <p>Ser la infraestructura tecnológica invisible pero indispensable detrás de cada sistema de agua a nivel continental. Apuntamos a consolidar la red de distribución hidroneumática más robusta basada en alianzas sólidas.</p>
             </div>
         </div>
     </section>
+
+    <div class="trust-marquee">
+        <div class="marquee-content">
+            <span class="marquee-item"><i class="fa-solid fa-certificate"></i> Certificación ISO 9001</span>
+            <span class="marquee-item"><i class="fa-solid fa-shield-halved"></i> Calidad CE Europea</span>
+            <span class="marquee-item"><i class="fa-solid fa-cubes"></i> Acero Inoxidable AISI 304</span>
+            <span class="marquee-item"><i class="fa-solid fa-bolt"></i> Motores de Alta Eficiencia</span>
+            <span class="marquee-item"><i class="fa-solid fa-leaf"></i> Estándar RoHS (Eco-Friendly)</span>
+            <span class="marquee-item"><i class="fa-solid fa-certificate"></i> Certificación ISO 9001</span>
+            <span class="marquee-item"><i class="fa-solid fa-shield-halved"></i> Calidad CE Europea</span>
+            <span class="marquee-item"><i class="fa-solid fa-cubes"></i> Acero Inoxidable AISI 304</span>
+            <span class="marquee-item"><i class="fa-solid fa-bolt"></i> Motores de Alta Eficiencia</span>
+        </div>
+    </div>
 
     <section id="productos" class="productos">
-        <h2 class="section-title"><span>Equipos Destacados</span></h2>
+        <h2 class="section-title">Ingeniería en <span>Detalle</span></h2>
         <div class="product-grid">
-            
-            <div class="product-card" data-aos="fade-up">
+            <div class="product-card" data-tilt data-tilt-glare data-tilt-max-glare="0.5" data-tilt-max="10" data-tilt-speed="400" data-aos="fade-up">
                 <div class="img-container">
                     <img src="https://i.postimg.cc/WbTPgfbs/Generated_Image_February_17_2026_1_37PM_Photoroom.png" alt="Bomba Periférica">
                 </div>
                 <div class="product-info">
-                    <h3>Bomba Periférica IP-100</h3>
+                    <h3>Serie IP-100 Periférica</h3>
                     <table class="info-table">
-                        <tr><td><i class="fa-solid fa-gauge-high"></i>Potencia</td><td>1.0 HP</td></tr>
+                        <tr><td><i class="fa-solid fa-gauge-high"></i>Potencia</td><td>1.0 HP / 0.75kW</td></tr>
                         <tr><td><i class="fa-solid fa-water"></i>Caudal Máx.</td><td>55 L/min</td></tr>
-                        <tr><td><i class="fa-solid fa-arrow-up-from-ground-water"></i>Altura Máx.</td><td>65 m</td></tr>
+                        <tr><td><i class="fa-solid fa-arrow-up-from-ground-water"></i>Elevación</td><td>65 Metros</td></tr>
                     </table>
-                    <button class="btn btn-blue" onclick="verFichaTecnica('Bomba Periférica IP-100')">Ficha Técnica</button>
+                    <button class="btn btn-outline" onclick="verFichaTecnica('Serie IP-100 Periférica')">Especificaciones</button>
                 </div>
             </div>
-
-            <div class="product-card" data-aos="fade-up" data-aos-delay="150">
+            <div class="product-card" data-tilt data-tilt-glare data-tilt-max-glare="0.5" data-tilt-max="10" data-tilt-speed="400" data-aos="fade-up" data-aos-delay="150">
                 <div class="img-container">
                     <img src="https://i.postimg.cc/Qxhr1nx8/Generated_Image_February_17_2026_1_42PM_Photoroom.png" alt="Bomba Sumergible">
                 </div>
                 <div class="product-info">
-                    <h3>Bomba Pozo Profundo SP-4"</h3>
+                    <h3>Serie SP-4" Sumergible</h3>
                     <table class="info-table">
-                        <tr><td><i class="fa-solid fa-arrows-down-to-line"></i>Inmersión</td><td>150 m</td></tr>
-                        <tr><td><i class="fa-solid fa-shield-halved"></i>Material</td><td>Acero Inox 304</td></tr>
-                        <tr><td><i class="fa-solid fa-plug"></i>Voltaje</td><td>220v Trifásica</td></tr>
+                        <tr><td><i class="fa-solid fa-arrows-down-to-line"></i>Inmersión</td><td>Hasta 150m</td></tr>
+                        <tr><td><i class="fa-solid fa-shield-halved"></i>Aleación</td><td>Acero Inox 304</td></tr>
+                        <tr><td><i class="fa-solid fa-plug"></i>Fase</td><td>Trifásica 220V</td></tr>
                     </table>
-                    <button class="btn btn-blue" onclick="verFichaTecnica('Bomba Sumergible SP-4')">Ficha Técnica</button>
+                    <button class="btn btn-outline" onclick="verFichaTecnica('Serie SP-4 Sumergible')">Especificaciones</button>
                 </div>
             </div>
-
-            <div class="product-card" data-aos="fade-up" data-aos-delay="300">
+            <div class="product-card" data-tilt data-tilt-glare data-tilt-max-glare="0.5" data-tilt-max="10" data-tilt-speed="400" data-aos="fade-up" data-aos-delay="300">
                 <div class="img-container">
                     <img src="https://i.postimg.cc/SNkpCtNC/Generated_Image_March_07_2026_1_38PM_Photoroom.png" alt="Tanque de Agua">
                 </div>
                 <div class="product-info">
-                    <h3>Tanque Vertical Pro-Tank</h3>
+                    <h3>Pro-Tank Acumulador</h3>
                     <table class="info-table">
-                        <tr><td><i class="fa-solid fa-database"></i>Capacidad</td><td>120 Litros</td></tr>
-                        <tr><td><i class="fa-solid fa-circle-dot"></i>Presión</td><td>Precargado 40 PSI</td></tr>
-                        <tr><td><i class="fa-solid fa-layer-group"></i>Conexión</td><td>1" NPT</td></tr>
+                        <tr><td><i class="fa-solid fa-database"></i>Volumen</td><td>120 Litros</td></tr>
+                        <tr><td><i class="fa-solid fa-compress"></i>Precarga</td><td>40 PSI (N2)</td></tr>
+                        <tr><td><i class="fa-solid fa-layer-group"></i>Membrana</td><td>EPDM Intercambiable</td></tr>
                     </table>
-                    <button class="btn btn-blue" onclick="verFichaTecnica('Tanque Vertical 120L')">Ficha Técnica</button>
+                    <button class="btn btn-outline" onclick="verFichaTecnica('Pro-Tank 120L')">Especificaciones</button>
                 </div>
             </div>
+        </div>
+    </section>
 
+    <section class="beneficios">
+        <h2 class="section-title">Ventajas <span>Competitivas B2B</span></h2>
+        <div class="b2b-grid" data-aos="fade-up">
+            <div class="b2b-card">
+                <div class="icon-wrapper"><i class="fa-solid fa-chart-line"></i></div>
+                <h4>Márgenes Superiores</h4>
+                <p>Estructura de precios escalonada por volumen que garantiza la mayor rentabilidad del mercado para tu negocio.</p>
+            </div>
+            <div class="b2b-card">
+                <div class="icon-wrapper"><i class="fa-solid fa-boxes-stacked"></i></div>
+                <h4>Inventario Blindado</h4>
+                <p>Evita quiebres de stock. Nuestro centro logístico en Maturín asegura reposición inmediata para grandes volúmenes.</p>
+            </div>
+            <div class="b2b-card">
+                <div class="icon-wrapper"><i class="fa-solid fa-person-chalkboard"></i></div>
+                <h4>Capacitación Técnica</h4>
+                <p>Entrenamos a tu fuerza de ventas. Les otorgamos las herramientas y el conocimiento para vender más y mejor.</p>
+            </div>
+            <div class="b2b-card">
+                <div class="icon-wrapper"><i class="fa-solid fa-hand-holding-dollar"></i></div>
+                <h4>Protección de Precios</h4>
+                <p>Respetamos la cadena de distribución. Políticas comerciales estrictas que protegen el margen de nuestros aliados.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="soporte">
+        <div class="soporte-container">
+            <div class="soporte-text" data-aos="fade-right">
+                <h2>Respaldo Total <span>Post-Venta</span></h2>
+                <p style="font-size: 1.1rem; color: #cbd5e1; margin-bottom: 20px;">Vende con confianza. En INTOP sabemos que tu reputación está en juego en cada venta. Por eso, asumimos la responsabilidad técnica.</p>
+                <ul class="soporte-list">
+                    <li><i class="fa-solid fa-circle-check"></i> Garantía de sustitución directa para fallos de fábrica confirmados.</li>
+                    <li><i class="fa-solid fa-microchip"></i> Acceso a portal exclusivo con manuales, curvas de rendimiento y despieces CAD.</li>
+                    <li><i class="fa-solid fa-headset"></i> Línea directa de ingenieros de soporte para asistencia en instalaciones complejas.</li>
+                </ul>
+            </div>
+            <div class="soporte-img" data-aos="fade-left">
+                <img src="https://images.unsplash.com/photo-1581092160562-40aa08e78837?q=80&w=800" alt="Soporte Técnico INTOP">
+                <div class="soporte-badge">
+                    <h4>24</h4>
+                    <p>Meses de Garantía</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="unete" class="captacion">
+        <div class="form-container" data-aos="zoom-in">
+            <h2>Únete a la Red INTOP</h2>
+            <p>Solicita la evaluación de tu perfil comercial y accede a nuestra lista de precios para distribuidores exclusivos.</p>
+            
+            <form id="b2bForm" onsubmit="enviarFormulario(event)">
+                <div class="row-2">
+                    <div class="form-group">
+                        <label>Nombre de la Empresa / Razón Social</label>
+                        <input type="text" class="form-control" required placeholder="Ej. Bombas del Oriente C.A.">
+                    </div>
+                    <div class="form-group">
+                        <label>RIF / Identificación Fiscal</label>
+                        <input type="text" class="form-control" required placeholder="J-12345678-9">
+                    </div>
+                </div>
+                <div class="row-2">
+                    <div class="form-group">
+                        <label>Estado / Ciudad</label>
+                        <input type="text" class="form-control" required placeholder="Ej. Maturín, Monagas">
+                    </div>
+                    <div class="form-group">
+                        <label>Teléfono Corporativo</label>
+                        <input type="tel" class="form-control" required placeholder="+58 414 000 0000">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Correo Electrónico Comercial</label>
+                    <input type="email" class="form-control" required placeholder="compras@tuempresa.com">
+                </div>
+                <div class="form-group" style="margin-bottom: 30px;">
+                    <label>Volumen Estimado de Compra (Mensual)</label>
+                    <select class="form-control" required style="appearance: none; background-image: url('data:image/svg+xml;utf8,<svg fill=%22white%22 height=%2224%22 viewBox=%220 0 24 24%22 width=%2224%22 xmlns=%22http://www.w3.org/2000/svg%22><path d=%22M7 10l5 5 5-5z%22/></svg>'); background-repeat: no-repeat; background-position: right 15px center;">
+                        <option value="" disabled selected>Selecciona un rango...</option>
+                        <option value="1">10 - 50 Unidades</option>
+                        <option value="2">50 - 200 Unidades</option>
+                        <option value="3">Más de 200 Unidades</option>
+                        <option value="4">Integrador de Proyectos</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-neon" style="width: 100%; font-size: 1rem;"><i class="fa-solid fa-paper-plane" style="margin-right: 10px;"></i> Solicitar Acceso Mayorista</button>
+            </form>
         </div>
     </section>
 
     <footer id="contacto">
         <div class="footer-grid">
             <div>
-                <img src="https://i.postimg.cc/j5BPB72H/INTOP-BETTER-TOGETHER-transparente-copia.png" height="35" alt="INTOP" style="margin-bottom: 20px;">
-                <p>Excelencia hidráulica para el mercado mayorista.</p>
+                <img src="https://i.postimg.cc/j5BPB72H/INTOP-BETTER-TOGETHER-transparente-copia.png" height="40" alt="INTOP" style="margin-bottom: 25px;">
+                <p>Ingeniería que fluye, potencia que impulsa.</p>
+                <div style="margin-top: 20px; display: flex; gap: 15px;">
+                    <a href="#" style="color: white; font-size: 1.2rem;"><i class="fa-brands fa-linkedin"></i></a>
+                    <a href="#" style="color: white; font-size: 1.2rem;"><i class="fa-brands fa-instagram"></i></a>
+                </div>
             </div>
             <div>
-                <h4><i class="fa-solid fa-headset" style="margin-right: 10px; color: var(--azul-brillante);"></i>Soporte B2B</h4>
-                <p>Horario: Lun-Vie 8:00am - 5:00pm</p>
-                <p>Email: soporte.tecnico@intop.com</p>
+                <h4><i class="fa-solid fa-headset" style="margin-right: 10px; color: var(--azul-neon);"></i>Atención Comercial</h4>
+                <p><i class="fa-regular fa-clock" style="margin-right: 8px; width: 15px;"></i> Lun-Vie 08:00 - 17:00</p>
+                <p><i class="fa-regular fa-envelope" style="margin-right: 8px; width: 15px;"></i> distribuidores@intop.com</p>
             </div>
             <div>
-                <h4><i class="fa-solid fa-location-dot" style="margin-right: 10px; color: var(--azul-brillante);"></i>Ubicación</h4>
-                <p>Caracas, Venezuela</p>
-                <p>Tel Central: +58 (212) 555-0100</p>
+                <h4><i class="fa-solid fa-location-dot" style="margin-right: 10px; color: var(--azul-neon);"></i>Sede Principal</h4>
+                <p>Maturín, Monagas, Venezuela</p>
+                <p><i class="fa-solid fa-phone" style="margin-right: 8px; width: 15px;"></i> +58 (212) 555-INTOP</p>
             </div>
         </div>
-        <hr style="opacity: 0.1; margin-bottom: 25px;">
-        <p style="font-size: 0.8rem; font-weight: 300;">&copy; 2026 INTOP Suministros. Todos los derechos reservados. Venta exclusiva a distribuidores.</p>
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; max-width: 1200px; margin: 0 auto;">
+            <p style="font-size: 0.8rem; font-weight: 300; margin: 0;">&copy; 2026 INTOP. Acceso restringido a red de distribuidores.</p>
+            <p style="font-size: 0.8rem; font-weight: 500; color: var(--azul-neon); margin: 0;">BETTER TOGETHER</p>
+        </div>
     </footer>
 
     <script>
-        AOS.init({ duration: 1000, once: true });
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('preloader').style.opacity = '0';
+                setTimeout(() => { document.getElementById('preloader').style.visibility = 'hidden'; }, 800);
+            }, 1000); 
+        });
 
-        function alertaVenta() {
-            Swal.fire({
-                title: 'Acceso Mayorista',
-                text: 'Para descargar el catálogo de precios B2B, por favor contáctanos para validar tu cuenta de distribuidor.',
-                icon: 'info',
-                confirmButtonColor: '#004a99',
-                confirmButtonText: 'Contactar Ventas'
-            });
-        }
+        AOS.init({ duration: 1000, once: true, offset: 50 });
 
         function verFichaTecnica(producto) {
             Swal.fire({
-                title: `Detalles Técnicos`,
-                iconHtml: '<i class="fa-solid fa-file-pdf" style="color: #dc2626; font-size: 3rem;"></i>',
-                customClass: { icon: 'no-border' },
+                title: `Ingeniería: ${producto}`,
+                iconHtml: '<i class="fa-solid fa-file-pdf" style="color: #e11d48; font-size: 3.5rem;"></i>',
+                customClass: { icon: 'no-border'},
                 html: `
-                    <div style="text-align: left; margin-top: 20px;">
-                        <h3 style="color: #001a33; margin-bottom: 10px; font-size: 1.1rem; font-weight: 600;">${producto}</h3>
-                        <p style="font-size: 0.85rem; color: #666; margin-bottom: 15px; font-weight: 400;">A continuación se presentan las especificaciones detalladas para la instalación y operación.</p>
-                        
-                        <table class="swal-tech-table">
-                            <thead>
-                                <tr><th>Parámetro</th><th>Especificación</th></tr>
+                    <div style="text-align: left; margin-top: 15px;">
+                        <p style="font-size: 0.9rem; color: #64748b; margin-bottom: 20px;">Documentación técnica validada bajo normas ISO 9001.</p>
+                        <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem; text-align: left; background: #f8fafc; border-radius: 10px; overflow: hidden;">
+                            <thead style="background: #004a99; color: white;">
+                                <tr><th style="padding: 12px 15px;">Parámetro</th><th style="padding: 12px 15px;">Valor</th></tr>
                             </thead>
                             <tbody>
-                                <tr><td>Rango de Temperatura</td><td>5°C - 40°C</td></tr>
-                                <tr><td>Clase de Aislamiento</td><td>F</td></tr>
-                                <tr><td>Grado de Protección</td><td>IP55</td></tr>
-                                <tr><td>Succión Máxima</td><td>8 metros</td></tr>
-                                <tr><td>Garantía B2B</td><td>24 Meses</td></tr>
+                                <tr><td style="padding: 12px 15px; border-bottom: 1px solid #e2e8f0;">Aislamiento</td><td style="padding: 12px 15px; border-bottom: 1px solid #e2e8f0;">Clase F</td></tr>
+                                <tr><td style="padding: 12px 15px; border-bottom: 1px solid #e2e8f0;">Protección</td><td style="padding: 12px 15px; border-bottom: 1px solid #e2e8f0;">IP55</td></tr>
+                                <tr><td style="padding: 12px 15px; font-weight: 600;">Garantía</td><td style="padding: 12px 15px; color: #004a99; font-weight: 700;">24 Meses (B2B)</td></tr>
                             </tbody>
                         </table>
                     </div>`,
-                showCloseButton: true,
-                confirmButtonColor: '#004a99',
-                confirmButtonText: '<i class="fa-solid fa-download"></i> Descargar PDF الكامل'
+                showCloseButton: true, confirmButtonColor: '#00d2ff',
+                confirmButtonText: '<span style="color: #020d1c; font-weight: 700;"><i class="fa-solid fa-download"></i> Descargar PDF</span>',
+                width: '600px'
             });
+        }
+
+        // Lógica para simular el envío del Formulario B2B
+        function enviarFormulario(event) {
+            event.preventDefault(); // Evita que la página se recargue
+            
+            Swal.fire({
+                title: '¡Solicitud Recibida!',
+                text: 'Nuestro equipo de desarrollo comercial analizará tu perfil y se pondrá en contacto en menos de 24 horas hábiles.',
+                icon: 'success',
+                background: '#ffffff',
+                color: '#020d1c',
+                confirmButtonColor: '#004a99',
+                confirmButtonText: 'Excelente'
+            });
+
+            // Limpiar el formulario después de enviar
+            document.getElementById('b2bForm').reset();
         }
     </script>
 </body>
