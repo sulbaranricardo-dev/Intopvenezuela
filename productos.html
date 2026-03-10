@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catálogo Industrial | INTOP Suministros</title>
+    <title>Catálogo | INTOP Suministros</title>
     
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap" rel="stylesheet">
@@ -11,7 +11,6 @@
     
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
 
     <style>
         :root {
@@ -19,15 +18,15 @@
             --azul-primario: #004a99;
             --azul-neon: #00d2ff;
             --blanco: #ffffff;
-            --gris-bg: #f1f5f9;
+            --gris-bg: #f8fafc;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Montserrat', sans-serif; }
         body { background-color: var(--gris-bg); color: var(--azul-deep); overflow-x: hidden; }
 
-        /* --- NAVBAR ESTILO INDEX --- */
+        /* --- NAVBAR --- */
         .nav-header {
-            background: rgba(2, 13, 28, 0.95);
+            background: rgba(2, 13, 28, 0.98);
             padding: 15px 5%;
             display: flex;
             justify-content: space-between;
@@ -35,59 +34,60 @@
             position: sticky;
             top: 0;
             z-index: 1000;
-            backdrop-filter: blur(10px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
         }
         .nav-header img { height: 35px; }
         .btn-back {
             color: white;
             text-decoration: none;
             font-weight: 600;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
+            letter-spacing: 1px;
             transition: 0.3s;
         }
         .btn-back:hover { color: var(--azul-neon); }
 
         /* --- FILTROS --- */
         .filter-section {
-            padding: 40px 5% 20px;
+            padding: 40px 5% 30px;
             background: white;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            text-align: center;
         }
         .filter-container {
             max-width: 1200px;
-            margin: 0 auto;
+            margin: 20px auto 0;
             display: flex;
             flex-wrap: wrap;
-            gap: 15px;
+            gap: 12px;
             justify-content: center;
         }
         .filter-btn {
-            padding: 10px 25px;
+            padding: 10px 22px;
             border-radius: 50px;
-            border: 2px solid #e2e8f0;
-            background: transparent;
+            border: 1px solid #e2e8f0;
+            background: white;
             cursor: pointer;
             font-weight: 600;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             transition: 0.3s;
             text-transform: uppercase;
+            color: var(--azul-deep);
         }
-        .filter-btn.active, .filter-btn:hover {
+        .filter-btn.active {
             background: var(--azul-primario);
             color: white;
             border-color: var(--azul-primario);
-            box-shadow: 0 5px 15px rgba(0, 74, 153, 0.2);
+            box-shadow: 0 8px 20px rgba(0, 74, 153, 0.2);
         }
 
-        /* --- GRID DE PRODUCTOS --- */
+        /* --- GRID --- */
         .catalog-container {
-            padding: 50px 5%;
+            padding: 40px 5% 80px;
             max-width: 1300px;
             margin: 0 auto;
-            min-height: 60vh;
         }
         .product-grid {
             display: grid;
@@ -95,55 +95,51 @@
             gap: 30px;
         }
 
-        /* Loader */
-        #loader-container {
-            text-align: center;
-            padding: 100px;
-        }
-        .spinner {
-            width: 50px; height: 50px;
-            border: 5px solid rgba(0,74,153,0.1);
-            border-top: 5px solid var(--azul-neon);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 20px;
-        }
-        @keyframes spin { 100% { transform: rotate(360deg); } }
-
-        /* Tarjeta de Producto WOW */
+        /* --- TARJETA --- */
         .p-card {
             background: white;
             border-radius: 25px;
-            padding: 20px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.05);
-            transition: 0.4s;
-            border: 1px solid transparent;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             display: flex;
             flex-direction: column;
+            border: 1px solid #f1f5f9;
         }
-        .p-card:hover { transform: translateY(-10px); border-color: var(--azul-neon); }
+        .p-card:hover { transform: translateY(-12px); box-shadow: 0 20px 40px rgba(0,0,0,0.08); border-color: var(--azul-neon); }
         
+        .p-category-tag {
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: var(--azul-primario);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 5px;
+            display: block;
+        }
+
         .p-img {
-            background: #f8fafc;
-            height: 250px;
+            background: #fff;
+            height: 220px;
             border-radius: 20px;
             display: flex; align-items: center; justify-content: center;
-            margin-bottom: 20px; overflow: hidden;
+            margin-bottom: 20px; position: relative;
         }
-        .p-img img { max-width: 85%; max-height: 85%; object-fit: contain; }
+        .p-img img { max-width: 90%; max-height: 90%; object-fit: contain; }
 
-        .p-info h3 { font-size: 1.1rem; color: var(--azul-deep); margin-bottom: 15px; height: 2.4em; overflow: hidden; }
+        .p-info h3 { font-size: 1.15rem; color: var(--azul-deep); margin-bottom: 15px; font-weight: 700; line-height: 1.3; }
         
-        .p-specs { width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 0.85rem; }
-        .p-specs td { padding: 8px 0; border-bottom: 1px dashed #e2e8f0; }
-        .p-specs td:nth-child(2) { text-align: right; font-weight: 700; color: var(--azul-primario); }
+        .p-specs { width: 100%; border-collapse: collapse; margin-bottom: 25px; font-size: 0.85rem; }
+        .p-specs td { padding: 10px 0; border-bottom: 1px dashed #e2e8f0; color: var(--text-light); }
+        .p-specs td i { color: var(--azul-primario); width: 22px; margin-right: 5px; text-align: center; }
+        .p-specs td:nth-child(2) { text-align: right; font-weight: 700; color: var(--azul-deep); }
 
         .btn-ficha {
             background: var(--azul-deep);
             color: white;
             border: none;
-            padding: 12px;
-            border-radius: 12px;
+            padding: 14px;
+            border-radius: 15px;
             width: 100%;
             font-weight: 700;
             cursor: pointer;
@@ -153,42 +149,39 @@
             transition: 0.3s;
             margin-top: auto;
         }
-        .btn-ficha:hover { background: var(--azul-neon); color: var(--azul-deep); }
+        .btn-ficha:hover { background: var(--azul-primario); transform: scale(1.02); }
 
-        /* --- MODAL TABLA --- */
-        .tech-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.9rem; text-align: left; }
-        .tech-table tr:nth-child(even) { background: #f8fafc; }
-        .tech-table td { padding: 12px; border: 1px solid #e2e8f0; }
-        .tech-label { font-weight: 700; color: var(--azul-primario); width: 40%; }
+        /* Loader */
+        #loader-container { text-align: center; padding: 100px; }
+        .spinner { width: 50px; height: 50px; border: 5px solid #eee; border-top: 5px solid var(--azul-neon); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 20px; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
 
-        @media (max-width: 768px) {
-            .section-title { font-size: 1.8rem; }
-            .filter-container { padding: 0 10px; }
-            .product-grid { grid-template-columns: 1fr; }
-        }
+        /* SweetAlert Table */
+        .swal-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.9rem; }
+        .swal-table td { padding: 12px; border-bottom: 1px solid #eee; }
+        .swal-label { font-weight: 700; color: var(--azul-primario); width: 45%; }
     </style>
 </head>
 <body>
 
     <nav class="nav-header">
         <img src="https://i.postimg.cc/j5BPB72H/INTOP-BETTER-TOGETHER-transparente-copia.png" alt="INTOP Logo">
-        <a href="index.html" class="btn-back"><i class="fa-solid fa-arrow-left"></i> VOLVER AL INICIO</a>
+        <a href="index.html" class="btn-back"><i class="fa-solid fa-chevron-left"></i> VOLVER</a>
     </nav>
 
     <div class="filter-section">
-        <h2 style="text-align: center; margin-bottom: 25px; font-weight: 800;">CATÁLOGO DE <span style="color: var(--azul-primario);">EQUIPOS</span></h2>
+        <h2 style="font-weight: 800; letter-spacing: -1px; font-size: 2.2rem;">NUESTRO <span style="color: var(--azul-primario);">STOCK</span></h2>
         <div class="filter-container" id="category-filters">
-            <button class="filter-btn active" onclick="filterProducts('Todos')">Todos</button>
-            </div>
+            <button class="filter-btn active" onclick="filterProducts('Todos', this)">Todos</button>
+        </div>
     </div>
 
     <div class="catalog-container">
         <div id="loader-container">
             <div class="spinner"></div>
-            <p>Cargando inventario desde la central...</p>
+            <p>Conectando con la base de datos...</p>
         </div>
-        <div class="product-grid" id="product-grid">
-            </div>
+        <div class="product-grid" id="product-grid"></div>
     </div>
 
     <script>
@@ -199,23 +192,37 @@
             try {
                 const response = await fetch(API_URL);
                 const data = await response.json();
-                allProducts = data;
                 
-                renderFilters(data);
-                renderProducts(data);
+                // Normalizar datos para evitar el error "undefined"
+                allProducts = data.map(p => ({
+                    ID: p.ID || "",
+                    Nombre: p.Nombre || p.Modelo || "Producto INTOP", // Si no hay nombre usa modelo
+                    Categoria: p.Categoría || p.Categoria || "General",
+                    Serie: p.Serie || "N/A",
+                    Potencia: p.Potencia || "N/A",
+                    Voltaje: p.Voltaje || "N/A",
+                    Imagen: p.Imagen_URL || p.Imagen || "https://via.placeholder.com/300",
+                    Descripcion: p.Descripción || p.Descripcion || "",
+                    HMAX: p.HMAX || "N/A",
+                    QMAX: p.QMAX || "N/A",
+                    AMP: p.AMP || "N/A",
+                    Succ_Desc: p.Succ_Desc || "N/A"
+                }));
+
+                renderFilters(allProducts);
+                renderProducts(allProducts);
                 document.getElementById('loader-container').style.display = 'none';
             } catch (error) {
-                console.error("Error cargando productos:", error);
-                document.getElementById('loader-container').innerHTML = "<p>Error al conectar con la base de datos. Intente más tarde.</p>";
+                document.getElementById('loader-container').innerHTML = "<p>Error al cargar el inventario.</p>";
             }
         }
 
         function renderFilters(products) {
             const container = document.getElementById('category-filters');
-            const categories = [...new Set(products.map(p => p.Categoría))];
+            const categories = [...new Set(products.map(p => p.Categoria))];
             
             categories.forEach(cat => {
-                if(cat) {
+                if(cat && cat !== "General") {
                     const btn = document.createElement('button');
                     btn.className = 'filter-btn';
                     btn.innerText = cat;
@@ -235,17 +242,20 @@
                 card.setAttribute('data-aos', 'fade-up');
                 
                 card.innerHTML = `
+                    <span class="p-category-tag">${p.Categoria}</span>
                     <div class="p-img">
-                        <img src="${p.Imagen_URL || 'https://via.placeholder.com/300'}" alt="${p.Nombre}">
+                        <img src="${p.Imagen}" alt="${p.Nombre}">
                     </div>
                     <div class="p-info">
                         <h3>${p.Nombre}</h3>
                         <table class="p-specs">
-                            <tr><td>Serie:</td><td>${p.Serie || 'N/A'}</td></tr>
-                            <tr><td>Potencia:</td><td>${p.Potencia || 'N/A'}</td></tr>
-                            <tr><td>Voltaje:</td><td>${p.Voltaje || 'N/A'}</td></tr>
+                            <tr><td><i class="fa-solid fa-microchip"></i> Serie:</td><td>${p.Serie}</td></tr>
+                            <tr><td><i class="fa-solid fa-bolt"></i> Potencia:</td><td>${p.Potencia}</td></tr>
+                            <tr><td><i class="fa-solid fa-plug"></i> Voltaje:</td><td>${p.Voltaje}</td></tr>
                         </table>
-                        <button class="btn-ficha" onclick='verDetalle(${JSON.stringify(p)})'>Ver Ficha Técnica</button>
+                        <button class="btn-ficha" onclick='verDetalle(${JSON.stringify(p).replace(/'/g, "&apos;")})'>
+                            <i class="fa-solid fa-file-lines" style="margin-right:8px;"></i> Ficha Técnica
+                        </button>
                     </div>
                 `;
                 grid.appendChild(card);
@@ -254,39 +264,34 @@
         }
 
         function filterProducts(category, btn) {
-            // UI Update
             document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-            if(btn) btn.classList.add('active');
-            else document.querySelector('.filter-btn').classList.add('active');
+            btn.classList.add('active');
 
             const filtered = category === 'Todos' 
                 ? allProducts 
-                : allProducts.filter(p => p.Categoría === category);
+                : allProducts.filter(p => p.Categoria === category);
             
             renderProducts(filtered);
         }
 
         function verDetalle(p) {
             Swal.fire({
-                title: `<span style="font-size: 1.2rem; font-weight:800;">${p.Modelo || p.Nombre}</span>`,
+                title: `<span style="font-weight:800;">DATOS TÉCNICOS</span>`,
                 html: `
-                    <div style="text-align: left;">
-                        <img src="${p.Imagen_URL}" style="width:100px; display:block; margin: 0 auto 15px;">
-                        <p style="font-size:0.85rem; color:#666; margin-bottom:15px; text-align:center;">${p.Descripción || ''}</p>
-                        <table class="tech-table">
-                            <tr><td class="tech-label">Categoría</td><td>${p.Categoría}</td></tr>
-                            <tr><td class="tech-label">Potencia</td><td>${p.Potencia}</td></tr>
-                            <tr><td class="tech-label">Voltaje</td><td>${p.Voltaje}</td></tr>
-                            <tr><td class="tech-label">Succión/Desc.</td><td>${p.Succ_Desc}</td></tr>
-                            <tr><td class="tech-label">H. Máxima</td><td>${p.HMAX}</td></tr>
-                            <tr><td class="tech-label">Q. Máximo</td><td>${p.QMAX}</td></tr>
-                            <tr><td class="tech-label">Amperaje</td><td>${p.AMP}</td></tr>
+                    <div style="text-align: left; padding: 10px;">
+                        <h4 style="color:var(--azul-primario); margin-bottom:10px;">${p.Nombre}</h4>
+                        <table class="swal-table">
+                            <tr><td class="swal-label">Succión/Desc.</td><td>${p.Succ_Desc}</td></tr>
+                            <tr><td class="swal-label">H. Máxima</td><td>${p.HMAX}</td></tr>
+                            <tr><td class="swal-label">Q. Máximo</td><td>${p.QMAX}</td></tr>
+                            <tr><td class="swal-label">Amperaje</td><td>${p.AMP}</td></tr>
+                            <tr><td class="swal-label">Serie</td><td>${p.Serie}</td></tr>
                         </table>
+                        <p style="margin-top:15px; font-size:0.8rem; color:#666;">${p.Descripcion}</p>
                     </div>
                 `,
-                confirmButtonText: 'CERRAR',
-                confirmButtonColor: '#004a99',
-                width: '500px'
+                confirmButtonText: 'ENTENDIDO',
+                confirmButtonColor: '#004a99'
             });
         }
 
