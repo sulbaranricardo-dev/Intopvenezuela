@@ -15,30 +15,27 @@
         .container { max-width: 1100px; margin: 0 auto; display: none; }
         #login-box { height: 80vh; display: flex; flex-direction: column; justify-content: center; align-items: center; }
         
-        /* Glass Cards */
         .glass { background: rgba(255,255,255,0.05); backdrop-filter: blur(10px); border-radius: 25px; border: 1px solid rgba(255,255,255,0.1); padding: 30px; margin-bottom: 30px; }
         
-        /* Botones */
         .btn { padding: 12px 25px; border-radius: 50px; border: none; font-weight: 700; cursor: pointer; transition: 0.3s; text-transform: uppercase; font-size: 0.75rem; }
         .btn-neon { background: var(--azul-neon); color: var(--azul-deep); }
         .btn-neon:hover { box-shadow: 0 0 20px var(--azul-neon); transform: scale(1.05); }
         .btn-add { font-size: 1rem; padding: 15px 40px; margin-bottom: 30px; display: block; width: fit-content; }
         
-        /* Tabla de Gestión */
         table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 0.85rem; }
         th { text-align: left; color: var(--azul-neon); padding: 15px; border-bottom: 2px solid rgba(255,255,255,0.1); }
         td { padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); }
         
-        .badge { padding: 5px 10px; border-radius: 5px; font-size: 0.7rem; font-weight: 800; }
+        .badge { padding: 5px 10px; border-radius: 5px; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; }
         .bg-success { background: #22c55e; color: white; }
         .bg-danger { background: #ef4444; color: white; }
         .bg-warning { background: #f59e0b; color: white; }
 
         .action-btns { display: flex; gap: 8px; }
-        .action-btns button { background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2); padding: 8px; border-radius: 8px; cursor: pointer; }
-        .action-btns button:hover { background: var(--azul-primario); }
+        .action-btns button { background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2); padding: 8px; border-radius: 8px; cursor: pointer; transition: 0.3s; }
+        .action-btns button:hover { background: var(--azul-primario); border-color: var(--azul-neon); }
 
-        input, select, textarea { width: 100%; padding: 12px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.2); border-radius: 10px; color: white; margin-top: 5px; }
+        input, select, textarea { width: 100%; padding: 12px; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.2); border-radius: 10px; color: white; margin-top: 5px; font-family: 'Montserrat'; }
         .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; }
     </style>
 </head>
@@ -61,20 +58,19 @@
 
         <div class="glass">
             <h3 style="color: var(--azul-neon); margin-bottom: 10px;">📦 Gestión de Inventario</h3>
-            <p style="color: #cbd5e1; font-size: 0.85rem; margin-bottom: 20px;">Desde aquí puedes controlar la visibilidad y el stock de tus productos en tiempo real.</p>
+            <p style="color: #cbd5e1; font-size: 0.85rem; margin-bottom: 20px;">Administra los productos que se muestran en el catálogo público.</p>
             
             <table id="products-table">
                 <thead>
                     <tr>
-                        <th>Producto</th>
+                        <th>Producto / Modelo</th>
                         <th>Categoría</th>
-                        <th>Estado</th>
-                        <th>Stock</th>
+                        <th>Estado Catálogo</th>
+                        <th>Disponibilidad</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
-                <tbody id="table-body">
-                    </tbody>
+                <tbody id="table-body"></tbody>
             </table>
         </div>
     </div>
@@ -88,13 +84,15 @@
                 document.getElementById('login-box').style.display = 'none';
                 document.getElementById('main-ui').style.display = 'block';
                 cargarProductos();
-            } else { Swal.fire('Error', 'Acceso denegado', 'error'); }
+            } else { Swal.fire('Error', 'Contraseña incorrecta', 'error'); }
         }
 
         async function cargarProductos() {
-            const res = await fetch(API_URL);
-            allProducts = await res.json();
-            renderTable();
+            try {
+                const res = await fetch(API_URL);
+                allProducts = await res.json();
+                renderTable();
+            } catch (e) { console.error("Error al cargar:", e); }
         }
 
         function renderTable() {
@@ -102,39 +100,49 @@
             body.innerHTML = allProducts.map(p => `
                 <tr>
                     <td><b>${p.Producto || p.Nombre}</b><br><small style="opacity:0.6">${p.Modelo}</small></td>
-                    <td>${p.Categoria}</td>
-                    <td><span class="badge ${p.Visible == 'TRUE' ? 'bg-success' : 'bg-danger'}">${p.Visible == 'TRUE' ? 'ACTIVO' : 'OCULTO'}</span></td>
-                    <td><span class="badge ${p.Stock == 'EN STOCK' ? 'bg-success' : 'bg-warning'}">${p.Stock}</span></td>
+                    <td>${p.Categoria || p.Categoría}</td>
+                    <td><span class="badge ${p.Visible == 'TRUE' || p.Visible == true ? 'bg-success' : 'bg-danger'}">${p.Visible == 'TRUE' || p.Visible == true ? 'Visible' : 'Oculto'}</span></td>
+                    <td><span class="badge ${p.Stock == 'EN STOCK' ? 'bg-success' : 'bg-warning'}">${p.Stock || 'EN STOCK'}</span></td>
                     <td class="action-btns">
-                        <button onclick="toggleStatus('${p.ID}', 'toggle_visible', '${p.Visible == 'TRUE' ? 'FALSE' : 'TRUE'}')" title="Activar/Desactivar"><i class="fa-solid fa-eye-slash"></i></button>
-                        <button onclick="toggleStatus('${p.ID}', 'toggle_stock', '${p.Stock == 'EN STOCK' ? 'AGOTADO' : 'EN STOCK'}')" title="Cambiar Stock"><i class="fa-solid fa-boxes-packing"></i></button>
-                        <button onclick="borrarProducto('${p.ID}')" title="Borrar"><i class="fa-solid fa-trash" style="color:#ef4444"></i></button>
-                    </tr>
+                        <button onclick="toggleStatus('${p.Modelo}', 'toggle_visible', '${p.Visible == 'TRUE' || p.Visible == true ? 'FALSE' : 'TRUE'}')" title="Ocultar/Mostrar"><i class="fa-solid ${p.Visible == 'TRUE' || p.Visible == true ? 'fa-eye' : 'fa-eye-slash'}"></i></button>
+                        <button onclick="toggleStatus('${p.Modelo}', 'toggle_stock', '${p.Stock == 'EN STOCK' ? 'AGOTADO' : 'EN STOCK'}')" title="Cambiar Disponibilidad"><i class="fa-solid fa-boxes-stacked"></i></button>
+                        <button onclick="borrarProducto('${p.Modelo}')" title="Eliminar definitivamente"><i class="fa-solid fa-trash" style="color:#ef4444"></i></button>
+                    </td>
+                </tr>
             `).join('');
         }
 
-        async function toggleStatus(id, action, status) {
-            await fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({action, ID: id, status}) });
-            Swal.fire('Actualizado', 'El cambio se reflejará pronto', 'success').then(() => cargarProductos());
+        async function toggleStatus(modelo, action, status) {
+            Swal.fire({ title: 'Procesando...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+            await fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({action, Modelo: modelo, status}) });
+            setTimeout(() => { cargarProductos(); Swal.close(); }, 1500);
         }
 
-        async function borrarProducto(id) {
-            const confirm = await Swal.fire({ title: '¿Borrar producto?', text: "Esta acción no se puede deshacer", icon: 'warning', showCancelButton: true, confirmButtonColor: '#ef4444' });
+        async function borrarProducto(modelo) {
+            const confirm = await Swal.fire({ 
+                title: '¿Eliminar producto?', 
+                text: `Se borrará el modelo ${modelo} de la base de datos.`, 
+                icon: 'warning', 
+                showCancelButton: true, 
+                confirmButtonColor: '#ef4444',
+                confirmButtonText: 'Sí, eliminar'
+            });
             if(confirm.isConfirmed) {
-                await fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({action: 'delete', ID: id}) });
-                cargarProductos();
+                Swal.fire({ title: 'Eliminando...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+                await fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({action: 'delete', Modelo: modelo}) });
+                setTimeout(() => { cargarProductos(); Swal.close(); }, 1500);
             }
         }
 
         function abrirFormulario() {
             Swal.fire({
                 title: 'Nuevo Producto INTOP',
-                width: '800px',
+                width: '850px',
                 background: '#020d1c',
                 color: '#fff',
                 html: `
                     <div class="form-grid" style="text-align:left;">
-                        <div class="form-group"><label>Producto</label><input id="f-prod" placeholder="Ej: Bomba Periférica"></div>
+                        <div class="form-group"><label>Nombre del Producto *</label><input id="f-prod" placeholder="Ej: Bomba Periférica"></div>
                         <div class="form-group"><label>Categoría</label>
                             <select id="f-cat">
                                 <option>Bombas Periféricas</option><option>Bombas Sumergibles</option>
@@ -142,31 +150,59 @@
                                 <option>Accesorios</option><option>Repuestos</option>
                             </select>
                         </div>
-                        <div class="form-group"><label>Serie</label><input id="f-serie"></div>
-                        <div class="form-group"><label>Modelo</label><input id="f-mod"></div>
-                        <div class="form-group"><label>Potencia</label><input id="f-pot"></div>
-                        <div class="form-group"><label>Voltaje</label><input id="f-vol"></div>
+                        <div class="form-group"><label>Serie</label><input id="f-serie" placeholder="Ej: QB"></div>
+                        <div class="form-group"><label>Modelo * (Identificador Único)</label><input id="f-mod" placeholder="Ej: QB-60"></div>
+                        <div class="form-group"><label>Potencia</label><input id="f-pot" placeholder="Ej: 0.5 HP"></div>
+                        <div class="form-group"><label>Voltaje</label><input id="f-vol" placeholder="Ej: 110v"></div>
+                        <div class="form-group"><label>H. MAX</label><input id="f-hmax" placeholder="Ej: 35m"></div>
+                        <div class="form-group"><label>Q. MAX</label><input id="f-qmax" placeholder="Ej: 40 L/min"></div>
+                        <div class="form-group"><label>AMP</label><input id="f-amp" placeholder="Ej: 5.2A"></div>
+                        <div class="form-group"><label>Succión/Desc.</label><input id="f-succ" placeholder="Ej: 1 x 1"></div>
                     </div>
                     <div class="form-group" style="text-align:left; margin-top:15px;">
-                        <label>Link Imagen (PostImages)</label><input id="f-img">
+                        <label>URL de Imagen (PostImages)</label><input id="f-img" placeholder="https://i.postimg.cc/...">
+                    </div>
+                    <div class="form-group" style="text-align:left; margin-top:15px;">
+                        <label>Descripción</label><textarea id="f-desc" rows="2"></textarea>
                     </div>
                 `,
+                showCancelButton: true,
+                confirmButtonText: 'Guardar Producto',
+                cancelButtonText: 'Cancelar',
+                confirmButtonColor: '#00d2ff',
                 preConfirm: () => {
+                    const prod = document.getElementById('f-prod').value;
+                    const mod = document.getElementById('f-mod').value;
+                    if (!prod || !mod) {
+                        Swal.showValidationMessage('El Nombre y el Modelo son obligatorios');
+                        return false;
+                    }
                     return {
                         action: 'add',
-                        Producto: document.getElementById('f-prod').value,
+                        Producto: prod,
                         Categoria: document.getElementById('f-cat').value,
                         Serie: document.getElementById('f-serie').value,
-                        Modelo: document.getElementById('f-mod').value,
+                        Modelo: mod,
                         Potencia: document.getElementById('f-pot').value,
                         Voltaje: document.getElementById('f-vol').value,
-                        Imagen_URL: document.getElementById('f-img').value
+                        HMAX: document.getElementById('f-hmax').value,
+                        QMAX: document.getElementById('f-qmax').value,
+                        AMP: document.getElementById('f-amp').value,
+                        Succ_Desc: document.getElementById('f-succ').value,
+                        Imagen_URL: document.getElementById('f-img').value,
+                        Descripcion: document.getElementById('f-desc').value
                     }
                 }
             }).then(result => {
-                if(result.isConfirmed) {
+                if(result.isConfirmed && result.value) {
+                    Swal.fire({ title: 'Guardando...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
                     fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(result.value) })
-                    .then(() => { Swal.fire('¡Éxito!', 'Producto agregado', 'success'); cargarProductos(); });
+                    .then(() => { 
+                        setTimeout(() => {
+                            Swal.fire('¡Éxito!', 'El producto ha sido agregado.', 'success'); 
+                            cargarProductos(); 
+                        }, 1500);
+                    });
                 }
             });
         }
