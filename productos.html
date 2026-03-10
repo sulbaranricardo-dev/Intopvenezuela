@@ -19,6 +19,7 @@
             --azul-neon: #00d2ff;
             --blanco: #ffffff;
             --gris-bg: #f8fafc;
+            --rojo-alert: #ef4444;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Montserrat', sans-serif; }
@@ -105,6 +106,7 @@
             display: flex;
             flex-direction: column;
             border: 1px solid #f1f5f9;
+            position: relative;
         }
         .p-card:hover { transform: translateY(-12px); box-shadow: 0 20px 40px rgba(0,0,0,0.08); border-color: var(--azul-neon); }
         
@@ -118,6 +120,22 @@
             display: block;
         }
 
+        /* Badge Agotado */
+        .stock-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--rojo-alert);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 50px;
+            font-size: 0.6rem;
+            font-weight: 800;
+            z-index: 5;
+            text-transform: uppercase;
+            box-shadow: 0 5px 10px rgba(239, 68, 68, 0.3);
+        }
+
         .p-img {
             background: #fff;
             height: 220px;
@@ -126,11 +144,12 @@
             margin-bottom: 20px; position: relative;
         }
         .p-img img { max-width: 90%; max-height: 90%; object-fit: contain; }
+        .p-img.out-stock { opacity: 0.5; filter: grayscale(1); }
 
         .p-info h3 { font-size: 1.15rem; color: var(--azul-deep); margin-bottom: 5px; font-weight: 700; line-height: 1.3; }
         
         .p-specs { width: 100%; border-collapse: collapse; margin-bottom: 25px; font-size: 0.85rem; }
-        .p-specs td { padding: 10px 0; border-bottom: 1px dashed #e2e8f0; color: var(--text-light); }
+        .p-specs td { padding: 10px 0; border-bottom: 1px dashed #e2e8f0; color: #64748b; }
         .p-specs td i { color: var(--azul-primario); width: 22px; margin-right: 5px; text-align: center; }
         .p-specs td:nth-child(2) { text-align: right; font-weight: 700; color: var(--azul-deep); }
 
@@ -150,13 +169,14 @@
             margin-top: auto;
         }
         .btn-ficha:hover { background: var(--azul-primario); transform: scale(1.02); }
+        .btn-out { background: #94a3b8; cursor: not-allowed; }
 
         /* Loader */
         #loader-container { text-align: center; padding: 100px; }
         .spinner { width: 50px; height: 50px; border: 5px solid #eee; border-top: 5px solid var(--azul-neon); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 20px; }
         @keyframes spin { 100% { transform: rotate(360deg); } }
 
-        /* --- MODAL CUSTOMIZADO --- */
+        /* --- MODAL --- */
         .intop-swal-popup {
             background: rgba(2, 13, 28, 0.95) !important;
             backdrop-filter: blur(15px) !important;
@@ -164,72 +184,16 @@
             border-radius: 35px !important;
             color: white !important;
         }
+        .modal-header-intop { text-align: center; padding-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 15px; }
+        .modal-img-container { width: 100%; background: rgba(255, 255, 255, 0.05); border-radius: 20px; padding: 15px; margin-bottom: 15px; display: flex; justify-content: center; align-items: center; }
+        .modal-img-container img { max-width: 150px; max-height: 150px; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5)); }
+        .tech-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 15px; }
+        .tech-item { background: rgba(255, 255, 255, 0.05); padding: 12px; border-radius: 15px; border: 1px solid rgba(255, 255, 255, 0.1); }
+        .tech-item label { display: block; font-size: 0.6rem; color: var(--azul-neon); text-transform: uppercase; font-weight: 700; margin-bottom: 3px; }
+        .tech-item span { font-size: 0.9rem; font-weight: 600; color: white; }
+        .modal-footer-info { margin-top: 20px; font-size: 0.75rem; color: #cbd5e1; text-align: center; font-style: italic; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 12px; }
 
-        .modal-header-intop {
-            text-align: center;
-            padding-bottom: 15px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            margin-bottom: 15px;
-        }
-
-        .modal-img-container {
-            width: 100%;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 20px;
-            padding: 15px;
-            margin-bottom: 15px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .modal-img-container img {
-            max-width: 150px;
-            max-height: 150px;
-            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5));
-        }
-
-        .tech-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            margin-top: 15px;
-        }
-
-        .tech-item {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 12px;
-            border-radius: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .tech-item label {
-            display: block;
-            font-size: 0.6rem;
-            color: var(--azul-neon);
-            text-transform: uppercase;
-            font-weight: 700;
-            margin-bottom: 3px;
-        }
-
-        .tech-item span {
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: white;
-        }
-
-        .modal-footer-info {
-            margin-top: 20px;
-            font-size: 0.75rem;
-            color: #cbd5e1;
-            text-align: center;
-            font-style: italic;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            padding-top: 12px;
-        }
-
-        @media (max-width: 480px) {
-            .tech-grid { grid-template-columns: 1fr; }
-        }
+        @media (max-width: 480px) { .tech-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
@@ -263,26 +227,30 @@
                 const response = await fetch(API_URL);
                 const data = await response.json();
                 
-                allProducts = data.map(p => ({
-                    ID: p.ID || "",
-                    Nombre: p.Producto || p.Nombre || p.Modelo || "Producto INTOP",
-                    Categoria: p.Categoría || p.Categoria || "General",
-                    Serie: p.Serie || "N/A",
-                    Modelo: p.Modelo || "N/A",
-                    Potencia: p.Potencia || "N/A",
-                    Voltaje: p.Voltaje || "N/A",
-                    Imagen: p.Imagen_URL || p.Imagen || "https://via.placeholder.com/300",
-                    Descripcion: p.Descripción || p.Descripcion || "",
-                    HMAX: p.HMAX || "N/A",
-                    QMAX: p.QMAX || "N/A",
-                    AMP: p.AMP || "N/A",
-                    Succ_Desc: p.Succ_Desc || "N/A"
-                }));
+                // FILTRO DE VISIBILIDAD: Solo procesamos productos con Visible === TRUE
+                allProducts = data
+                    .filter(p => p.Visible === "TRUE" || p.Visible === true)
+                    .map(p => ({
+                        Nombre: p.Producto || p.Nombre || p.Modelo,
+                        Categoria: p.Categoria || p.Categoría,
+                        Serie: p.Serie || "",
+                        Modelo: p.Modelo || "",
+                        Potencia: p.Potencia || "",
+                        Voltaje: p.Voltaje || "",
+                        Imagen: p.Imagen_URL || p.Imagen || "https://via.placeholder.com/300",
+                        Descripcion: p.Descripcion || p.Descripción || "",
+                        HMAX: p.HMAX || "",
+                        QMAX: p.QMAX || "",
+                        AMP: p.AMP || "",
+                        Succ_Desc: p.Succ_Desc || "",
+                        Stock: p.Stock || "EN STOCK"
+                    }));
 
                 renderFilters(allProducts);
                 renderProducts(allProducts);
                 document.getElementById('loader-container').style.display = 'none';
             } catch (error) {
+                console.error(error);
                 document.getElementById('loader-container').innerHTML = "<p>Error al cargar el inventario.</p>";
             }
         }
@@ -290,9 +258,8 @@
         function renderFilters(products) {
             const container = document.getElementById('category-filters');
             const categories = [...new Set(products.map(p => p.Categoria))];
-            
             categories.forEach(cat => {
-                if(cat && cat !== "General") {
+                if(cat) {
                     const btn = document.createElement('button');
                     btn.className = 'filter-btn';
                     btn.innerText = cat;
@@ -307,25 +274,33 @@
             grid.innerHTML = "";
 
             products.forEach(p => {
+                const isOut = p.Stock === "AGOTADO";
                 const card = document.createElement('div');
                 card.className = "p-card";
                 card.setAttribute('data-aos', 'fade-up');
                 
+                // Construcción de especificaciones filtrando vacíos
+                let specsHTML = "";
+                if(p.Serie) specsHTML += `<tr><td><i class="fa-solid fa-microchip"></i> Serie:</td><td>${p.Serie}</td></tr>`;
+                if(p.Potencia) specsHTML += `<tr><td><i class="fa-solid fa-bolt"></i> Potencia:</td><td>${p.Potencia}</td></tr>`;
+                if(p.Voltaje) specsHTML += `<tr><td><i class="fa-solid fa-plug"></i> Voltaje:</td><td>${p.Voltaje}</td></tr>`;
+
                 card.innerHTML = `
+                    ${isOut ? '<div class="stock-badge">Agotado</div>' : ''}
                     <span class="p-category-tag">${p.Categoria}</span>
-                    <div class="p-img">
+                    <div class="p-img ${isOut ? 'out-stock' : ''}">
                         <img src="${p.Imagen}" alt="${p.Nombre}">
                     </div>
                     <div class="p-info">
                         <h3>${p.Nombre}</h3>
-                        <p style="font-size:0.75rem; color:var(--azul-primario); font-weight:700; margin-bottom:12px;">MOD: ${p.Modelo}</p>
+                        ${p.Modelo ? `<p style="font-size:0.75rem; color:var(--azul-primario); font-weight:700; margin-bottom:12px;">MOD: ${p.Modelo}</p>` : ''}
                         <table class="p-specs">
-                            <tr><td><i class="fa-solid fa-microchip"></i> Serie:</td><td>${p.Serie}</td></tr>
-                            <tr><td><i class="fa-solid fa-bolt"></i> Potencia:</td><td>${p.Potencia}</td></tr>
-                            <tr><td><i class="fa-solid fa-plug"></i> Voltaje:</td><td>${p.Voltaje}</td></tr>
+                            ${specsHTML}
                         </table>
-                        <button class="btn-ficha" onclick='verDetalle(${JSON.stringify(p).replace(/'/g, "&apos;")})'>
-                            <i class="fa-solid fa-file-lines" style="margin-right:8px;"></i> Ficha Técnica
+                        <button class="btn-ficha ${isOut ? 'btn-out' : ''}" 
+                                onclick='${isOut ? '' : `verDetalle(${JSON.stringify(p).replace(/'/g, "&apos;")})`}'>
+                            <i class="fa-solid ${isOut ? 'fa-circle-xmark' : 'fa-file-lines'}" style="margin-right:8px;"></i> 
+                            ${isOut ? 'FUERA DE STOCK' : 'FICHA TÉCNICA'}
                         </button>
                     </div>
                 `;
@@ -337,19 +312,31 @@
         function filterProducts(category, btn) {
             document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-
-            const filtered = category === 'Todos' 
-                ? allProducts 
-                : allProducts.filter(p => p.Categoria === category);
-            
+            const filtered = category === 'Todos' ? allProducts : allProducts.filter(p => p.Categoria === category);
             renderProducts(filtered);
         }
 
         function verDetalle(p) {
+            let gridHTML = "";
+            const fields = [
+                { label: 'Modelo', val: p.Modelo, icon: 'fa-barcode' },
+                { label: 'Potencia', val: p.Potencia, icon: 'fa-bolt' },
+                { label: 'Caudal (Q)', val: p.QMAX, icon: 'fa-droplet' },
+                { label: 'Altura (H)', val: p.HMAX, icon: 'fa-arrow-up-from-ground-water' },
+                { label: 'Voltaje', val: p.Voltaje, icon: 'fa-plug' },
+                { label: 'Succión/Desc.', val: p.Succ_Desc, icon: 'fa-ruler-combined' },
+                { label: 'Amperaje', val: p.AMP, icon: 'fa-bolt-lightning' }
+            ];
+
+            fields.forEach(f => {
+                if(f.val) {
+                    gridHTML += `<div class="tech-item"><label><i class="fa-solid ${f.icon}"></i> ${f.label}</label><span>${f.val}</span></div>`;
+                }
+            });
+
             Swal.fire({
                 customClass: { popup: 'intop-swal-popup' },
-                showConfirmButton: true,
-                confirmButtonText: '<i class="fa-solid fa-circle-check"></i> ENTENDIDO',
+                confirmButtonText: 'ENTENDIDO',
                 confirmButtonColor: '#00d2ff',
                 width: '600px',
                 html: `
@@ -357,46 +344,9 @@
                         <h2 style="color:white; font-weight:800; font-size:1.5rem; margin-bottom:5px;">${p.Nombre}</h2>
                         <span style="color:var(--azul-neon); font-size:0.8rem; font-weight:600; letter-spacing:2px; text-transform:uppercase;">${p.Categoria}</span>
                     </div>
-
-                    <div class="modal-img-container">
-                        <img src="${p.Imagen}" alt="${p.Nombre}">
-                    </div>
-
-                    <div class="tech-grid">
-                        <div class="tech-item">
-                            <label><i class="fa-solid fa-barcode"></i> Modelo</label>
-                            <span>${p.Modelo}</span>
-                        </div>
-                        <div class="tech-item">
-                            <label><i class="fa-solid fa-bolt"></i> Potencia</label>
-                            <span>${p.Potencia}</span>
-                        </div>
-                        <div class="tech-item">
-                            <label><i class="fa-solid fa-droplet"></i> Caudal (Q)</label>
-                            <span>${p.QMAX}</span>
-                        </div>
-                        <div class="tech-item">
-                            <label><i class="fa-solid fa-arrow-up-from-ground-water"></i> Altura (H)</label>
-                            <span>${p.HMAX}</span>
-                        </div>
-                        <div class="tech-item">
-                            <label><i class="fa-solid fa-plug"></i> Voltaje</label>
-                            <span>${p.Voltaje}</span>
-                        </div>
-                        <div class="tech-item">
-                            <label><i class="fa-solid fa-ruler-combined"></i> Succión/Desc.</label>
-                            <span>${p.Succ_Desc}</span>
-                        </div>
-                    </div>
-
-                    <div style="margin-top:20px; padding:15px; background:rgba(0,0,0,0.2); border-radius:15px; text-align:left; border: 1px solid rgba(255,255,255,0.1);">
-                        <label style="color:var(--azul-neon); font-size:0.7rem; font-weight:700;">DESCRIPCIÓN:</label>
-                        <p style="color:#cbd5e1; font-size:0.85rem; margin-top:5px; line-height:1.4;">${p.Descripcion || 'Equipo de alto rendimiento bajo estándares industriales INTOP.'}</p>
-                    </div>
-
-                    <div class="modal-footer-info">
-                        * Datos sujetos a pruebas de laboratorio bajo condiciones controladas.
-                    </div>
+                    <div class="modal-img-container"><img src="${p.Imagen}" alt="${p.Nombre}"></div>
+                    <div class="tech-grid">${gridHTML}</div>
+                    ${p.Descripcion ? `<div style="margin-top:20px; padding:15px; background:rgba(0,0,0,0.2); border-radius:15px; text-align:left; border:1px solid rgba(255,255,255,0.1);"><p style="color:#cbd5e1; font-size:0.85rem; line-height:1.4;">${p.Descripcion}</p></div>` : ''}
                 `
             });
         }
