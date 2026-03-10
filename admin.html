@@ -12,7 +12,7 @@
         :root { --azul-deep: #020d1c; --azul-primario: #004a99; --azul-neon: #00d2ff; --blanco: #ffffff; }
         body { background: var(--azul-deep); color: white; font-family: 'Montserrat', sans-serif; margin: 0; padding: 20px; }
         
-        .container { max-width: 1100px; margin: 0 auto; display: none; }
+        .container { max-width: 1150px; margin: 0 auto; display: none; }
         #login-box { height: 80vh; display: flex; flex-direction: column; justify-content: center; align-items: center; }
         
         .glass { background: rgba(255,255,255,0.05); backdrop-filter: blur(10px); border-radius: 25px; border: 1px solid rgba(255,255,255,0.1); padding: 30px; margin-bottom: 30px; }
@@ -35,8 +35,15 @@
         .action-btns button { background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2); padding: 8px; border-radius: 8px; cursor: pointer; transition: 0.3s; }
         .action-btns button:hover { background: var(--azul-primario); border-color: var(--azul-neon); }
 
-        input, select, textarea { width: 100%; padding: 12px; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.2); border-radius: 10px; color: white; margin-top: 5px; font-family: 'Montserrat'; }
-        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; }
+        /* Estilos del Formulario en el Modal */
+        .swal-form-container { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; text-align: left; }
+        .swal-form-group { margin-bottom: 10px; }
+        .swal-form-group label { display: block; font-size: 0.7rem; color: var(--azul-neon); font-weight: 700; margin-bottom: 5px; text-transform: uppercase; }
+        .swal-form-group input, .swal-form-group select, .swal-form-group textarea { 
+            width: 100%; padding: 10px; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.2); 
+            border-radius: 8px; color: white; font-family: 'Montserrat'; box-sizing: border-box;
+        }
+        .full-width { grid-column: span 2; }
     </style>
 </head>
 <body>
@@ -44,29 +51,27 @@
     <div id="login-box">
         <img src="https://i.postimg.cc/j5BPB72H/INTOP-BETTER-TOGETHER-transparente-copia.png" height="50">
         <h2 style="margin-top: 20px;">Panel de Administración</h2>
-        <input type="password" id="pass" placeholder="Contraseña Maestra" style="max-width: 300px; text-align: center;">
-        <button class="btn btn-neon" style="margin-top: 15px; width: 300px;" onclick="checkPass()">Acceder al Sistema</button>
+        <input type="password" id="pass" placeholder="Contraseña Maestra" style="width: 100%; max-width: 300px; padding: 12px; border-radius: 10px; border: none; text-align: center;">
+        <button class="btn btn-neon" style="margin-top: 15px; width: 300px;" onclick="checkPass()">Entrar al Panel</button>
     </div>
 
     <div class="container" id="main-ui">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px;">
             <img src="https://i.postimg.cc/j5BPB72H/INTOP-BETTER-TOGETHER-transparente-copia.png" height="35">
             <button class="btn btn-neon btn-add" onclick="abrirFormulario()">
-                <i class="fa-solid fa-plus-circle"></i> AGREGAR NUEVO PRODUCTO
+                <i class="fa-solid fa-plus-circle"></i> AGREGAR PRODUCTO
             </button>
         </div>
 
         <div class="glass">
-            <h3 style="color: var(--azul-neon); margin-bottom: 10px;">📦 Gestión de Inventario</h3>
-            <p style="color: #cbd5e1; font-size: 0.85rem; margin-bottom: 20px;">Administra los productos que se muestran en el catálogo público.</p>
-            
+            <h3>📦 Gestión de Inventario</h3>
             <table id="products-table">
                 <thead>
                     <tr>
                         <th>Producto / Modelo</th>
                         <th>Categoría</th>
-                        <th>Estado Catálogo</th>
-                        <th>Disponibilidad</th>
+                        <th>Estado</th>
+                        <th>Stock</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
@@ -76,7 +81,7 @@
     </div>
 
     <script>
-        const API_URL = "https://script.google.com/macros/s/AKfycbywQxhAKkPPGE6CCXzcECj7qP1ikcbyzJ7loHa_IikFKVaA-BpILMHlczyXuiq51ndy4A/exec";
+        const API_URL = "TU_URL_DE_APPS_SCRIPT_AQUI"; 
         let allProducts = [];
 
         function checkPass() {
@@ -84,127 +89,108 @@
                 document.getElementById('login-box').style.display = 'none';
                 document.getElementById('main-ui').style.display = 'block';
                 cargarProductos();
-            } else { Swal.fire('Error', 'Contraseña incorrecta', 'error'); }
+            } else { Swal.fire('Error', 'Clave incorrecta', 'error'); }
         }
 
         async function cargarProductos() {
-            try {
-                const res = await fetch(API_URL);
-                allProducts = await res.json();
-                renderTable();
-            } catch (e) { console.error("Error al cargar:", e); }
+            const res = await fetch(API_URL);
+            allProducts = await res.json();
+            renderTable();
         }
 
         function renderTable() {
             const body = document.getElementById('table-body');
             body.innerHTML = allProducts.map(p => `
                 <tr>
-                    <td><b>${p.Producto || p.Nombre}</b><br><small style="opacity:0.6">${p.Modelo}</small></td>
+                    <td><b>${p.Producto}</b><br><small style="opacity:0.6">${p.Modelo}</small></td>
                     <td>${p.Categoria || p.Categoría}</td>
-                    <td><span class="badge ${p.Visible == 'TRUE' || p.Visible == true ? 'bg-success' : 'bg-danger'}">${p.Visible == 'TRUE' || p.Visible == true ? 'Visible' : 'Oculto'}</span></td>
-                    <td><span class="badge ${p.Stock == 'EN STOCK' ? 'bg-success' : 'bg-warning'}">${p.Stock || 'EN STOCK'}</span></td>
+                    <td><span class="badge ${p.Visible == 'TRUE' ? 'bg-success' : 'bg-danger'}">${p.Visible == 'TRUE' ? 'Público' : 'Oculto'}</span></td>
+                    <td><span class="badge ${p.Stock == 'EN STOCK' ? 'bg-success' : 'bg-warning'}">${p.Stock}</span></td>
                     <td class="action-btns">
-                        <button onclick="toggleStatus('${p.Modelo}', 'toggle_visible', '${p.Visible == 'TRUE' || p.Visible == true ? 'FALSE' : 'TRUE'}')" title="Ocultar/Mostrar"><i class="fa-solid ${p.Visible == 'TRUE' || p.Visible == true ? 'fa-eye' : 'fa-eye-slash'}"></i></button>
-                        <button onclick="toggleStatus('${p.Modelo}', 'toggle_stock', '${p.Stock == 'EN STOCK' ? 'AGOTADO' : 'EN STOCK'}')" title="Cambiar Disponibilidad"><i class="fa-solid fa-boxes-stacked"></i></button>
-                        <button onclick="borrarProducto('${p.Modelo}')" title="Eliminar definitivamente"><i class="fa-solid fa-trash" style="color:#ef4444"></i></button>
+                        <button onclick="editarProducto('${p.Modelo}')" title="Editar"><i class="fa-solid fa-pen-to-square"></i></button>
+                        <button onclick="toggleStatus('${p.Modelo}', 'toggle_visible', '${p.Visible == 'TRUE' ? 'FALSE' : 'TRUE'}')" title="Ocultar/Mostrar"><i class="fa-solid ${p.Visible == 'TRUE' ? 'fa-eye' : 'fa-eye-slash'}"></i></button>
+                        <button onclick="toggleStatus('${p.Modelo}', 'toggle_stock', '${p.Stock == 'EN STOCK' ? 'AGOTADO' : 'EN STOCK'}')" title="Stock"><i class="fa-solid fa-boxes-stacked"></i></button>
+                        <button onclick="borrarProducto('${p.Modelo}')" title="Borrar"><i class="fa-solid fa-trash" style="color:#ef4444"></i></button>
                     </td>
                 </tr>
             `).join('');
         }
 
         async function toggleStatus(modelo, action, status) {
-            Swal.fire({ title: 'Procesando...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
             await fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({action, Modelo: modelo, status}) });
-            setTimeout(() => { cargarProductos(); Swal.close(); }, 1500);
+            setTimeout(() => cargarProductos(), 1000);
         }
 
         async function borrarProducto(modelo) {
-            const confirm = await Swal.fire({ 
-                title: '¿Eliminar producto?', 
-                text: `Se borrará el modelo ${modelo} de la base de datos.`, 
-                icon: 'warning', 
-                showCancelButton: true, 
-                confirmButtonColor: '#ef4444',
-                confirmButtonText: 'Sí, eliminar'
-            });
+            const confirm = await Swal.fire({ title: '¿Eliminar?', text: "Se borrará del sistema.", icon: 'warning', showCancelButton: true, confirmButtonColor: '#ef4444' });
             if(confirm.isConfirmed) {
-                Swal.fire({ title: 'Eliminando...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
                 await fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({action: 'delete', Modelo: modelo}) });
-                setTimeout(() => { cargarProductos(); Swal.close(); }, 1500);
+                setTimeout(() => cargarProductos(), 1000);
             }
         }
 
-        function abrirFormulario() {
+        function abrirFormulario(existingData = null) {
+            const isEdit = existingData !== null;
             Swal.fire({
-                title: 'Nuevo Producto INTOP',
-                width: '850px',
+                title: isEdit ? 'Editar Producto' : 'Nuevo Producto',
+                width: '800px',
                 background: '#020d1c',
                 color: '#fff',
                 html: `
-                    <div class="form-grid" style="text-align:left;">
-                        <div class="form-group"><label>Nombre del Producto *</label><input id="f-prod" placeholder="Ej: Bomba Periférica"></div>
-                        <div class="form-group"><label>Categoría</label>
+                    <div class="swal-form-container">
+                        <div class="swal-form-group full-width"><label>Nombre del Producto</label><input id="f-prod" value="${isEdit ? existingData.Producto : ''}"></div>
+                        <div class="swal-form-group"><label>Categoría</label>
                             <select id="f-cat">
-                                <option>Bombas Periféricas</option><option>Bombas Sumergibles</option>
-                                <option>Pozos Profundos</option><option>Tanques</option>
-                                <option>Accesorios</option><option>Repuestos</option>
+                                <option ${isEdit && existingData.Categoria == 'Bombas Periféricas' ? 'selected' : ''}>Bombas Periféricas</option>
+                                <option ${isEdit && existingData.Categoria == 'Bombas Sumergibles' ? 'selected' : ''}>Bombas Sumergibles</option>
+                                <option ${isEdit && existingData.Categoria == 'Pozos Profundos' ? 'selected' : ''}>Pozos Profundos</option>
+                                <option ${isEdit && existingData.Categoria == 'Tanques' ? 'selected' : ''}>Tanques</option>
+                                <option ${isEdit && existingData.Categoria == 'Accesorios' ? 'selected' : ''}>Accesorios</option>
                             </select>
                         </div>
-                        <div class="form-group"><label>Serie</label><input id="f-serie" placeholder="Ej: QB"></div>
-                        <div class="form-group"><label>Modelo * (Identificador Único)</label><input id="f-mod" placeholder="Ej: QB-60"></div>
-                        <div class="form-group"><label>Potencia</label><input id="f-pot" placeholder="Ej: 0.5 HP"></div>
-                        <div class="form-group"><label>Voltaje</label><input id="f-vol" placeholder="Ej: 110v"></div>
-                        <div class="form-group"><label>H. MAX</label><input id="f-hmax" placeholder="Ej: 35m"></div>
-                        <div class="form-group"><label>Q. MAX</label><input id="f-qmax" placeholder="Ej: 40 L/min"></div>
-                        <div class="form-group"><label>AMP</label><input id="f-amp" placeholder="Ej: 5.2A"></div>
-                        <div class="form-group"><label>Succión/Desc.</label><input id="f-succ" placeholder="Ej: 1 x 1"></div>
-                    </div>
-                    <div class="form-group" style="text-align:left; margin-top:15px;">
-                        <label>URL de Imagen (PostImages)</label><input id="f-img" placeholder="https://i.postimg.cc/...">
-                    </div>
-                    <div class="form-group" style="text-align:left; margin-top:15px;">
-                        <label>Descripción</label><textarea id="f-desc" rows="2"></textarea>
+                        <div class="swal-form-group"><label>Modelo (ID)</label><input id="f-mod" value="${isEdit ? existingData.Modelo : ''}" ${isEdit ? 'disabled' : ''}></div>
+                        <div class="swal-form-group"><label>Serie</label><input id="f-serie" value="${isEdit ? existingData.Serie : ''}"></div>
+                        <div class="swal-form-group"><label>Potencia</label><input id="f-pot" value="${isEdit ? existingData.Potencia : ''}"></div>
+                        <div class="swal-form-group"><label>HMAX</label><input id="f-hmax" value="${isEdit ? existingData.HMAX : ''}"></div>
+                        <div class="swal-form-group"><label>QMAX</label><input id="f-qmax" value="${isEdit ? existingData.QMAX : ''}"></div>
+                        <div class="swal-form-group"><label>Voltaje</label><input id="f-vol" value="${isEdit ? existingData.Voltaje : ''}"></div>
+                        <div class="swal-form-group"><label>AMP</label><input id="f-amp" value="${isEdit ? existingData.AMP : ''}"></div>
+                        <div class="swal-form-group full-width"><label>URL Imagen</label><input id="f-img" value="${isEdit ? existingData.Imagen_URL : ''}"></div>
+                        <div class="swal-form-group full-width"><label>Descripción</label><textarea id="f-desc">${isEdit ? existingData.Descripcion : ''}</textarea></div>
                     </div>
                 `,
                 showCancelButton: true,
-                confirmButtonText: 'Guardar Producto',
-                cancelButtonText: 'Cancelar',
-                confirmButtonColor: '#00d2ff',
+                confirmButtonText: isEdit ? 'Guardar Cambios' : 'Crear Producto',
                 preConfirm: () => {
                     const prod = document.getElementById('f-prod').value;
                     const mod = document.getElementById('f-mod').value;
-                    if (!prod || !mod) {
-                        Swal.showValidationMessage('El Nombre y el Modelo son obligatorios');
-                        return false;
-                    }
+                    if(!prod || !mod) return Swal.showValidationMessage('Nombre y Modelo son obligatorios');
                     return {
-                        action: 'add',
+                        action: isEdit ? 'edit' : 'add',
                         Producto: prod,
+                        Modelo: mod,
                         Categoria: document.getElementById('f-cat').value,
                         Serie: document.getElementById('f-serie').value,
-                        Modelo: mod,
                         Potencia: document.getElementById('f-pot').value,
-                        Voltaje: document.getElementById('f-vol').value,
                         HMAX: document.getElementById('f-hmax').value,
                         QMAX: document.getElementById('f-qmax').value,
+                        Voltaje: document.getElementById('f-vol').value,
                         AMP: document.getElementById('f-amp').value,
-                        Succ_Desc: document.getElementById('f-succ').value,
                         Imagen_URL: document.getElementById('f-img').value,
                         Descripcion: document.getElementById('f-desc').value
                     }
                 }
             }).then(result => {
-                if(result.isConfirmed && result.value) {
-                    Swal.fire({ title: 'Guardando...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
-                    fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(result.value) })
-                    .then(() => { 
-                        setTimeout(() => {
-                            Swal.fire('¡Éxito!', 'El producto ha sido agregado.', 'success'); 
-                            cargarProductos(); 
-                        }, 1500);
-                    });
+                if(result.isConfirmed) {
+                    fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(result.value) });
+                    setTimeout(() => cargarProductos(), 1500);
                 }
             });
+        }
+
+        function editarProducto(modelo) {
+            const p = allProducts.find(item => item.Modelo == modelo);
+            if(p) abrirFormulario(p);
         }
     </script>
 </body>
