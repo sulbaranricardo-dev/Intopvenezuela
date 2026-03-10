@@ -35,7 +35,7 @@
         .action-btns button { background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2); padding: 8px; border-radius: 8px; cursor: pointer; transition: 0.3s; }
         .action-btns button:hover { background: var(--azul-primario); border-color: var(--azul-neon); }
 
-        /* Estilos del Formulario en el Modal */
+        /* Arreglo Formulario en Modal */
         .swal-form-container { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; text-align: left; }
         .swal-form-group { margin-bottom: 10px; }
         .swal-form-group label { display: block; font-size: 0.7rem; color: var(--azul-neon); font-weight: 700; margin-bottom: 5px; text-transform: uppercase; }
@@ -71,7 +71,7 @@
                         <th>Producto / Modelo</th>
                         <th>Categoría</th>
                         <th>Estado</th>
-                        <th>Stock</th>
+                        <th>Disponibilidad</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
@@ -94,7 +94,14 @@
 
         async function cargarProductos() {
             const res = await fetch(API_URL);
-            allProducts = await res.json();
+            const data = await res.json();
+            // Normalizar datos para asegurar que descripción y visible se lean bien
+            allProducts = data.map(p => ({
+                ...p,
+                Descripcion: p.Descripcion || p.Descripción || "",
+                Visible: String(p.Visible).toUpperCase() === "TRUE" ? "TRUE" : "FALSE",
+                Stock: p.Stock === "AGOTADO" ? "AGOTADO" : "EN STOCK"
+            }));
             renderTable();
         }
 
@@ -104,28 +111,34 @@
                 <tr>
                     <td><b>${p.Producto}</b><br><small style="opacity:0.6">${p.Modelo}</small></td>
                     <td>${p.Categoria || p.Categoría}</td>
-                    <td><span class="badge ${p.Visible == 'TRUE' ? 'bg-success' : 'bg-danger'}">${p.Visible == 'TRUE' ? 'Público' : 'Oculto'}</span></td>
-                    <td><span class="badge ${p.Stock == 'EN STOCK' ? 'bg-success' : 'bg-warning'}">${p.Stock}</span></td>
+                    <td><span class="badge ${p.Visible === 'TRUE' ? 'bg-success' : 'bg-danger'}">${p.Visible === 'TRUE' ? 'Público' : 'Oculto'}</span></td>
+                    <td><span class="badge ${p.Stock === 'EN STOCK' ? 'bg-success' : 'bg-warning'}">${p.Stock}</span></td>
                     <td class="action-btns">
                         <button onclick="editarProducto('${p.Modelo}')" title="Editar"><i class="fa-solid fa-pen-to-square"></i></button>
-                        <button onclick="toggleStatus('${p.Modelo}', 'toggle_visible', '${p.Visible == 'TRUE' ? 'FALSE' : 'TRUE'}')" title="Ocultar/Mostrar"><i class="fa-solid ${p.Visible == 'TRUE' ? 'fa-eye' : 'fa-eye-slash'}"></i></button>
-                        <button onclick="toggleStatus('${p.Modelo}', 'toggle_stock', '${p.Stock == 'EN STOCK' ? 'AGOTADO' : 'EN STOCK'}')" title="Stock"><i class="fa-solid fa-boxes-stacked"></i></button>
+                        <button onclick="toggleAction('${p.Modelo}', 'toggle_visible', '${p.Visible === 'TRUE' ? 'FALSE' : 'TRUE'}')" title="Ocultar/Mostrar"><i class="fa-solid ${p.Visible === 'TRUE' ? 'fa-eye' : 'fa-eye-slash'}"></i></button>
+                        <button onclick="toggleAction('${p.Modelo}', 'toggle_stock', '${p.Stock === 'EN STOCK' ? 'AGOTADO' : 'EN STOCK'}')" title="Marcar Agotado"><i class="fa-solid fa-boxes-stacked"></i></button>
                         <button onclick="borrarProducto('${p.Modelo}')" title="Borrar"><i class="fa-solid fa-trash" style="color:#ef4444"></i></button>
                     </td>
                 </tr>
             `).join('');
         }
 
-        async function toggleStatus(modelo, action, status) {
-            await fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({action, Modelo: modelo, status}) });
-            setTimeout(() => cargarProductos(), 1000);
+        async function toggleAction(modelo, action, status) {
+            Swal.fire({ title: 'Procesando...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+            try {
+                await fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({action, Modelo: modelo, status}) });
+                setTimeout(() => { cargarProductos(); Swal.close(); }, 1500);
+            } catch (e) {
+                Swal.fire('Error', 'No se pudo actualizar', 'error');
+            }
         }
 
         async function borrarProducto(modelo) {
-            const confirm = await Swal.fire({ title: '¿Eliminar?', text: "Se borrará del sistema.", icon: 'warning', showCancelButton: true, confirmButtonColor: '#ef4444' });
+            const confirm = await Swal.fire({ title: '¿Eliminar?', text: "Se borrará del sistema permanentemente.", icon: 'warning', showCancelButton: true, confirmButtonColor: '#ef4444' });
             if(confirm.isConfirmed) {
+                Swal.fire({ title: 'Eliminando...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
                 await fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({action: 'delete', Modelo: modelo}) });
-                setTimeout(() => cargarProductos(), 1000);
+                setTimeout(() => { cargarProductos(); Swal.close(); }, 1500);
             }
         }
 
@@ -141,26 +154,27 @@
                         <div class="swal-form-group full-width"><label>Nombre del Producto</label><input id="f-prod" value="${isEdit ? existingData.Producto : ''}"></div>
                         <div class="swal-form-group"><label>Categoría</label>
                             <select id="f-cat">
-                                <option ${isEdit && existingData.Categoria == 'Bombas Periféricas' ? 'selected' : ''}>Bombas Periféricas</option>
-                                <option ${isEdit && existingData.Categoria == 'Bombas Sumergibles' ? 'selected' : ''}>Bombas Sumergibles</option>
-                                <option ${isEdit && existingData.Categoria == 'Pozos Profundos' ? 'selected' : ''}>Pozos Profundos</option>
-                                <option ${isEdit && existingData.Categoria == 'Tanques' ? 'selected' : ''}>Tanques</option>
-                                <option ${isEdit && existingData.Categoria == 'Accesorios' ? 'selected' : ''}>Accesorios</option>
+                                <option ${isEdit && (existingData.Categoria == 'Bombas Periféricas' || existingData.Categoría == 'Bombas Periféricas') ? 'selected' : ''}>Bombas Periféricas</option>
+                                <option ${isEdit && (existingData.Categoria == 'Bombas Sumergibles' || existingData.Categoría == 'Bombas Sumergibles') ? 'selected' : ''}>Bombas Sumergibles</option>
+                                <option ${isEdit && (existingData.Categoria == 'Pozos Profundos' || existingData.Categoría == 'Pozos Profundos') ? 'selected' : ''}>Pozos Profundos</option>
+                                <option ${isEdit && (existingData.Categoria == 'Tanques' || existingData.Categoría == 'Tanques') ? 'selected' : ''}>Tanques</option>
+                                <option ${isEdit && (existingData.Categoria == 'Accesorios' || existingData.Categoría == 'Accesorios') ? 'selected' : ''}>Accesorios</option>
                             </select>
                         </div>
-                        <div class="swal-form-group"><label>Modelo (ID)</label><input id="f-mod" value="${isEdit ? existingData.Modelo : ''}" ${isEdit ? 'disabled' : ''}></div>
-                        <div class="swal-form-group"><label>Serie</label><input id="f-serie" value="${isEdit ? existingData.Serie : ''}"></div>
-                        <div class="swal-form-group"><label>Potencia</label><input id="f-pot" value="${isEdit ? existingData.Potencia : ''}"></div>
-                        <div class="swal-form-group"><label>HMAX</label><input id="f-hmax" value="${isEdit ? existingData.HMAX : ''}"></div>
-                        <div class="swal-form-group"><label>QMAX</label><input id="f-qmax" value="${isEdit ? existingData.QMAX : ''}"></div>
-                        <div class="swal-form-group"><label>Voltaje</label><input id="f-vol" value="${isEdit ? existingData.Voltaje : ''}"></div>
-                        <div class="swal-form-group"><label>AMP</label><input id="f-amp" value="${isEdit ? existingData.AMP : ''}"></div>
-                        <div class="swal-form-group full-width"><label>URL Imagen</label><input id="f-img" value="${isEdit ? existingData.Imagen_URL : ''}"></div>
-                        <div class="swal-form-group full-width"><label>Descripción</label><textarea id="f-desc">${isEdit ? existingData.Descripcion : ''}</textarea></div>
+                        <div class="swal-form-group"><label>Modelo (ID Único)</label><input id="f-mod" value="${isEdit ? existingData.Modelo : ''}" ${isEdit ? 'disabled' : ''}></div>
+                        <div class="swal-form-group"><label>Serie</label><input id="f-serie" value="${isEdit ? (existingData.Serie || '') : ''}"></div>
+                        <div class="swal-form-group"><label>Potencia</label><input id="f-pot" value="${isEdit ? (existingData.Potencia || '') : ''}"></div>
+                        <div class="swal-form-group"><label>HMAX</label><input id="f-hmax" value="${isEdit ? (existingData.HMAX || '') : ''}"></div>
+                        <div class="swal-form-group"><label>QMAX</label><input id="f-qmax" value="${isEdit ? (existingData.QMAX || '') : ''}"></div>
+                        <div class="swal-form-group"><label>Voltaje</label><input id="f-vol" value="${isEdit ? (existingData.Voltaje || '') : ''}"></div>
+                        <div class="swal-form-group"><label>AMP</label><input id="f-amp" value="${isEdit ? (existingData.AMP || '') : ''}"></div>
+                        <div class="swal-form-group full-width"><label>URL Imagen (PostImages)</label><input id="f-img" value="${isEdit ? (existingData.Imagen_URL || '') : ''}"></div>
+                        <div class="swal-form-group full-width"><label>Descripción</label><textarea id="f-desc" rows="3">${isEdit ? existingData.Descripcion : ''}</textarea></div>
                     </div>
                 `,
                 showCancelButton: true,
                 confirmButtonText: isEdit ? 'Guardar Cambios' : 'Crear Producto',
+                confirmButtonColor: '#00d2ff',
                 preConfirm: () => {
                     const prod = document.getElementById('f-prod').value;
                     const mod = document.getElementById('f-mod').value;
@@ -182,8 +196,9 @@
                 }
             }).then(result => {
                 if(result.isConfirmed) {
+                    Swal.fire({ title: 'Guardando...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
                     fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(result.value) });
-                    setTimeout(() => cargarProductos(), 1500);
+                    setTimeout(() => { cargarProductos(); Swal.close(); }, 1500);
                 }
             });
         }
