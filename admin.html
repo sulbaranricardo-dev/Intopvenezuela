@@ -3,249 +3,173 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard | INTOP</title>
+    <title>Panel de Control | INTOP</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <style>
-        :root {
-            --azul-deep: #020d1c;
-            --azul-primario: #004a99;
-            --azul-neon: #00d2ff;
-            --blanco: #ffffff;
-        }
-
-        body {
-            background: var(--azul-deep);
-            color: white;
-            font-family: 'Montserrat', sans-serif;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
-
-        /* --- LOGIN --- */
-        #login-box {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(15px);
-            padding: 40px;
-            border-radius: 30px;
-            border: 1px solid rgba(0, 210, 255, 0.3);
-            text-align: center;
-            width: 90%;
-            max-width: 400px;
-        }
-
-        /* --- DASHBOARD --- */
-        #dashboard {
-            display: none;
-            width: 90%;
-            max-width: 900px;
-            padding: 40px 0;
-        }
-
-        .admin-card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            padding: 40px;
-            border-radius: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        h2 { color: var(--azul-neon); margin-bottom: 30px; text-transform: uppercase; letter-spacing: 2px; }
-
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-        }
-
-        .form-group { margin-bottom: 20px; text-align: left; }
-        label { display: block; font-size: 0.75rem; font-weight: 700; color: var(--azul-neon); margin-bottom: 8px; text-transform: uppercase; }
+        :root { --azul-deep: #020d1c; --azul-primario: #004a99; --azul-neon: #00d2ff; --blanco: #ffffff; }
+        body { background: var(--azul-deep); color: white; font-family: 'Montserrat', sans-serif; margin: 0; padding: 20px; }
         
-        input, select, textarea {
-            width: 100%;
-            padding: 12px 15px;
-            background: rgba(0,0,0,0.3);
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 12px;
-            color: white;
-            font-size: 0.9rem;
-            font-family: 'Montserrat', sans-serif;
-        }
+        .container { max-width: 1100px; margin: 0 auto; display: none; }
+        #login-box { height: 80vh; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        
+        /* Glass Cards */
+        .glass { background: rgba(255,255,255,0.05); backdrop-filter: blur(10px); border-radius: 25px; border: 1px solid rgba(255,255,255,0.1); padding: 30px; margin-bottom: 30px; }
+        
+        /* Botones */
+        .btn { padding: 12px 25px; border-radius: 50px; border: none; font-weight: 700; cursor: pointer; transition: 0.3s; text-transform: uppercase; font-size: 0.75rem; }
+        .btn-neon { background: var(--azul-neon); color: var(--azul-deep); }
+        .btn-neon:hover { box-shadow: 0 0 20px var(--azul-neon); transform: scale(1.05); }
+        .btn-add { font-size: 1rem; padding: 15px 40px; margin-bottom: 30px; display: block; width: fit-content; }
+        
+        /* Tabla de Gestión */
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 0.85rem; }
+        th { text-align: left; color: var(--azul-neon); padding: 15px; border-bottom: 2px solid rgba(255,255,255,0.1); }
+        td { padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        
+        .badge { padding: 5px 10px; border-radius: 5px; font-size: 0.7rem; font-weight: 800; }
+        .bg-success { background: #22c55e; color: white; }
+        .bg-danger { background: #ef4444; color: white; }
+        .bg-warning { background: #f59e0b; color: white; }
 
-        input:focus { border-color: var(--azul-neon); outline: none; }
+        .action-btns { display: flex; gap: 8px; }
+        .action-btns button { background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2); padding: 8px; border-radius: 8px; cursor: pointer; }
+        .action-btns button:hover { background: var(--azul-primario); }
 
-        .btn-save {
-            background: var(--azul-neon);
-            color: var(--azul-deep);
-            padding: 15px 40px;
-            border: none;
-            border-radius: 50px;
-            font-weight: 800;
-            cursor: pointer;
-            text-transform: uppercase;
-            width: 100%;
-            margin-top: 20px;
-            transition: 0.3s;
-        }
-        .btn-save:hover { transform: scale(1.02); box-shadow: 0 0 20px rgba(0, 210, 255, 0.5); }
-
-        .header-admin { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
-        .logout { color: #ff4d4d; cursor: pointer; text-decoration: none; font-size: 0.8rem; font-weight: 700; }
+        input, select, textarea { width: 100%; padding: 12px; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.2); border-radius: 10px; color: white; margin-top: 5px; }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; }
     </style>
 </head>
 <body>
 
     <div id="login-box">
-        <img src="https://i.postimg.cc/j5BPB72H/INTOP-BETTER-TOGETHER-transparente-copia.png" height="40" style="margin-bottom: 20px;">
-        <h3>ACCESO PANEL</h3>
-        <input type="password" id="pass" placeholder="Contraseña Maestra" style="margin-top: 20px;">
-        <button class="btn-save" onclick="checkPass()">ENTRAR</button>
+        <img src="https://i.postimg.cc/j5BPB72H/INTOP-BETTER-TOGETHER-transparente-copia.png" height="50">
+        <h2 style="margin-top: 20px;">Panel de Administración</h2>
+        <input type="password" id="pass" placeholder="Contraseña Maestra" style="max-width: 300px; text-align: center;">
+        <button class="btn btn-neon" style="margin-top: 15px; width: 300px;" onclick="checkPass()">Acceder al Sistema</button>
     </div>
 
-    <div id="dashboard">
-        <div class="header-admin">
+    <div class="container" id="main-ui">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px;">
             <img src="https://i.postimg.cc/j5BPB72H/INTOP-BETTER-TOGETHER-transparente-copia.png" height="35">
-            <a class="logout" onclick="location.reload()">CERRAR SESIÓN <i class="fa-solid fa-right-from-bracket"></i></a>
+            <button class="btn btn-neon btn-add" onclick="abrirFormulario()">
+                <i class="fa-solid fa-plus-circle"></i> AGREGAR NUEVO PRODUCTO
+            </button>
         </div>
 
-        <div class="admin-card">
-            <h2><i class="fa-solid fa-plus-circle"></i> Nuevo Producto</h2>
-            <form id="productForm">
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label>Nombre del Producto</label>
-                        <input type="text" id="Producto" placeholder="Ej: Bomba Sumergible" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Categoría</label>
-                        <select id="Categoria">
-                            <option value="Bombas Periféricas">Bombas Periféricas</option>
-                            <option value="Bombas Sumergibles">Bombas Sumergibles</option>
-                            <option value="Pozos Profundos">Pozos Profundos</option>
-                            <option value="Tanques">Tanques</option>
-                            <option value="Accesorios">Accesorios</option>
-                            <option value="Repuestos">Repuestos</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Serie</label>
-                        <input type="text" id="Serie" placeholder="Ej: QB">
-                    </div>
-                    <div class="form-group">
-                        <label>Modelo</label>
-                        <input type="text" id="Modelo" placeholder="Ej: QB60">
-                    </div>
-                </div>
-
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label>Potencia</label>
-                        <input type="text" id="Potencia" placeholder="0.5 HP">
-                    </div>
-                    <div class="form-group">
-                        <label>Voltaje</label>
-                        <input type="text" id="Voltaje" placeholder="110v / 220v">
-                    </div>
-                    <div class="form-group">
-                        <label>H. MAX (Altura)</label>
-                        <input type="text" id="HMAX" placeholder="35m">
-                    </div>
-                    <div class="form-group">
-                        <label>Q. MAX (Caudal)</label>
-                        <input type="text" id="QMAX" placeholder="40 L/min">
-                    </div>
-                </div>
-
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label>Succión / Descarga</label>
-                        <input type="text" id="Succ_Desc" placeholder="1 x 1">
-                    </div>
-                    <div class="form-group">
-                        <label>Amperaje (AMP)</label>
-                        <input type="text" id="AMP" placeholder="5.2 A">
-                    </div>
-                    <div class="form-group" style="grid-column: span 2;">
-                        <label>URL de Imagen (PostImages)</label>
-                        <input type="url" id="Imagen_URL" placeholder="https://i.postimg.cc/...">
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label>Descripción del Producto</label>
-                    <textarea id="Descripcion" rows="3" placeholder="Detalles comerciales o técnicos adicionales..."></textarea>
-                </div>
-
-                <button type="submit" class="btn-save" id="btnSubmit">
-                    <i class="fa-solid fa-cloud-arrow-up"></i> SUBIR A LA WEB
-                </button>
-            </form>
+        <div class="glass">
+            <h3 style="color: var(--azul-neon); margin-bottom: 10px;">📦 Gestión de Inventario</h3>
+            <p style="color: #cbd5e1; font-size: 0.85rem; margin-bottom: 20px;">Desde aquí puedes controlar la visibilidad y el stock de tus productos en tiempo real.</p>
+            
+            <table id="products-table">
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Categoría</th>
+                        <th>Estado</th>
+                        <th>Stock</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="table-body">
+                    </tbody>
+            </table>
         </div>
     </div>
 
     <script>
-        const API_URL = "https://script.google.com/macros/s/AKfycbywQxhAKkPPGE6CCXzcECj7qP1ikcbyzJ7loHa_IikFKVaA-BpILMHlczyXuiq51ndy4A/exec"; // <--- PEGA TU URL AQUÍ
+        const API_URL = "TU_URL_AQUI";
+        let allProducts = [];
 
         function checkPass() {
-            const pass = document.getElementById('pass').value;
-            if(pass === "intop2026") { // <--- CAMBIA TU CONTRASEÑA AQUÍ
+            if(document.getElementById('pass').value === "intop2026") {
                 document.getElementById('login-box').style.display = 'none';
-                document.getElementById('dashboard').style.display = 'block';
-                document.body.style.alignItems = 'flex-start';
-            } else {
-                Swal.fire('Error', 'Contraseña Incorrecta', 'error');
+                document.getElementById('main-ui').style.display = 'block';
+                cargarProductos();
+            } else { Swal.fire('Error', 'Acceso denegado', 'error'); }
+        }
+
+        async function cargarProductos() {
+            const res = await fetch(API_URL);
+            allProducts = await res.json();
+            renderTable();
+        }
+
+        function renderTable() {
+            const body = document.getElementById('table-body');
+            body.innerHTML = allProducts.map(p => `
+                <tr>
+                    <td><b>${p.Producto || p.Nombre}</b><br><small style="opacity:0.6">${p.Modelo}</small></td>
+                    <td>${p.Categoria}</td>
+                    <td><span class="badge ${p.Visible == 'TRUE' ? 'bg-success' : 'bg-danger'}">${p.Visible == 'TRUE' ? 'ACTIVO' : 'OCULTO'}</span></td>
+                    <td><span class="badge ${p.Stock == 'EN STOCK' ? 'bg-success' : 'bg-warning'}">${p.Stock}</span></td>
+                    <td class="action-btns">
+                        <button onclick="toggleStatus('${p.ID}', 'toggle_visible', '${p.Visible == 'TRUE' ? 'FALSE' : 'TRUE'}')" title="Activar/Desactivar"><i class="fa-solid fa-eye-slash"></i></button>
+                        <button onclick="toggleStatus('${p.ID}', 'toggle_stock', '${p.Stock == 'EN STOCK' ? 'AGOTADO' : 'EN STOCK'}')" title="Cambiar Stock"><i class="fa-solid fa-boxes-packing"></i></button>
+                        <button onclick="borrarProducto('${p.ID}')" title="Borrar"><i class="fa-solid fa-trash" style="color:#ef4444"></i></button>
+                    </tr>
+            `).join('');
+        }
+
+        async function toggleStatus(id, action, status) {
+            await fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({action, ID: id, status}) });
+            Swal.fire('Actualizado', 'El cambio se reflejará pronto', 'success').then(() => cargarProductos());
+        }
+
+        async function borrarProducto(id) {
+            const confirm = await Swal.fire({ title: '¿Borrar producto?', text: "Esta acción no se puede deshacer", icon: 'warning', showCancelButton: true, confirmButtonColor: '#ef4444' });
+            if(confirm.isConfirmed) {
+                await fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({action: 'delete', ID: id}) });
+                cargarProductos();
             }
         }
 
-        document.getElementById('productForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const btn = document.getElementById('btnSubmit');
-            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> PROCESANDO...';
-            btn.disabled = true;
-
-            const data = {
-                ID: Date.now(), // Genera un ID único basado en el tiempo
-                Producto: document.getElementById('Producto').value,
-                Categoria: document.getElementById('Categoria').value,
-                Serie: document.getElementById('Serie').value,
-                Modelo: document.getElementById('Modelo').value,
-                Potencia: document.getElementById('Potencia').value,
-                Voltaje: document.getElementById('Voltaje').value,
-                Succ_Desc: document.getElementById('Succ_Desc').value,
-                HMAX: document.getElementById('HMAX').value,
-                QMAX: document.getElementById('QMAX').value,
-                AMP: document.getElementById('AMP').value,
-                Imagen_URL: document.getElementById('Imagen_URL').value,
-                Descripcion: document.getElementById('Descripcion').value
-            };
-
-            try {
-                const response = await fetch(API_URL, {
-                    method: 'POST',
-                    mode: 'no-cors', // Importante para Google Apps Script
-                    cache: 'no-cache',
-                    body: JSON.stringify(data)
-                });
-
-                Swal.fire({
-                    title: '¡Éxito!',
-                    text: 'El producto se ha guardado en la base de datos y aparecerá en el catálogo.',
-                    icon: 'success',
-                    confirmButtonColor: '#00d2ff'
-                });
-                document.getElementById('productForm').reset();
-            } catch (error) {
-                Swal.fire('Error', 'No se pudo conectar con el servidor', 'error');
-            } finally {
-                btn.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i> SUBIR A LA WEB';
-                btn.disabled = false;
-            }
-        });
+        function abrirFormulario() {
+            Swal.fire({
+                title: 'Nuevo Producto INTOP',
+                width: '800px',
+                background: '#020d1c',
+                color: '#fff',
+                html: `
+                    <div class="form-grid" style="text-align:left;">
+                        <div class="form-group"><label>Producto</label><input id="f-prod" placeholder="Ej: Bomba Periférica"></div>
+                        <div class="form-group"><label>Categoría</label>
+                            <select id="f-cat">
+                                <option>Bombas Periféricas</option><option>Bombas Sumergibles</option>
+                                <option>Pozos Profundos</option><option>Tanques</option>
+                                <option>Accesorios</option><option>Repuestos</option>
+                            </select>
+                        </div>
+                        <div class="form-group"><label>Serie</label><input id="f-serie"></div>
+                        <div class="form-group"><label>Modelo</label><input id="f-mod"></div>
+                        <div class="form-group"><label>Potencia</label><input id="f-pot"></div>
+                        <div class="form-group"><label>Voltaje</label><input id="f-vol"></div>
+                    </div>
+                    <div class="form-group" style="text-align:left; margin-top:15px;">
+                        <label>Link Imagen (PostImages)</label><input id="f-img">
+                    </div>
+                `,
+                preConfirm: () => {
+                    return {
+                        action: 'add',
+                        Producto: document.getElementById('f-prod').value,
+                        Categoria: document.getElementById('f-cat').value,
+                        Serie: document.getElementById('f-serie').value,
+                        Modelo: document.getElementById('f-mod').value,
+                        Potencia: document.getElementById('f-pot').value,
+                        Voltaje: document.getElementById('f-vol').value,
+                        Imagen_URL: document.getElementById('f-img').value
+                    }
+                }
+            }).then(result => {
+                if(result.isConfirmed) {
+                    fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(result.value) })
+                    .then(() => { Swal.fire('¡Éxito!', 'Producto agregado', 'success'); cargarProductos(); });
+                }
+            });
+        }
     </script>
 </body>
 </html>
