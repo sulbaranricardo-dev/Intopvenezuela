@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo Industrial | INTOP Suministros</title>
+    
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
+
+    <style>
+        :root {
+            --azul-deep: #020d1c;
+            --azul-primario: #004a99;
+            --azul-neon: #00d2ff;
+            --blanco: #ffffff;
+            --gris-bg: #f1f5f9;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Montserrat', sans-serif; }
+        body { background-color: var(--gris-bg); color: var(--azul-deep); overflow-x: hidden; }
+
+        /* --- NAVBAR ESTILO INDEX --- */
+        .nav-header {
+            background: rgba(2, 13, 28, 0.95);
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+        .nav-header img { height: 35px; }
+        .btn-back {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: 0.3s;
+        }
+        .btn-back:hover { color: var(--azul-neon); }
+
+        /* --- FILTROS --- */
+        .filter-section {
+            padding: 40px 5% 20px;
+            background: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+        .filter-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+        }
+        .filter-btn {
+            padding: 10px 25px;
+            border-radius: 50px;
+            border: 2px solid #e2e8f0;
+            background: transparent;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.8rem;
+            transition: 0.3s;
+            text-transform: uppercase;
+        }
+        .filter-btn.active, .filter-btn:hover {
+            background: var(--azul-primario);
+            color: white;
+            border-color: var(--azul-primario);
+            box-shadow: 0 5px 15px rgba(0, 74, 153, 0.2);
+        }
+
+        /* --- GRID DE PRODUCTOS --- */
+        .catalog-container {
+            padding: 50px 5%;
+            max-width: 1300px;
+            margin: 0 auto;
+            min-height: 60vh;
+        }
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        /* Loader */
+        #loader-container {
+            text-align: center;
+            padding: 100px;
+        }
+        .spinner {
+            width: 50px; height: 50px;
+            border: 5px solid rgba(0,74,153,0.1);
+            border-top: 5px solid var(--azul-neon);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        /* Tarjeta de Producto WOW */
+        .p-card {
+            background: white;
+            border-radius: 25px;
+            padding: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.05);
+            transition: 0.4s;
+            border: 1px solid transparent;
+            display: flex;
+            flex-direction: column;
+        }
+        .p-card:hover { transform: translateY(-10px); border-color: var(--azul-neon); }
+        
+        .p-img {
+            background: #f8fafc;
+            height: 250px;
+            border-radius: 20px;
+            display: flex; align-items: center; justify-content: center;
+            margin-bottom: 20px; overflow: hidden;
+        }
+        .p-img img { max-width: 85%; max-height: 85%; object-fit: contain; }
+
+        .p-info h3 { font-size: 1.1rem; color: var(--azul-deep); margin-bottom: 15px; height: 2.4em; overflow: hidden; }
+        
+        .p-specs { width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 0.85rem; }
+        .p-specs td { padding: 8px 0; border-bottom: 1px dashed #e2e8f0; }
+        .p-specs td:nth-child(2) { text-align: right; font-weight: 700; color: var(--azul-primario); }
+
+        .btn-ficha {
+            background: var(--azul-deep);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 12px;
+            width: 100%;
+            font-weight: 700;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.75rem;
+            transition: 0.3s;
+            margin-top: auto;
+        }
+        .btn-ficha:hover { background: var(--azul-neon); color: var(--azul-deep); }
+
+        /* --- MODAL TABLA --- */
+        .tech-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.9rem; text-align: left; }
+        .tech-table tr:nth-child(even) { background: #f8fafc; }
+        .tech-table td { padding: 12px; border: 1px solid #e2e8f0; }
+        .tech-label { font-weight: 700; color: var(--azul-primario); width: 40%; }
+
+        @media (max-width: 768px) {
+            .section-title { font-size: 1.8rem; }
+            .filter-container { padding: 0 10px; }
+            .product-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="nav-header">
+        <img src="https://i.postimg.cc/j5BPB72H/INTOP-BETTER-TOGETHER-transparente-copia.png" alt="INTOP Logo">
+        <a href="index.html" class="btn-back"><i class="fa-solid fa-arrow-left"></i> VOLVER AL INICIO</a>
+    </nav>
+
+    <div class="filter-section">
+        <h2 style="text-align: center; margin-bottom: 25px; font-weight: 800;">CATÁLOGO DE <span style="color: var(--azul-primario);">EQUIPOS</span></h2>
+        <div class="filter-container" id="category-filters">
+            <button class="filter-btn active" onclick="filterProducts('Todos')">Todos</button>
+            </div>
+    </div>
+
+    <div class="catalog-container">
+        <div id="loader-container">
+            <div class="spinner"></div>
+            <p>Cargando inventario desde la central...</p>
+        </div>
+        <div class="product-grid" id="product-grid">
+            </div>
+    </div>
+
+    <script>
+        const API_URL = "https://script.google.com/macros/s/AKfycbywQxhAKkPPGE6CCXzcECj7qP1ikcbyzJ7loHa_IikFKVaA-BpILMHlczyXuiq51ndy4A/exec";
+        let allProducts = [];
+
+        async function fetchProducts() {
+            try {
+                const response = await fetch(API_URL);
+                const data = await response.json();
+                allProducts = data;
+                
+                renderFilters(data);
+                renderProducts(data);
+                document.getElementById('loader-container').style.display = 'none';
+            } catch (error) {
+                console.error("Error cargando productos:", error);
+                document.getElementById('loader-container').innerHTML = "<p>Error al conectar con la base de datos. Intente más tarde.</p>";
+            }
+        }
+
+        function renderFilters(products) {
+            const container = document.getElementById('category-filters');
+            const categories = [...new Set(products.map(p => p.Categoría))];
+            
+            categories.forEach(cat => {
+                if(cat) {
+                    const btn = document.createElement('button');
+                    btn.className = 'filter-btn';
+                    btn.innerText = cat;
+                    btn.onclick = () => filterProducts(cat, btn);
+                    container.appendChild(btn);
+                }
+            });
+        }
+
+        function renderProducts(products) {
+            const grid = document.getElementById('product-grid');
+            grid.innerHTML = "";
+
+            products.forEach(p => {
+                const card = document.createElement('div');
+                card.className = "p-card";
+                card.setAttribute('data-aos', 'fade-up');
+                
+                card.innerHTML = `
+                    <div class="p-img">
+                        <img src="${p.Imagen_URL || 'https://via.placeholder.com/300'}" alt="${p.Nombre}">
+                    </div>
+                    <div class="p-info">
+                        <h3>${p.Nombre}</h3>
+                        <table class="p-specs">
+                            <tr><td>Serie:</td><td>${p.Serie || 'N/A'}</td></tr>
+                            <tr><td>Potencia:</td><td>${p.Potencia || 'N/A'}</td></tr>
+                            <tr><td>Voltaje:</td><td>${p.Voltaje || 'N/A'}</td></tr>
+                        </table>
+                        <button class="btn-ficha" onclick='verDetalle(${JSON.stringify(p)})'>Ver Ficha Técnica</button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+            AOS.init();
+        }
+
+        function filterProducts(category, btn) {
+            // UI Update
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            if(btn) btn.classList.add('active');
+            else document.querySelector('.filter-btn').classList.add('active');
+
+            const filtered = category === 'Todos' 
+                ? allProducts 
+                : allProducts.filter(p => p.Categoría === category);
+            
+            renderProducts(filtered);
+        }
+
+        function verDetalle(p) {
+            Swal.fire({
+                title: `<span style="font-size: 1.2rem; font-weight:800;">${p.Modelo || p.Nombre}</span>`,
+                html: `
+                    <div style="text-align: left;">
+                        <img src="${p.Imagen_URL}" style="width:100px; display:block; margin: 0 auto 15px;">
+                        <p style="font-size:0.85rem; color:#666; margin-bottom:15px; text-align:center;">${p.Descripción || ''}</p>
+                        <table class="tech-table">
+                            <tr><td class="tech-label">Categoría</td><td>${p.Categoría}</td></tr>
+                            <tr><td class="tech-label">Potencia</td><td>${p.Potencia}</td></tr>
+                            <tr><td class="tech-label">Voltaje</td><td>${p.Voltaje}</td></tr>
+                            <tr><td class="tech-label">Succión/Desc.</td><td>${p.Succ_Desc}</td></tr>
+                            <tr><td class="tech-label">H. Máxima</td><td>${p.HMAX}</td></tr>
+                            <tr><td class="tech-label">Q. Máximo</td><td>${p.QMAX}</td></tr>
+                            <tr><td class="tech-label">Amperaje</td><td>${p.AMP}</td></tr>
+                        </table>
+                    </div>
+                `,
+                confirmButtonText: 'CERRAR',
+                confirmButtonColor: '#004a99',
+                width: '500px'
+            });
+        }
+
+        fetchProducts();
+    </script>
+</body>
+</html>
