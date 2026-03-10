@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | INTOP</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+        :root {
+            --azul-deep: #020d1c;
+            --azul-primario: #004a99;
+            --azul-neon: #00d2ff;
+            --blanco: #ffffff;
+        }
+
+        body {
+            background: var(--azul-deep);
+            color: white;
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* --- LOGIN --- */
+        #login-box {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            padding: 40px;
+            border-radius: 30px;
+            border: 1px solid rgba(0, 210, 255, 0.3);
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+        }
+
+        /* --- DASHBOARD --- */
+        #dashboard {
+            display: none;
+            width: 90%;
+            max-width: 900px;
+            padding: 40px 0;
+        }
+
+        .admin-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        h2 { color: var(--azul-neon); margin-bottom: 30px; text-transform: uppercase; letter-spacing: 2px; }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .form-group { margin-bottom: 20px; text-align: left; }
+        label { display: block; font-size: 0.75rem; font-weight: 700; color: var(--azul-neon); margin-bottom: 8px; text-transform: uppercase; }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 12px;
+            color: white;
+            font-size: 0.9rem;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        input:focus { border-color: var(--azul-neon); outline: none; }
+
+        .btn-save {
+            background: var(--azul-neon);
+            color: var(--azul-deep);
+            padding: 15px 40px;
+            border: none;
+            border-radius: 50px;
+            font-weight: 800;
+            cursor: pointer;
+            text-transform: uppercase;
+            width: 100%;
+            margin-top: 20px;
+            transition: 0.3s;
+        }
+        .btn-save:hover { transform: scale(1.02); box-shadow: 0 0 20px rgba(0, 210, 255, 0.5); }
+
+        .header-admin { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        .logout { color: #ff4d4d; cursor: pointer; text-decoration: none; font-size: 0.8rem; font-weight: 700; }
+    </style>
+</head>
+<body>
+
+    <div id="login-box">
+        <img src="https://i.postimg.cc/j5BPB72H/INTOP-BETTER-TOGETHER-transparente-copia.png" height="40" style="margin-bottom: 20px;">
+        <h3>ACCESO PANEL</h3>
+        <input type="password" id="pass" placeholder="Contraseña Maestra" style="margin-top: 20px;">
+        <button class="btn-save" onclick="checkPass()">ENTRAR</button>
+    </div>
+
+    <div id="dashboard">
+        <div class="header-admin">
+            <img src="https://i.postimg.cc/j5BPB72H/INTOP-BETTER-TOGETHER-transparente-copia.png" height="35">
+            <a class="logout" onclick="location.reload()">CERRAR SESIÓN <i class="fa-solid fa-right-from-bracket"></i></a>
+        </div>
+
+        <div class="admin-card">
+            <h2><i class="fa-solid fa-plus-circle"></i> Nuevo Producto</h2>
+            <form id="productForm">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Nombre del Producto</label>
+                        <input type="text" id="Producto" placeholder="Ej: Bomba Sumergible" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Categoría</label>
+                        <select id="Categoria">
+                            <option value="Bombas Periféricas">Bombas Periféricas</option>
+                            <option value="Bombas Sumergibles">Bombas Sumergibles</option>
+                            <option value="Pozos Profundos">Pozos Profundos</option>
+                            <option value="Tanques">Tanques</option>
+                            <option value="Accesorios">Accesorios</option>
+                            <option value="Repuestos">Repuestos</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Serie</label>
+                        <input type="text" id="Serie" placeholder="Ej: QB">
+                    </div>
+                    <div class="form-group">
+                        <label>Modelo</label>
+                        <input type="text" id="Modelo" placeholder="Ej: QB60">
+                    </div>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Potencia</label>
+                        <input type="text" id="Potencia" placeholder="0.5 HP">
+                    </div>
+                    <div class="form-group">
+                        <label>Voltaje</label>
+                        <input type="text" id="Voltaje" placeholder="110v / 220v">
+                    </div>
+                    <div class="form-group">
+                        <label>H. MAX (Altura)</label>
+                        <input type="text" id="HMAX" placeholder="35m">
+                    </div>
+                    <div class="form-group">
+                        <label>Q. MAX (Caudal)</label>
+                        <input type="text" id="QMAX" placeholder="40 L/min">
+                    </div>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Succión / Descarga</label>
+                        <input type="text" id="Succ_Desc" placeholder="1 x 1">
+                    </div>
+                    <div class="form-group">
+                        <label>Amperaje (AMP)</label>
+                        <input type="text" id="AMP" placeholder="5.2 A">
+                    </div>
+                    <div class="form-group" style="grid-column: span 2;">
+                        <label>URL de Imagen (PostImages)</label>
+                        <input type="url" id="Imagen_URL" placeholder="https://i.postimg.cc/...">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Descripción del Producto</label>
+                    <textarea id="Descripcion" rows="3" placeholder="Detalles comerciales o técnicos adicionales..."></textarea>
+                </div>
+
+                <button type="submit" class="btn-save" id="btnSubmit">
+                    <i class="fa-solid fa-cloud-arrow-up"></i> SUBIR A LA WEB
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = "TU_URL_DE_APPS_SCRIPT_AQUI"; // <--- PEGA TU URL AQUÍ
+
+        function checkPass() {
+            const pass = document.getElementById('pass').value;
+            if(pass === "intop2026") { // <--- CAMBIA TU CONTRASEÑA AQUÍ
+                document.getElementById('login-box').style.display = 'none';
+                document.getElementById('dashboard').style.display = 'block';
+                document.body.style.alignItems = 'flex-start';
+            } else {
+                Swal.fire('Error', 'Contraseña Incorrecta', 'error');
+            }
+        }
+
+        document.getElementById('productForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('btnSubmit');
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> PROCESANDO...';
+            btn.disabled = true;
+
+            const data = {
+                ID: Date.now(), // Genera un ID único basado en el tiempo
+                Producto: document.getElementById('Producto').value,
+                Categoria: document.getElementById('Categoria').value,
+                Serie: document.getElementById('Serie').value,
+                Modelo: document.getElementById('Modelo').value,
+                Potencia: document.getElementById('Potencia').value,
+                Voltaje: document.getElementById('Voltaje').value,
+                Succ_Desc: document.getElementById('Succ_Desc').value,
+                HMAX: document.getElementById('HMAX').value,
+                QMAX: document.getElementById('QMAX').value,
+                AMP: document.getElementById('AMP').value,
+                Imagen_URL: document.getElementById('Imagen_URL').value,
+                Descripcion: document.getElementById('Descripcion').value
+            };
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    mode: 'no-cors', // Importante para Google Apps Script
+                    cache: 'no-cache',
+                    body: JSON.stringify(data)
+                });
+
+                Swal.fire({
+                    title: '¡Éxito!',
+                    text: 'El producto se ha guardado en la base de datos y aparecerá en el catálogo.',
+                    icon: 'success',
+                    confirmButtonColor: '#00d2ff'
+                });
+                document.getElementById('productForm').reset();
+            } catch (error) {
+                Swal.fire('Error', 'No se pudo conectar con el servidor', 'error');
+            } finally {
+                btn.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i> SUBIR A LA WEB';
+                btn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>
