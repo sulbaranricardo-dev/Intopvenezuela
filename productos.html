@@ -127,7 +127,7 @@
         }
         .p-img img { max-width: 90%; max-height: 90%; object-fit: contain; }
 
-        .p-info h3 { font-size: 1.15rem; color: var(--azul-deep); margin-bottom: 15px; font-weight: 700; line-height: 1.3; }
+        .p-info h3 { font-size: 1.15rem; color: var(--azul-deep); margin-bottom: 5px; font-weight: 700; line-height: 1.3; }
         
         .p-specs { width: 100%; border-collapse: collapse; margin-bottom: 25px; font-size: 0.85rem; }
         .p-specs td { padding: 10px 0; border-bottom: 1px dashed #e2e8f0; color: var(--text-light); }
@@ -156,83 +156,80 @@
         .spinner { width: 50px; height: 50px; border: 5px solid #eee; border-top: 5px solid var(--azul-neon); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 20px; }
         @keyframes spin { 100% { transform: rotate(360deg); } }
 
-        /* SweetAlert Table */
-        .swal-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.9rem; }
-        .swal-table td { padding: 12px; border-bottom: 1px solid #eee; }
-        .swal-label { font-weight: 700; color: var(--azul-primario); width: 45%; }
+        /* --- MODAL CUSTOMIZADO --- */
+        .intop-swal-popup {
+            background: rgba(2, 13, 28, 0.95) !important;
+            backdrop-filter: blur(15px) !important;
+            border: 1px solid rgba(0, 210, 255, 0.3) !important;
+            border-radius: 35px !important;
+            color: white !important;
+        }
 
-        /* Estilos para el Modal Customizado */
-.intop-swal-popup {
-    background: rgba(2, 13, 28, 0.95) !important;
-    backdrop-filter: blur(15px) !important;
-    border: 1px solid rgba(0, 210, 255, 0.3) !important;
-    border-radius: 30px !important;
-    color: white !important;
-}
+        .modal-header-intop {
+            text-align: center;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 15px;
+        }
 
-.modal-header-intop {
-    text-align: center;
-    padding-bottom: 20px;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
-    margin-bottom: 20px;
-}
+        .modal-img-container {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 15px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-img-container img {
+            max-width: 150px;
+            max-height: 150px;
+            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5));
+        }
 
-.modal-header-intop i {
-    font-size: 3rem;
-    color: var(--azul-neon);
-    filter: drop-shadow(0 0 10px rgba(0, 210, 255, 0.5));
-    margin-bottom: 15px;
-}
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 15px;
+        }
 
-.tech-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
-    margin-top: 20px;
-}
+        .tech-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 12px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
 
-.tech-item {
-    background: rgba(255, 255, 255, 0.05);
-    padding: 15px;
-    border-radius: 15px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    transition: 0.3s;
-}
+        .tech-item label {
+            display: block;
+            font-size: 0.6rem;
+            color: var(--azul-neon);
+            text-transform: uppercase;
+            font-weight: 700;
+            margin-bottom: 3px;
+        }
 
-.tech-item:hover {
-    background: rgba(0, 210, 255, 0.1);
-    border-color: var(--azul-neon);
-}
+        .tech-item span {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: white;
+        }
 
-.tech-item label {
-    display: block;
-    font-size: 0.65rem;
-    color: var(--azul-neon);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    font-weight: 700;
-    margin-bottom: 5px;
-}
+        .modal-footer-info {
+            margin-top: 20px;
+            font-size: 0.75rem;
+            color: #cbd5e1;
+            text-align: center;
+            font-style: italic;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 12px;
+        }
 
-.tech-item span {
-    font-size: 1rem;
-    font-weight: 600;
-    color: white;
-}
-
-.modal-footer-info {
-    margin-top: 25px;
-    font-size: 0.8rem;
-    color: #cbd5e1;
-    text-align: center;
-    font-style: italic;
-    border-top: 1px solid rgba(255,255,255,0.1);
-    padding-top: 15px;
-}
-
-@media (max-width: 480px) {
-    .tech-grid { grid-template-columns: 1fr; }
-}
+        @media (max-width: 480px) {
+            .tech-grid { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
@@ -266,12 +263,12 @@
                 const response = await fetch(API_URL);
                 const data = await response.json();
                 
-                // Normalizar datos para evitar el error "undefined"
                 allProducts = data.map(p => ({
                     ID: p.ID || "",
-                    Nombre: p.Nombre || p.Modelo || "Producto INTOP", // Si no hay nombre usa modelo
+                    Nombre: p.Producto || p.Nombre || p.Modelo || "Producto INTOP",
                     Categoria: p.Categoría || p.Categoria || "General",
                     Serie: p.Serie || "N/A",
+                    Modelo: p.Modelo || "N/A",
                     Potencia: p.Potencia || "N/A",
                     Voltaje: p.Voltaje || "N/A",
                     Imagen: p.Imagen_URL || p.Imagen || "https://via.placeholder.com/300",
@@ -321,6 +318,7 @@
                     </div>
                     <div class="p-info">
                         <h3>${p.Nombre}</h3>
+                        <p style="font-size:0.75rem; color:var(--azul-primario); font-weight:700; margin-bottom:12px;">MOD: ${p.Modelo}</p>
                         <table class="p-specs">
                             <tr><td><i class="fa-solid fa-microchip"></i> Serie:</td><td>${p.Serie}</td></tr>
                             <tr><td><i class="fa-solid fa-bolt"></i> Potencia:</td><td>${p.Potencia}</td></tr>
@@ -348,61 +346,60 @@
         }
 
         function verDetalle(p) {
-    Swal.fire({
-        customClass: {
-            popup: 'intop-swal-popup'
-        },
-        showConfirmButton: true,
-        confirmButtonText: '<i class="fa-solid fa-circle-check"></i> ENTENDIDO',
-        confirmButtonColor: '#00d2ff',
-        width: '600px',
-        html: `
-            <div class="modal-header-intop">
-                <i class="fa-solid fa-microchip"></i>
-                <h2 style="color:white; font-weight:800; font-size:1.5rem; margin-bottom:5px;">FICHA TÉCNICA</h2>
-                <span style="color:var(--azul-neon); font-size:0.8rem; font-weight:600; letter-spacing:2px;">${p.Categoria}</span>
-            </div>
+            Swal.fire({
+                customClass: { popup: 'intop-swal-popup' },
+                showConfirmButton: true,
+                confirmButtonText: '<i class="fa-solid fa-circle-check"></i> ENTENDIDO',
+                confirmButtonColor: '#00d2ff',
+                width: '600px',
+                html: `
+                    <div class="modal-header-intop">
+                        <h2 style="color:white; font-weight:800; font-size:1.5rem; margin-bottom:5px;">${p.Nombre}</h2>
+                        <span style="color:var(--azul-neon); font-size:0.8rem; font-weight:600; letter-spacing:2px; text-transform:uppercase;">${p.Categoria}</span>
+                    </div>
 
-            <h3 style="color:white; text-align:center; margin-bottom:20px;">${p.Nombre}</h3>
+                    <div class="modal-img-container">
+                        <img src="${p.Imagen}" alt="${p.Nombre}">
+                    </div>
 
-            <div class="tech-grid">
-                <div class="tech-item">
-                    <label><i class="fa-solid fa-barcode"></i> Serie/Modelo</label>
-                    <span>${p.Serie} / ${p.Modelo || 'N/A'}</span>
-                </div>
-                <div class="tech-item">
-                    <label><i class="fa-solid fa-bolt"></i> Potencia</label>
-                    <span>${p.Potencia}</span>
-                </div>
-                <div class="tech-item">
-                    <label><i class="fa-solid fa-droplet"></i> Caudal Máx (Q)</label>
-                    <span>${p.QMAX}</span>
-                </div>
-                <div class="tech-item">
-                    <label><i class="fa-solid fa-arrow-up-from-ground-water"></i> Altura Máx (H)</label>
-                    <span>${p.HMAX}</span>
-                </div>
-                <div class="tech-item">
-                    <label><i class="fa-solid fa-plug"></i> Voltaje</label>
-                    <span>${p.Voltaje}</span>
-                </div>
-                <div class="tech-item">
-                    <label><i class="fa-solid fa-ruler-combined"></i> Succión/Desc.</label>
-                    <span>${p.Succ_Desc}</span>
-                </div>
-            </div>
+                    <div class="tech-grid">
+                        <div class="tech-item">
+                            <label><i class="fa-solid fa-barcode"></i> Modelo</label>
+                            <span>${p.Modelo}</span>
+                        </div>
+                        <div class="tech-item">
+                            <label><i class="fa-solid fa-bolt"></i> Potencia</label>
+                            <span>${p.Potencia}</span>
+                        </div>
+                        <div class="tech-item">
+                            <label><i class="fa-solid fa-droplet"></i> Caudal (Q)</label>
+                            <span>${p.QMAX}</span>
+                        </div>
+                        <div class="tech-item">
+                            <label><i class="fa-solid fa-arrow-up-from-ground-water"></i> Altura (H)</label>
+                            <span>${p.HMAX}</span>
+                        </div>
+                        <div class="tech-item">
+                            <label><i class="fa-solid fa-plug"></i> Voltaje</label>
+                            <span>${p.Voltaje}</span>
+                        </div>
+                        <div class="tech-item">
+                            <label><i class="fa-solid fa-ruler-combined"></i> Succión/Desc.</label>
+                            <span>${p.Succ_Desc}</span>
+                        </div>
+                    </div>
 
-            <div style="margin-top:20px; padding:15px; background:rgba(0,0,0,0.2); border-radius:10px; text-align:left;">
-                <label style="color:var(--azul-neon); font-size:0.7rem; font-weight:700;">DESCRIPCIÓN ADICIONAL:</label>
-                <p style="color:#cbd5e1; font-size:0.85rem; margin-top:5px;">${p.Descripcion || 'Equipo de alto rendimiento bajo estándares industriales INTOP.'}</p>
-            </div>
+                    <div style="margin-top:20px; padding:15px; background:rgba(0,0,0,0.2); border-radius:15px; text-align:left; border: 1px solid rgba(255,255,255,0.1);">
+                        <label style="color:var(--azul-neon); font-size:0.7rem; font-weight:700;">DESCRIPCIÓN:</label>
+                        <p style="color:#cbd5e1; font-size:0.85rem; margin-top:5px; line-height:1.4;">${p.Descripcion || 'Equipo de alto rendimiento bajo estándares industriales INTOP.'}</p>
+                    </div>
 
-            <div class="modal-footer-info">
-                * Datos sujetos a pruebas de laboratorio bajo condiciones controladas.
-            </div>
-        `
-    });
-}
+                    <div class="modal-footer-info">
+                        * Datos sujetos a pruebas de laboratorio bajo condiciones controladas.
+                    </div>
+                `
+            });
+        }
 
         fetchProducts();
     </script>
