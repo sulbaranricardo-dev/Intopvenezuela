@@ -130,6 +130,7 @@
         .info-table td { padding: 10px 0; border-bottom: 1px dashed #cbd5e1; color: var(--text-light); }
         .info-table td i { margin-right: 8px; color: var(--azul-claro); }
         .info-table td:nth-child(2) { text-align: right; font-weight: 700; color: var(--azul-deep); }
+        .btn-catalogo { text-align: center; margin-top: 40px; }
 
         /* --- BENEFICIOS B2B --- */
         .beneficios { padding: 80px 5%; background: white; }
@@ -300,49 +301,16 @@
 
     <section id="productos" class="productos">
         <h2 class="section-title">Ingeniería en <span>Detalle</span></h2>
-        <div class="product-grid">
-            <div class="product-card" data-tilt data-tilt-glare data-tilt-max-glare="0.5" data-tilt-max="10" data-aos="fade-up">
-                <div class="img-container">
-                    <img src="https://i.postimg.cc/WbTPgfbs/Generated_Image_February_17_2026_1_37PM_Photoroom.png" alt="Bomba Periférica">
-                </div>
-                <div class="product-info">
-                    <h3>Serie IP-100 Periférica</h3>
-                    <table class="info-table">
-                        <tr><td><i class="fa-solid fa-gauge-high"></i>Potencia</td><td>1.0 HP / 0.75kW</td></tr>
-                        <tr><td><i class="fa-solid fa-water"></i>Caudal Máx.</td><td>55 L/min</td></tr>
-                        <tr><td><i class="fa-solid fa-arrow-up-from-ground-water"></i>Elevación</td><td>65 Metros</td></tr>
-                    </table>
-                    <button class="btn btn-outline" onclick="verFichaTecnica('Serie IP-100 Periférica')">Especificaciones</button>
-                </div>
+        
+        <div class="product-grid" id="random-products-grid">
+            <div style="text-align: center; width: 100%; grid-column: 1 / -1;">
+                <i class="fa-solid fa-circle-notch fa-spin" style="font-size: 2rem; color: var(--azul-primario);"></i>
+                <p style="margin-top: 10px;">Cargando inventario destacado...</p>
             </div>
-            <div class="product-card" data-tilt data-tilt-glare data-tilt-max-glare="0.5" data-tilt-max="10" data-aos="fade-up" data-aos-delay="100">
-                <div class="img-container">
-                    <img src="https://i.postimg.cc/Qxhr1nx8/Generated_Image_February_17_2026_1_42PM_Photoroom.png" alt="Bomba Sumergible">
-                </div>
-                <div class="product-info">
-                    <h3>Serie SP-4" Sumergible</h3>
-                    <table class="info-table">
-                        <tr><td><i class="fa-solid fa-arrows-down-to-line"></i>Inmersión</td><td>Hasta 150m</td></tr>
-                        <tr><td><i class="fa-solid fa-shield-halved"></i>Aleación</td><td>Acero Inox 304</td></tr>
-                        <tr><td><i class="fa-solid fa-plug"></i>Fase</td><td>Trifásica 220V</td></tr>
-                    </table>
-                    <button class="btn btn-outline" onclick="verFichaTecnica('Serie SP-4 Sumergible')">Especificaciones</button>
-                </div>
-            </div>
-            <div class="product-card" data-tilt data-tilt-glare data-tilt-max-glare="0.5" data-tilt-max="10" data-aos="fade-up" data-aos-delay="200">
-                <div class="img-container">
-                    <img src="https://i.postimg.cc/SNkpCtNC/Generated_Image_March_07_2026_1_38PM_Photoroom.png" alt="Tanque de Agua">
-                </div>
-                <div class="product-info">
-                    <h3>Pro-Tank Acumulador</h3>
-                    <table class="info-table">
-                        <tr><td><i class="fa-solid fa-database"></i>Volumen</td><td>120 Litros</td></tr>
-                        <tr><td><i class="fa-solid fa-compress"></i>Precarga</td><td>40 PSI (N2)</td></tr>
-                        <tr><td><i class="fa-solid fa-layer-group"></i>Membrana</td><td>EPDM Intercambiable</td></tr>
-                    </table>
-                    <button class="btn btn-outline" onclick="verFichaTecnica('Pro-Tank 120L')">Especificaciones</button>
-                </div>
-            </div>
+        </div>
+
+        <div class="btn-catalogo" data-aos="fade-up">
+            <a href="productos.html" class="btn btn-neon">Ver Catálogo Completo <i class="fa-solid fa-arrow-right" style="margin-left: 8px;"></i></a>
         </div>
     </section>
 
@@ -485,41 +453,6 @@
             }
         }
 
-        // Lógica de Vanilla Tilt (Desactivar en móviles para mejor rendimiento)
-        if (window.innerWidth > 992) {
-            VanillaTilt.init(document.querySelectorAll(".product-card"), {
-                max: 10,
-                speed: 400,
-                glare: true,
-                "max-glare": 0.5
-            });
-        }
-
-        // SweetAlert Ficha Técnica
-        function verFichaTecnica(producto) {
-            Swal.fire({
-                title: `Ingeniería: ${producto}`,
-                iconHtml: '<i class="fa-solid fa-file-pdf" style="color: #e11d48; font-size: 3rem;"></i>',
-                customClass: { icon: 'no-border'},
-                html: `
-                    <div style="text-align: left; margin-top: 15px;">
-                        <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem; text-align: left; background: #f8fafc; border-radius: 10px; overflow: hidden;">
-                            <thead style="background: #004a99; color: white;">
-                                <tr><th style="padding: 10px;">Parámetro</th><th style="padding: 10px;">Valor</th></tr>
-                            </thead>
-                            <tbody>
-                                <tr><td style="padding: 10px; border-bottom: 1px solid #e2e8f0;">Aislamiento</td><td style="padding: 10px; border-bottom: 1px solid #e2e8f0;">Clase F</td></tr>
-                                <tr><td style="padding: 10px; border-bottom: 1px solid #e2e8f0;">Protección</td><td style="padding: 10px; border-bottom: 1px solid #e2e8f0;">IP55</td></tr>
-                                <tr><td style="padding: 10px; font-weight: 600;">Garantía</td><td style="padding: 10px; color: #004a99; font-weight: 700;">24 Meses</td></tr>
-                            </tbody>
-                        </table>
-                    </div>`,
-                showCloseButton: true, confirmButtonColor: '#00d2ff',
-                confirmButtonText: '<span style="color: #020d1c; font-weight: 700;">Descargar PDF</span>',
-                width: '90%'
-            });
-        }
-
         // Lógica del Formulario
         function enviarFormulario(event) {
             event.preventDefault(); 
@@ -532,6 +465,89 @@
             });
             document.getElementById('b2bForm').reset();
         }
+
+        // ---------------------------------------------------------
+        // NUEVA LÓGICA: CARGAR 3 PRODUCTOS ALEATORIOS DESDE GOOGLE SHEETS
+        // ---------------------------------------------------------
+        const API_URL = "https://script.google.com/macros/s/AKfycbywQxhAKkPPGE6CCXzcECj7qP1ikcbyzJ7loHa_IikFKVaA-BpILMHlczyXuiq51ndy4A/exec";
+        
+        async function loadRandomProducts() {
+            try {
+                const response = await fetch(API_URL);
+                const data = await response.json();
+                
+                // Filtramos solo los productos visibles
+                const visibles = data.filter(p => String(p.Visible).toUpperCase() === "TRUE");
+                
+                // Barajamos el array (Shuffle)
+                const shuffled = visibles.sort(() => 0.5 - Math.random());
+                
+                // Tomamos solo los 3 primeros
+                const selectedProducts = shuffled.slice(0, 3);
+                
+                renderRandomProducts(selectedProducts);
+            } catch (error) {
+                console.error("Error cargando productos aleatorios:", error);
+                document.getElementById('random-products-grid').innerHTML = "<p style='text-align:center; width:100%; grid-column:1/-1;'>No se pudieron cargar los productos en este momento.</p>";
+            }
+        }
+
+        function renderRandomProducts(products) {
+            const grid = document.getElementById('random-products-grid');
+            grid.innerHTML = ""; // Limpiamos el spinner de carga
+
+            products.forEach((p, index) => {
+                const card = document.createElement('div');
+                card.className = "product-card";
+                card.setAttribute('data-tilt', '');
+                card.setAttribute('data-tilt-glare', '');
+                card.setAttribute('data-tilt-max-glare', '0.5');
+                card.setAttribute('data-tilt-max', '10');
+                card.setAttribute('data-aos', 'fade-up');
+                card.setAttribute('data-aos-delay', (index * 100).toString());
+
+                // Extraer la primera potencia si hay varias
+                const primeraPotencia = p.Potencia ? p.Potencia.split(',')[0].trim() : 'N/A';
+
+                // Generar HTML de especificaciones de forma segura
+                let specsHTML = "";
+                if(p.Potencia) specsHTML += `<tr><td><i class="fa-solid fa-gauge-high"></i>Potencia</td><td>${primeraPotencia}</td></tr>`;
+                if(p.QMAX) specsHTML += `<tr><td><i class="fa-solid fa-water"></i>Caudal Máx.</td><td>${p.QMAX}</td></tr>`;
+                if(p.HMAX) specsHTML += `<tr><td><i class="fa-solid fa-arrow-up-from-ground-water"></i>Elevación</td><td>${p.HMAX}</td></tr>`;
+                if(!p.Potencia && !p.QMAX && !p.HMAX) specsHTML = `<tr><td colspan="2" style="text-align:center;">Ver especificaciones en el catálogo</td></tr>`;
+
+                card.innerHTML = `
+                    <div class="img-container">
+                        <img src="${p.Imagen_URL || p.Imagen}" alt="${p.Producto || p.Nombre}">
+                    </div>
+                    <div class="product-info">
+                        <h3>${p.Producto || p.Nombre}</h3>
+                        <table class="info-table">
+                            ${specsHTML}
+                        </table>
+                        <a href="productos.html" class="btn btn-outline" style="display:block; text-align:center;">Especificaciones completas</a>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+
+            // Refrescar AOS para que los nuevos elementos se animen
+            AOS.refresh();
+
+            // Re-inicializar Vanilla Tilt en los nuevos elementos (Solo en PC)
+            if (window.innerWidth > 992) {
+                VanillaTilt.init(document.querySelectorAll(".product-card"), {
+                    max: 10,
+                    speed: 400,
+                    glare: true,
+                    "max-glare": 0.5
+                });
+            }
+        }
+
+        // Iniciar la carga de productos tan pronto como la página esté lista
+        document.addEventListener('DOMContentLoaded', loadRandomProducts);
+
     </script>
 </body>
 </html>
