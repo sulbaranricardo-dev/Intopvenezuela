@@ -38,136 +38,58 @@
             box-shadow: 0 5px 20px rgba(0,0,0,0.2);
         }
         .nav-header img { height: 35px; }
-        .btn-back {
-            color: white;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.75rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            letter-spacing: 1px;
-            transition: 0.3s;
-        }
+        .btn-back { color: white; text-decoration: none; font-weight: 600; font-size: 0.75rem; display: flex; align-items: center; gap: 8px; transition: 0.3s; }
         .btn-back:hover { color: var(--azul-neon); }
 
         /* --- FILTROS --- */
-        .filter-section {
-            padding: 40px 5% 30px;
-            background: white;
-            text-align: center;
-        }
-        .filter-container {
-            max-width: 1200px;
-            margin: 20px auto 0;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            justify-content: center;
-        }
-        .filter-btn {
-            padding: 10px 22px;
-            border-radius: 50px;
-            border: 1px solid #e2e8f0;
-            background: white;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.75rem;
-            transition: 0.3s;
-            text-transform: uppercase;
-            color: var(--azul-deep);
-        }
-        .filter-btn.active {
-            background: var(--azul-primario);
-            color: white;
-            border-color: var(--azul-primario);
-            box-shadow: 0 8px 20px rgba(0, 74, 153, 0.2);
-        }
+        .filter-section { padding: 40px 5% 30px; background: white; text-align: center; }
+        .filter-container { max-width: 1200px; margin: 20px auto 0; display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
+        .filter-btn { padding: 10px 22px; border-radius: 50px; border: 1px solid #e2e8f0; background: white; cursor: pointer; font-weight: 600; font-size: 0.75rem; transition: 0.3s; text-transform: uppercase; color: var(--azul-deep); }
+        .filter-btn.active { background: var(--azul-primario); color: white; border-color: var(--azul-primario); box-shadow: 0 8px 20px rgba(0, 74, 153, 0.2); }
 
         /* --- GRID --- */
-        .catalog-container {
-            padding: 40px 5% 80px;
-            max-width: 1300px;
-            margin: 0 auto;
-        }
-        .product-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 30px;
-        }
+        .catalog-container { padding: 40px 5% 80px; max-width: 1300px; margin: 0 auto; }
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px; }
 
         /* --- TARJETA --- */
-        .p-card {
-            background: white;
-            border-radius: 25px;
-            padding: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.03);
-            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            display: flex;
-            flex-direction: column;
-            border: 1px solid #f1f5f9;
-            position: relative;
-        }
-        .p-card:hover { transform: translateY(-12px); box-shadow: 0 20px 40px rgba(0,0,0,0.08); border-color: var(--azul-neon); }
+        .p-card { background: white; border-radius: 25px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); display: flex; flex-direction: column; border: 1px solid #f1f5f9; position: relative; }
+        .p-card:hover { transform: translateY(-12px); border-color: var(--azul-neon); }
         
-        .p-category-tag {
-            font-size: 0.65rem;
-            font-weight: 700;
-            color: var(--azul-primario);
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            margin-bottom: 5px;
-            display: block;
-        }
+        .p-category-tag { font-size: 0.65rem; font-weight: 700; color: var(--azul-primario); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 5px; display: block; }
 
         /* Badge Agotado */
-        .stock-badge {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: var(--rojo-alert);
-            color: white;
-            padding: 5px 12px;
-            border-radius: 50px;
-            font-size: 0.6rem;
-            font-weight: 800;
-            z-index: 5;
-            text-transform: uppercase;
-            box-shadow: 0 5px 10px rgba(239, 68, 68, 0.3);
-        }
+        .stock-badge { position: absolute; top: 20px; right: 20px; background: var(--rojo-alert); color: white; padding: 5px 12px; border-radius: 50px; font-size: 0.6rem; font-weight: 800; z-index: 5; text-transform: uppercase; box-shadow: 0 5px 10px rgba(239, 68, 68, 0.3); }
 
-        .p-img {
-            background: #fff;
-            height: 220px;
-            border-radius: 20px;
-            display: flex; align-items: center; justify-content: center;
-            margin-bottom: 20px; position: relative;
-        }
+        .p-img { background: #fff; height: 220px; border-radius: 20px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; position: relative; }
         .p-img img { max-width: 90%; max-height: 90%; object-fit: contain; }
-        .p-img.out-stock { opacity: 0.5; filter: grayscale(1); }
+        .p-img.out-stock { opacity: 0.4; filter: grayscale(1); }
 
         .p-info h3 { font-size: 1.15rem; color: var(--azul-deep); margin-bottom: 5px; font-weight: 700; line-height: 1.3; }
         
+        /* Estilo de la tabla de especificaciones */
         .p-specs { width: 100%; border-collapse: collapse; margin-bottom: 25px; font-size: 0.85rem; }
         .p-specs td { padding: 10px 0; border-bottom: 1px dashed #e2e8f0; color: #64748b; }
         .p-specs td i { color: var(--azul-primario); width: 22px; margin-right: 5px; text-align: center; }
         .p-specs td:nth-child(2) { text-align: right; font-weight: 700; color: var(--azul-deep); }
 
-        .btn-ficha {
-            background: var(--azul-deep);
+        /* Fila de Potencia Especial */
+        .row-potencia { background: rgba(0, 168, 255, 0.05); border-radius: 8px; }
+        .row-potencia td { border-bottom: none !important; padding: 12px 8px !important; }
+
+        /* Badges de Potencia */
+        .potencia-badge {
+            background: var(--azul-primario);
             color: white;
-            border: none;
-            padding: 14px;
-            border-radius: 15px;
-            width: 100%;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.7rem;
             font-weight: 700;
-            cursor: pointer;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-size: 0.75rem;
-            transition: 0.3s;
-            margin-top: auto;
+            margin-left: 4px;
+            display: inline-block;
+            box-shadow: 0 2px 4px rgba(0, 74, 153, 0.2);
         }
+
+        .btn-ficha { background: var(--azul-deep); color: white; border: none; padding: 14px; border-radius: 15px; width: 100%; font-weight: 700; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; font-size: 0.75rem; transition: 0.3s; margin-top: auto; }
         .btn-ficha:hover { background: var(--azul-primario); transform: scale(1.02); }
         .btn-out { background: #94a3b8; cursor: not-allowed; }
 
@@ -177,20 +99,15 @@
         @keyframes spin { 100% { transform: rotate(360deg); } }
 
         /* --- MODAL --- */
-        .intop-swal-popup {
-            background: rgba(2, 13, 28, 0.95) !important;
-            backdrop-filter: blur(15px) !important;
-            border: 1px solid rgba(0, 210, 255, 0.3) !important;
-            border-radius: 35px !important;
-            color: white !important;
-        }
+        .intop-swal-popup { background: rgba(2, 13, 28, 0.95) !important; backdrop-filter: blur(15px) !important; border: 1px solid rgba(0, 210, 255, 0.3) !important; border-radius: 35px !important; color: white !important; }
         .modal-header-intop { text-align: center; padding-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 15px; }
         .modal-img-container { width: 100%; background: rgba(255, 255, 255, 0.05); border-radius: 20px; padding: 15px; margin-bottom: 15px; display: flex; justify-content: center; align-items: center; }
         .modal-img-container img { max-width: 150px; max-height: 150px; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5)); }
         .tech-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 15px; }
         .tech-item { background: rgba(255, 255, 255, 0.05); padding: 12px; border-radius: 15px; border: 1px solid rgba(255, 255, 255, 0.1); }
         .tech-item label { display: block; font-size: 0.6rem; color: var(--azul-neon); text-transform: uppercase; font-weight: 700; margin-bottom: 3px; }
-        .tech-item span { font-size: 0.9rem; font-weight: 600; color: white; }
+        .tech-item span { font-size: 0.9rem; font-weight: 600; color: white; display: flex; flex-wrap: wrap; gap: 4px; }
+        
         .modal-footer-info { margin-top: 20px; font-size: 0.75rem; color: #cbd5e1; text-align: center; font-style: italic; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 12px; }
 
         @media (max-width: 480px) { .tech-grid { grid-template-columns: 1fr; } }
@@ -200,7 +117,7 @@
 
     <nav class="nav-header">
         <img src="https://i.postimg.cc/j5BPB72H/INTOP-BETTER-TOGETHER-transparente-copia.png" alt="INTOP Logo">
-        <a href="index.html" class="btn-back"><i class="fa-solid fa-chevron-left"></i> VOLVER</a>
+        <a href="index.html" class="btn-back"><i class="fa-solid fa-chevron-left"></i> VOLVER AL INICIO</a>
     </nav>
 
     <div class="filter-section">
@@ -213,7 +130,7 @@
     <div class="catalog-container">
         <div id="loader-container">
             <div class="spinner"></div>
-            <p>Conectando con la base de datos...</p>
+            <p>Sincronizando inventario...</p>
         </div>
         <div class="product-grid" id="product-grid"></div>
     </div>
@@ -227,37 +144,20 @@
                 const response = await fetch(API_URL);
                 const data = await response.json();
                 
-                // FILTRO DE VISIBILIDAD: Solo procesamos productos con Visible === TRUE
-                allProducts = data
-                    .filter(p => p.Visible === "TRUE" || p.Visible === true)
-                    .map(p => ({
-                        Nombre: p.Producto || p.Nombre || p.Modelo,
-                        Categoria: p.Categoria || p.Categoría,
-                        Serie: p.Serie || "",
-                        Modelo: p.Modelo || "",
-                        Potencia: p.Potencia || "",
-                        Voltaje: p.Voltaje || "",
-                        Imagen: p.Imagen_URL || p.Imagen || "https://via.placeholder.com/300",
-                        Descripcion: p.Descripcion || p.Descripción || "",
-                        HMAX: p.HMAX || "",
-                        QMAX: p.QMAX || "",
-                        AMP: p.AMP || "",
-                        Succ_Desc: p.Succ_Desc || "",
-                        Stock: p.Stock || "EN STOCK"
-                    }));
+                // Filtro estricto de visibilidad (Visible debe ser TRUE)
+                allProducts = data.filter(p => String(p.Visible).toUpperCase() === "TRUE");
 
                 renderFilters(allProducts);
                 renderProducts(allProducts);
                 document.getElementById('loader-container').style.display = 'none';
             } catch (error) {
-                console.error(error);
-                document.getElementById('loader-container').innerHTML = "<p>Error al cargar el inventario.</p>";
+                document.getElementById('loader-container').innerHTML = "<p>Error al conectar con la base de datos.</p>";
             }
         }
 
         function renderFilters(products) {
             const container = document.getElementById('category-filters');
-            const categories = [...new Set(products.map(p => p.Categoria))];
+            const categories = [...new Set(products.map(p => p.Categoria || p.Categoría))];
             categories.forEach(cat => {
                 if(cat) {
                     const btn = document.createElement('button');
@@ -279,28 +179,35 @@
                 card.className = "p-card";
                 card.setAttribute('data-aos', 'fade-up');
                 
-                // Construcción de especificaciones filtrando vacíos
+                // Procesar Potencias Múltiples (Coma separada)
+                let potenciasHTML = "";
+                if (p.Potencia) {
+                    const lista = p.Potencia.split(',');
+                    potenciasHTML = lista.map(pot => `<span class="potencia-badge">${pot.trim()}</span>`).join('');
+                }
+
+                // Specs condicionales
                 let specsHTML = "";
                 if(p.Serie) specsHTML += `<tr><td><i class="fa-solid fa-microchip"></i> Serie:</td><td>${p.Serie}</td></tr>`;
-                if(p.Potencia) specsHTML += `<tr><td><i class="fa-solid fa-bolt"></i> Potencia:</td><td>${p.Potencia}</td></tr>`;
+                if(p.Potencia) specsHTML += `<tr class="row-potencia"><td><i class="fa-solid fa-bolt"></i> Potencia:</td><td>${potenciasHTML}</td></tr>`;
                 if(p.Voltaje) specsHTML += `<tr><td><i class="fa-solid fa-plug"></i> Voltaje:</td><td>${p.Voltaje}</td></tr>`;
 
                 card.innerHTML = `
                     ${isOut ? '<div class="stock-badge">Agotado</div>' : ''}
-                    <span class="p-category-tag">${p.Categoria}</span>
+                    <span class="p-category-tag">${p.Categoria || p.Categoría}</span>
                     <div class="p-img ${isOut ? 'out-stock' : ''}">
-                        <img src="${p.Imagen}" alt="${p.Nombre}">
+                        <img src="${p.Imagen_URL || p.Imagen}" alt="${p.Producto}">
                     </div>
                     <div class="p-info">
-                        <h3>${p.Nombre}</h3>
-                        ${p.Modelo ? `<p style="font-size:0.75rem; color:var(--azul-primario); font-weight:700; margin-bottom:12px;">MOD: ${p.Modelo}</p>` : ''}
+                        <h3>${p.Producto || p.Nombre}</h3>
+                        ${p.Modelo ? `<p style="font-size:0.75rem; color:var(--azul-primario); font-weight:700; margin-bottom:12px;">REF: ${p.Modelo}</p>` : ''}
                         <table class="p-specs">
                             ${specsHTML}
                         </table>
                         <button class="btn-ficha ${isOut ? 'btn-out' : ''}" 
                                 onclick='${isOut ? '' : `verDetalle(${JSON.stringify(p).replace(/'/g, "&apos;")})`}'>
                             <i class="fa-solid ${isOut ? 'fa-circle-xmark' : 'fa-file-lines'}" style="margin-right:8px;"></i> 
-                            ${isOut ? 'FUERA DE STOCK' : 'FICHA TÉCNICA'}
+                            ${isOut ? 'SIN DISPONIBILIDAD' : 'FICHA TÉCNICA'}
                         </button>
                     </div>
                 `;
@@ -312,20 +219,22 @@
         function filterProducts(category, btn) {
             document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-            const filtered = category === 'Todos' ? allProducts : allProducts.filter(p => p.Categoria === category);
+            const filtered = category === 'Todos' ? allProducts : allProducts.filter(p => (p.Categoria || p.Categoría) === category);
             renderProducts(filtered);
         }
 
         function verDetalle(p) {
+            // Procesar Potencias para el Modal
+            let potBadges = p.Potencia ? p.Potencia.split(',').map(pot => `<span class="potencia-badge" style="background:var(--azul-neon); color:var(--azul-deep);">${pot.trim()}</span>`).join('') : '';
+
             let gridHTML = "";
             const fields = [
                 { label: 'Modelo', val: p.Modelo, icon: 'fa-barcode' },
-                { label: 'Potencia', val: p.Potencia, icon: 'fa-bolt' },
+                { label: 'Potencias', val: potBadges, isRaw: true, icon: 'fa-bolt' },
                 { label: 'Caudal (Q)', val: p.QMAX, icon: 'fa-droplet' },
                 { label: 'Altura (H)', val: p.HMAX, icon: 'fa-arrow-up-from-ground-water' },
                 { label: 'Voltaje', val: p.Voltaje, icon: 'fa-plug' },
-                { label: 'Succión/Desc.', val: p.Succ_Desc, icon: 'fa-ruler-combined' },
-                { label: 'Amperaje', val: p.AMP, icon: 'fa-bolt-lightning' }
+                { label: 'Succión/Desc.', val: p.Succ_Desc, icon: 'fa-ruler-combined' }
             ];
 
             fields.forEach(f => {
@@ -336,17 +245,17 @@
 
             Swal.fire({
                 customClass: { popup: 'intop-swal-popup' },
-                confirmButtonText: 'ENTENDIDO',
+                confirmButtonText: 'CERRAR',
                 confirmButtonColor: '#00d2ff',
                 width: '600px',
                 html: `
                     <div class="modal-header-intop">
-                        <h2 style="color:white; font-weight:800; font-size:1.5rem; margin-bottom:5px;">${p.Nombre}</h2>
-                        <span style="color:var(--azul-neon); font-size:0.8rem; font-weight:600; letter-spacing:2px; text-transform:uppercase;">${p.Categoria}</span>
+                        <h2 style="color:white; font-weight:800; font-size:1.5rem; margin-bottom:5px;">${p.Producto || p.Nombre}</h2>
+                        <span style="color:var(--azul-neon); font-size:0.8rem; font-weight:600; letter-spacing:2px; text-transform:uppercase;">${p.Categoria || p.Categoría}</span>
                     </div>
-                    <div class="modal-img-container"><img src="${p.Imagen}" alt="${p.Nombre}"></div>
+                    <div class="modal-img-container"><img src="${p.Imagen_URL || p.Imagen}" alt="${p.Producto}"></div>
                     <div class="tech-grid">${gridHTML}</div>
-                    ${p.Descripcion ? `<div style="margin-top:20px; padding:15px; background:rgba(0,0,0,0.2); border-radius:15px; text-align:left; border:1px solid rgba(255,255,255,0.1);"><p style="color:#cbd5e1; font-size:0.85rem; line-height:1.4;">${p.Descripcion}</p></div>` : ''}
+                    ${(p.Descripcion || p.Descripción) ? `<div style="margin-top:20px; padding:15px; background:rgba(0,0,0,0.2); border-radius:15px; text-align:left; border:1px solid rgba(255,255,255,0.1);"><p style="color:#cbd5e1; font-size:0.85rem; line-height:1.4;">${p.Descripcion || p.Descripción}</p></div>` : ''}
                 `
             });
         }
