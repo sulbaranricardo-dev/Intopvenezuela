@@ -15,23 +15,23 @@
         .container { max-width: 1150px; margin: 0 auto; display: none; }
         #login-box { height: 80vh; display: flex; flex-direction: column; justify-content: center; align-items: center; }
         
-        .glass { background: rgba(255,255,255,0.05); backdrop-filter: blur(10px); border-radius: 25px; border: 1px solid rgba(255,255,255,0.1); padding: 30px; margin-bottom: 30px; }
+        .glass { background: rgba(255,255,255,0.05); backdrop-filter: blur(10px); border-radius: 25px; border: 1px solid rgba(255,255,255,0.1); padding: 30px; margin-bottom: 30px; overflow-x: auto; }
         
         .btn { padding: 12px 25px; border-radius: 50px; border: none; font-weight: 700; cursor: pointer; transition: 0.3s; text-transform: uppercase; font-size: 0.75rem; }
         .btn-neon { background: var(--azul-neon); color: var(--azul-deep); }
         .btn-neon:hover { box-shadow: 0 0 20px var(--azul-neon); transform: scale(1.05); }
         .btn-add { font-size: 1rem; padding: 15px 40px; margin-bottom: 30px; display: block; width: fit-content; }
         
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 0.85rem; }
-        th { text-align: left; color: var(--azul-neon); padding: 15px; border-bottom: 2px solid rgba(255,255,255,0.1); }
-        td { padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 0.85rem; min-width: 800px; }
+        th { text-align: left; color: var(--azul-neon); padding: 15px; border-bottom: 2px solid rgba(255,255,255,0.1); white-space: nowrap; }
+        td { padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); vertical-align: middle; }
         
         .badge { padding: 5px 10px; border-radius: 5px; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; }
         .bg-success { background: #22c55e; color: white; }
         .bg-danger { background: #ef4444; color: white; }
         .bg-warning { background: #f59e0b; color: white; }
 
-        .action-btns { display: flex; gap: 8px; }
+        .action-btns { display: flex; gap: 8px; flex-wrap: wrap; }
         .action-btns button { background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2); padding: 8px; border-radius: 8px; cursor: pointer; transition: 0.3s; }
         .action-btns button:hover { background: var(--azul-primario); border-color: var(--azul-neon); }
 
@@ -68,7 +68,8 @@
             <table id="products-table">
                 <thead>
                     <tr>
-                        <th>Producto / Modelo</th>
+                        <th>Modelo / Producto</th>
+                        <th>Serie</th>
                         <th>Categoría</th>
                         <th>Estado</th>
                         <th>Disponibilidad</th>
@@ -83,6 +84,7 @@
     <script>
         const API_URL = "https://script.google.com/macros/s/AKfycbywQxhAKkPPGE6CCXzcECj7qP1ikcbyzJ7loHa_IikFKVaA-BpILMHlczyXuiq51ndy4A/exec"; 
         let allProducts = [];
+        let categoriasDisponibles = [];
 
         function checkPass() {
             if(document.getElementById('pass').value === "intop2026") {
@@ -95,13 +97,17 @@
         async function cargarProductos() {
             const res = await fetch(API_URL);
             const data = await res.json();
-            // Normalizar datos para asegurar que descripción y visible se lean bien
+            
             allProducts = data.map(p => ({
                 ...p,
                 Descripcion: p.Descripcion || p.Descripción || "",
                 Visible: String(p.Visible).toUpperCase() === "TRUE" ? "TRUE" : "FALSE",
                 Stock: p.Stock === "AGOTADO" ? "AGOTADO" : "EN STOCK"
             }));
+
+            // Extraer categorías únicas de los datos reales
+            categoriasDisponibles = [...new Set(allProducts.map(p => p.Categoria || p.Categoría).filter(c => c))];
+
             renderTable();
         }
 
@@ -109,7 +115,11 @@
             const body = document.getElementById('table-body');
             body.innerHTML = allProducts.map(p => `
                 <tr>
-                    <td><b>${p.Producto}</b><br><small style="opacity:0.6">${p.Modelo}</small></td>
+                    <td>
+                        <b style="font-size: 1.1rem; color: var(--azul-neon);">${p.Modelo}</b><br>
+                        <small style="opacity:0.7; font-weight: 600;">${p.Producto || p.Nombre}</small>
+                    </td>
+                    <td style="font-weight: 600;">${p.Serie || '-'}</td>
                     <td>${p.Categoria || p.Categoría}</td>
                     <td><span class="badge ${p.Visible === 'TRUE' ? 'bg-success' : 'bg-danger'}">${p.Visible === 'TRUE' ? 'Público' : 'Oculto'}</span></td>
                     <td><span class="badge ${p.Stock === 'EN STOCK' ? 'bg-success' : 'bg-warning'}">${p.Stock}</span></td>
@@ -144,6 +154,15 @@
 
         function abrirFormulario(existingData = null) {
             const isEdit = existingData !== null;
+            const currentCat = isEdit ? (existingData.Categoria || existingData.Categoría) : '';
+
+            // Generar opciones de categoría dinámicamente
+            let catOptions = categoriasDisponibles.map(cat => 
+                `<option value="${cat}" ${cat === currentCat ? 'selected' : ''}>${cat}</option>`
+            ).join('');
+            
+            catOptions += `<option value="nueva_cat">+ Añadir nueva categoría...</option>`;
+
             Swal.fire({
                 title: isEdit ? 'Editar Producto' : 'Nuevo Producto',
                 width: '800px',
@@ -151,19 +170,19 @@
                 color: '#fff',
                 html: `
                     <div class="swal-form-container">
-                        <div class="swal-form-group full-width"><label>Nombre del Producto</label><input id="f-prod" value="${isEdit ? existingData.Producto : ''}"></div>
-                        <div class="swal-form-group"><label>Categoría</label>
-                            <select id="f-cat">
-                                <option ${isEdit && (existingData.Categoria == 'Bombas Periféricas' || existingData.Categoría == 'Bombas Periféricas') ? 'selected' : ''}>Bombas Periféricas</option>
-                                <option ${isEdit && (existingData.Categoria == 'Bombas Sumergibles' || existingData.Categoría == 'Bombas Sumergibles') ? 'selected' : ''}>Bombas Sumergibles</option>
-                                <option ${isEdit && (existingData.Categoria == 'Pozos Profundos' || existingData.Categoría == 'Pozos Profundos') ? 'selected' : ''}>Pozos Profundos</option>
-                                <option ${isEdit && (existingData.Categoria == 'Tanques' || existingData.Categoría == 'Tanques') ? 'selected' : ''}>Tanques</option>
-                                <option ${isEdit && (existingData.Categoria == 'Accesorios' || existingData.Categoría == 'Accesorios') ? 'selected' : ''}>Accesorios</option>
+                        <div class="swal-form-group full-width"><label>Nombre del Producto</label><input id="f-prod" value="${isEdit ? (existingData.Producto || existingData.Nombre) : ''}" placeholder="Ej: Bomba Periférica"></div>
+                        
+                        <div class="swal-form-group">
+                            <label>Categoría</label>
+                            <select id="f-cat" onchange="checkNuevaCategoria()">
+                                ${catOptions}
                             </select>
+                            <input type="text" id="f-nueva-cat" placeholder="Escribe la nueva categoría" style="display:none; margin-top:5px;">
                         </div>
+                        
                         <div class="swal-form-group"><label>Modelo (ID Único)</label><input id="f-mod" value="${isEdit ? existingData.Modelo : ''}" ${isEdit ? 'disabled' : ''}></div>
                         <div class="swal-form-group"><label>Serie</label><input id="f-serie" value="${isEdit ? (existingData.Serie || '') : ''}"></div>
-                        <div class="swal-form-group"><label>Potencia</label><input id="f-pot" value="${isEdit ? (existingData.Potencia || '') : ''}"></div>
+                        <div class="swal-form-group"><label>Potencia</label><input id="f-pot" value="${isEdit ? (existingData.Potencia || '') : ''}" placeholder="Ej: 0.5 HP, 1 HP"></div>
                         <div class="swal-form-group"><label>HMAX</label><input id="f-hmax" value="${isEdit ? (existingData.HMAX || '') : ''}"></div>
                         <div class="swal-form-group"><label>QMAX</label><input id="f-qmax" value="${isEdit ? (existingData.QMAX || '') : ''}"></div>
                         <div class="swal-form-group"><label>Voltaje</label><input id="f-vol" value="${isEdit ? (existingData.Voltaje || '') : ''}"></div>
@@ -178,12 +197,20 @@
                 preConfirm: () => {
                     const prod = document.getElementById('f-prod').value;
                     const mod = document.getElementById('f-mod').value;
+                    
+                    // Lógica para capturar categoría (existente o nueva)
+                    const selectCat = document.getElementById('f-cat').value;
+                    const inputNuevaCat = document.getElementById('f-nueva-cat').value;
+                    const finalCat = selectCat === 'nueva_cat' ? inputNuevaCat : selectCat;
+
                     if(!prod || !mod) return Swal.showValidationMessage('Nombre y Modelo son obligatorios');
+                    if(selectCat === 'nueva_cat' && !inputNuevaCat) return Swal.showValidationMessage('Debes escribir el nombre de la nueva categoría');
+
                     return {
                         action: isEdit ? 'edit' : 'add',
                         Producto: prod,
                         Modelo: mod,
-                        Categoria: document.getElementById('f-cat').value,
+                        Categoria: finalCat,
                         Serie: document.getElementById('f-serie').value,
                         Potencia: document.getElementById('f-pot').value,
                         HMAX: document.getElementById('f-hmax').value,
@@ -201,6 +228,18 @@
                     setTimeout(() => { cargarProductos(); Swal.close(); }, 1500);
                 }
             });
+        }
+
+        // Función auxiliar para mostrar el campo de texto si se elige "Nueva Categoría"
+        function checkNuevaCategoria() {
+            const select = document.getElementById('f-cat');
+            const input = document.getElementById('f-nueva-cat');
+            if (select.value === 'nueva_cat') {
+                input.style.display = 'block';
+                input.focus();
+            } else {
+                input.style.display = 'none';
+            }
         }
 
         function editarProducto(modelo) {
