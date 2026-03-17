@@ -196,7 +196,7 @@
                     </table>
 
                     <button class="btn-ficha" onclick='verFichaComparativa("${p.Serie}")'>
-                        <i class="fa-solid fa-table-list" style="margin-right:8px;"></i> COMPARAR MODELOS
+                        <i class="fa-solid fa-table-list" style="margin-right:8px;"></i> VER FICHA TECNICA
                     </button>
                 </div>
             `;
@@ -248,7 +248,7 @@
                 html: `
                     <div class="modal-header-intop">
                         <h2 style="color:white; font-weight:800; text-transform:uppercase;">SERIE ${serieName}</h2>
-                        <p style="color:var(--azul-neon); font-size:0.75rem; letter-spacing:2px; font-weight:700;">${models[0].Producto}</p>
+                        <p style="color:var(--azul-neon); font-size:0.75rem; letter-spacing:2px; font-weight:700; padding:10;">${models[0].Producto}</p>
                     </div>
                     <div class="modal-img-container" style="background:white; border-radius:20px; padding:20px; margin-bottom:20px;">
                         <img src="${models[0].Imagen_URL || models[0].Imagen}" style="max-height:180px;">
