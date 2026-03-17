@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catálogo | INTOP Suministros</title>
+    <title>Catálogo por Series | INTOP</title>
     
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap" rel="stylesheet">
@@ -26,17 +26,7 @@
         body { background-color: var(--gris-bg); color: var(--azul-deep); overflow-x: hidden; }
 
         /* --- NAVBAR --- */
-        .nav-header {
-            background: rgba(2, 13, 28, 0.98);
-            padding: 15px 5%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
-        }
+        .nav-header { background: rgba(2, 13, 28, 0.98); padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; box-shadow: 0 5px 20px rgba(0,0,0,0.2); }
         .nav-header img { height: 35px; }
         .btn-back { color: white; text-decoration: none; font-weight: 600; font-size: 0.75rem; display: flex; align-items: center; gap: 8px; transition: 0.3s; }
         .btn-back:hover { color: var(--azul-neon); }
@@ -49,213 +39,237 @@
 
         /* --- GRID --- */
         .catalog-container { padding: 40px 5% 80px; max-width: 1300px; margin: 0 auto; }
-        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px; }
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px; }
 
-        /* --- TARJETA --- */
-        .p-card { background: white; border-radius: 25px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); display: flex; flex-direction: column; border: 1px solid #f1f5f9; position: relative; }
-        .p-card:hover { transform: translateY(-12px); border-color: var(--azul-neon); }
+        /* --- TARJETA POR SERIE --- */
+        .p-card { background: white; border-radius: 25px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); transition: 0.4s; display: flex; flex-direction: column; border: 1px solid #f1f5f9; position: relative; }
+        .p-card:hover { border-color: var(--azul-neon); transform: translateY(-5px); }
         
-        .p-category-tag { font-size: 0.65rem; font-weight: 700; color: var(--azul-primario); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 5px; display: block; }
+        /* Switcher de Modelos */
+        .model-switcher { display: flex; align-items: center; justify-content: space-between; background: #f1f5f9; padding: 8px 15px; border-radius: 12px; margin-bottom: 15px; border: 1px solid #e2e8f0; }
+        .model-switcher span { font-size: 0.65rem; font-weight: 800; color: var(--azul-primario); text-transform: uppercase; }
+        .btn-nav-model { background: var(--azul-primario); color: white; border: none; width: 26px; height: 26px; border-radius: 50%; cursor: pointer; font-size: 0.7rem; transition: 0.3s; display: flex; align-items: center; justify-content: center; }
+        .btn-nav-model:hover { background: var(--azul-neon); color: var(--azul-deep); }
 
-        /* Badge Agotado */
-        .stock-badge { position: absolute; top: 20px; right: 20px; background: var(--rojo-alert); color: white; padding: 5px 12px; border-radius: 50px; font-size: 0.6rem; font-weight: 800; z-index: 5; text-transform: uppercase; box-shadow: 0 5px 10px rgba(239, 68, 68, 0.3); }
+        .p-category-tag { font-size: 0.6rem; font-weight: 700; color: var(--azul-primario); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 5px; }
+        .stock-badge { position: absolute; top: 20px; right: 20px; background: var(--rojo-alert); color: white; padding: 5px 12px; border-radius: 50px; font-size: 0.6rem; font-weight: 800; z-index: 5; text-transform: uppercase; }
 
-        .p-img { background: #fff; height: 220px; border-radius: 20px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; position: relative; }
-        .p-img img { max-width: 90%; max-height: 90%; object-fit: contain; }
+        .p-img { height: 200px; display: flex; align-items: center; justify-content: center; margin-bottom: 15px; transition: 0.3s; }
+        .p-img img { max-width: 85%; max-height: 85%; object-fit: contain; }
         .p-img.out-stock { opacity: 0.4; filter: grayscale(1); }
 
-        .p-info h3 { font-size: 1.15rem; color: var(--azul-deep); margin-bottom: 5px; font-weight: 700; line-height: 1.3; }
+        .p-info h3 { font-size: 1.1rem; color: var(--azul-deep); margin-bottom: 2px; font-weight: 800; }
+        .serie-label { font-size: 0.85rem; color: var(--azul-primario); font-weight: 700; margin-bottom: 15px; display: block; }
         
-        /* Estilo de la tabla de especificaciones */
-        .p-specs { width: 100%; border-collapse: collapse; margin-bottom: 25px; font-size: 0.85rem; }
-        .p-specs td { padding: 10px 0; border-bottom: 1px dashed #e2e8f0; color: #64748b; }
-        .p-specs td i { color: var(--azul-primario); width: 22px; margin-right: 5px; text-align: center; }
+        .p-specs { width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 0.8rem; }
+        .p-specs td { padding: 8px 0; border-bottom: 1px dashed #e2e8f0; color: #64748b; }
+        .p-specs td i { color: var(--azul-primario); width: 20px; }
         .p-specs td:nth-child(2) { text-align: right; font-weight: 700; color: var(--azul-deep); }
 
-        /* Fila de Potencia Especial */
-        .row-potencia { background: rgba(0, 168, 255, 0.05); border-radius: 8px; }
-        .row-potencia td { border-bottom: none !important; padding: 12px 8px !important; }
+        .row-potencia { background: rgba(0, 210, 255, 0.05); }
+        .potencia-badge { background: var(--azul-primario); color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.65rem; margin-left: 3px; display: inline-block; font-weight: 700; }
 
-        /* Badges de Potencia */
-        .potencia-badge {
-            background: var(--azul-primario);
-            color: white;
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 0.7rem;
-            font-weight: 700;
-            margin-left: 4px;
-            display: inline-block;
-            box-shadow: 0 2px 4px rgba(0, 74, 153, 0.2);
-        }
-
-        .btn-ficha { background: var(--azul-deep); color: white; border: none; padding: 14px; border-radius: 15px; width: 100%; font-weight: 700; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; font-size: 0.75rem; transition: 0.3s; margin-top: auto; }
-        .btn-ficha:hover { background: var(--azul-primario); transform: scale(1.02); }
-        .btn-out { background: #94a3b8; cursor: not-allowed; }
-
-        /* Loader */
-        #loader-container { text-align: center; padding: 100px; }
-        .spinner { width: 50px; height: 50px; border: 5px solid #eee; border-top: 5px solid var(--azul-neon); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 20px; }
-        @keyframes spin { 100% { transform: rotate(360deg); } }
+        .btn-ficha { background: var(--azul-deep); color: white; border: none; padding: 14px; border-radius: 15px; width: 100%; font-weight: 700; cursor: pointer; text-transform: uppercase; font-size: 0.7rem; transition: 0.3s; margin-top: auto; letter-spacing: 1px; }
+        .btn-ficha:hover { background: var(--azul-primario); }
 
         /* --- MODAL --- */
-        .intop-swal-popup { background: rgba(2, 13, 28, 0.95) !important; backdrop-filter: blur(15px) !important; border: 1px solid rgba(0, 210, 255, 0.3) !important; border-radius: 35px !important; color: white !important; }
-        .modal-header-intop { text-align: center; padding-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 15px; }
-        .modal-img-container { width: 100%; background: rgba(255, 255, 255, 0.05); border-radius: 20px; padding: 15px; margin-bottom: 15px; display: flex; justify-content: center; align-items: center; }
-        .modal-img-container img { max-width: 150px; max-height: 150px; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5)); }
-        .tech-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 15px; }
-        .tech-item { background: rgba(255, 255, 255, 0.05); padding: 12px; border-radius: 15px; border: 1px solid rgba(255, 255, 255, 0.1); }
-        .tech-item label { display: block; font-size: 0.6rem; color: var(--azul-neon); text-transform: uppercase; font-weight: 700; margin-bottom: 3px; }
-        .tech-item span { font-size: 0.9rem; font-weight: 600; color: white; display: flex; flex-wrap: wrap; gap: 4px; }
-        
-        .modal-footer-info { margin-top: 20px; font-size: 0.75rem; color: #cbd5e1; text-align: center; font-style: italic; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 12px; }
+        .intop-swal-popup { background: rgba(2, 13, 28, 0.98) !important; color: white !important; border-radius: 30px !important; border: 1px solid var(--azul-neon) !important; }
+        .comp-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.7rem; color: white; }
+        .comp-table th { background: rgba(0, 74, 153, 0.6); padding: 10px; border: 1px solid rgba(255,255,255,0.1); text-transform: uppercase; }
+        .comp-table td { padding: 10px; border: 1px solid rgba(255,255,255,0.1); text-align: center; }
 
-        @media (max-width: 480px) { .tech-grid { grid-template-columns: 1fr; } }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
     <nav class="nav-header">
         <img src="https://i.postimg.cc/j5BPB72H/INTOP-BETTER-TOGETHER-transparente-copia.png" alt="INTOP Logo">
-        <a href="index.html" class="btn-back"><i class="fa-solid fa-chevron-left"></i> VOLVER AL INICIO</a>
+        <a href="index.html" class="btn-back"><i class="fa-solid fa-chevron-left"></i> INICIO</a>
     </nav>
 
     <div class="filter-section">
-        <h2 style="font-weight: 800; letter-spacing: -1px; font-size: 2.2rem;">NUESTRO <span style="color: var(--azul-primario);">STOCK</span></h2>
+        <h2 style="font-weight: 800; font-size: 2.2rem;">CATÁLOGO <span style="color: var(--azul-primario);">COMPLETO</span></h2>
         <div class="filter-container" id="category-filters">
-            <button class="filter-btn active" onclick="filterProducts('Todos', this)">Todos</button>
+            <button class="filter-btn active" onclick="filterByCat('Todos', this)">Todos</button>
         </div>
     </div>
 
     <div class="catalog-container">
-        <div id="loader-container">
-            <div class="spinner"></div>
-            <p>Sincronizando inventario...</p>
+        <div id="loader-container" style="text-align: center; padding: 50px;">
+            <div style="width: 40px; height: 40px; border: 4px solid #eee; border-top: 4px solid var(--azul-neon); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 15px;"></div>
+            <p>Sincronizando modelos por serie...</p>
         </div>
         <div class="product-grid" id="product-grid"></div>
     </div>
 
     <script>
         const API_URL = "https://script.google.com/macros/s/AKfycbywQxhAKkPPGE6CCXzcECj7qP1ikcbyzJ7loHa_IikFKVaA-BpILMHlczyXuiq51ndy4A/exec";
-        let allProducts = [];
+        let groupedBySerie = {}; 
 
         async function fetchProducts() {
             try {
                 const response = await fetch(API_URL);
                 const data = await response.json();
                 
-                // Filtro estricto de visibilidad (Visible debe ser TRUE)
-                allProducts = data.filter(p => String(p.Visible).toUpperCase() === "TRUE");
+                const visibles = data.filter(p => String(p.Visible).toUpperCase() === "TRUE");
 
-                renderFilters(allProducts);
-                renderProducts(allProducts);
+                // --- CAMBIO CLAVE: Agrupar por SERIE (Columna C) ---
+                groupedBySerie = visibles.reduce((acc, p) => {
+                    const key = p.Serie || "Genérico";
+                    if (!acc[key]) acc[key] = [];
+                    acc[key].push(p);
+                    return acc;
+                }, {});
+
+                renderFilters(visibles);
+                renderGroups(groupedBySerie);
                 document.getElementById('loader-container').style.display = 'none';
             } catch (error) {
-                document.getElementById('loader-container').innerHTML = "<p>Error al conectar con la base de datos.</p>";
+                console.error(error);
             }
         }
 
-        function renderFilters(products) {
+        function renderFilters(allData) {
             const container = document.getElementById('category-filters');
-            const categories = [...new Set(products.map(p => p.Categoria || p.Categoría))];
+            const categories = [...new Set(allData.map(p => p.Categoria || p.Categoría))];
             categories.forEach(cat => {
                 if(cat) {
                     const btn = document.createElement('button');
                     btn.className = 'filter-btn';
                     btn.innerText = cat;
-                    btn.onclick = () => filterProducts(cat, btn);
+                    btn.onclick = () => filterByCat(cat, btn);
                     container.appendChild(btn);
                 }
             });
         }
 
-        function renderProducts(products) {
+        function renderGroups(groups) {
             const grid = document.getElementById('product-grid');
             grid.innerHTML = "";
 
-            products.forEach(p => {
-                const isOut = p.Stock === "AGOTADO";
+            Object.keys(groups).forEach(serieName => {
+                const models = groups[serieName];
                 const card = document.createElement('div');
                 card.className = "p-card";
                 card.setAttribute('data-aos', 'fade-up');
                 
-                // Procesar Potencias Múltiples (Coma separada)
-                let potenciasHTML = "";
-                if (p.Potencia) {
-                    const lista = p.Potencia.split(',');
-                    potenciasHTML = lista.map(pot => `<span class="potencia-badge">${pot.trim()}</span>`).join('');
-                }
-
-                // Specs condicionales
-                let specsHTML = "";
-                if(p.Serie) specsHTML += `<tr><td><i class="fa-solid fa-microchip"></i> Serie:</td><td>${p.Serie}</td></tr>`;
-                if(p.Potencia) specsHTML += `<tr class="row-potencia"><td><i class="fa-solid fa-bolt"></i> Potencia:</td><td>${potenciasHTML}</td></tr>`;
-                if(p.Voltaje) specsHTML += `<tr><td><i class="fa-solid fa-plug"></i> Voltaje:</td><td>${p.Voltaje}</td></tr>`;
-
-                card.innerHTML = `
-                    ${isOut ? '<div class="stock-badge">Agotado</div>' : ''}
-                    <span class="p-category-tag">${p.Categoria || p.Categoría}</span>
-                    <div class="p-img ${isOut ? 'out-stock' : ''}">
-                        <img src="${p.Imagen_URL || p.Imagen}" alt="${p.Producto}">
-                    </div>
-                    <div class="p-info">
-                        <h3>${p.Producto || p.Nombre}</h3>
-                        ${p.Modelo ? `<p style="font-size:0.75rem; color:var(--azul-primario); font-weight:700; margin-bottom:12px;">REF: ${p.Modelo}</p>` : ''}
-                        <table class="p-specs">
-                            ${specsHTML}
-                        </table>
-                        <button class="btn-ficha ${isOut ? 'btn-out' : ''}" 
-                                onclick='${isOut ? '' : `verDetalle(${JSON.stringify(p).replace(/'/g, "&apos;")})`}'>
-                            <i class="fa-solid ${isOut ? 'fa-circle-xmark' : 'fa-file-lines'}" style="margin-right:8px;"></i> 
-                            ${isOut ? 'SIN DISPONIBILIDAD' : 'FICHA TÉCNICA'}
-                        </button>
-                    </div>
-                `;
+                renderCardContent(card, models, 0);
                 grid.appendChild(card);
             });
             AOS.init();
         }
 
-        function filterProducts(category, btn) {
-            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            const filtered = category === 'Todos' ? allProducts : allProducts.filter(p => (p.Categoria || p.Categoría) === category);
-            renderProducts(filtered);
+        function renderCardContent(card, models, index) {
+            const p = models[index];
+            const hasMultiple = models.length > 1;
+            const isOut = p.Stock === "AGOTADO";
+
+            // Procesar potencias en badges
+            const potenciasHTML = p.Potencia ? p.Potencia.split(',').map(pot => `<span class="potencia-badge">${pot.trim()}</span>`).join('') : 'N/A';
+
+            card.innerHTML = `
+                ${isOut ? '<div class="stock-badge">Agotado</div>' : ''}
+                <span class="p-category-tag">${p.Categoria || p.Categoría}</span>
+                
+                ${hasMultiple ? `
+                <div class="model-switcher">
+                    <button class="btn-nav-model" onclick="changeModel(this, -1)"><i class="fa-solid fa-chevron-left"></i></button>
+                    <span>MODELO ${index + 1} DE ${models.length}</span>
+                    <button class="btn-nav-model" onclick="changeModel(this, 1)"><i class="fa-solid fa-chevron-right"></i></button>
+                </div>
+                ` : '<div style="height:40px"></div>'}
+
+                <div class="p-img ${isOut ? 'out-stock' : ''}">
+                    <img src="${p.Imagen_URL || p.Imagen}" alt="${p.Producto}">
+                </div>
+
+                <div class="p-info">
+                    <h3>${p.Producto || p.Nombre}</h3>
+                    <span class="serie-label">SERIE: ${p.Serie}</span>
+                    
+                    <table class="p-specs">
+                        <tr><td><i class="fa-solid fa-barcode"></i> Modelo:</td><td>${p.Modelo}</td></tr>
+                        <tr class="row-potencia"><td><i class="fa-solid fa-bolt"></i> Potencia:</td><td>${potenciasHTML}</td></tr>
+                        ${p.HMAX ? `<tr><td><i class="fa-solid fa-arrow-up-wide-short"></i> Altura (H):</td><td>${p.HMAX}</td></tr>` : ''}
+                        ${p.QMAX ? `<tr><td><i class="fa-solid fa-droplet"></i> Caudal (Q):</td><td>${p.QMAX}</td></tr>` : ''}
+                    </table>
+
+                    <button class="btn-ficha" onclick='verFichaComparativa("${p.Serie}")'>
+                        <i class="fa-solid fa-table-list" style="margin-right:8px;"></i> COMPARAR MODELOS
+                    </button>
+                </div>
+            `;
+
+            card.dataset.models = JSON.stringify(models);
+            card.dataset.currentIndex = index;
         }
 
-        function verDetalle(p) {
-            // Procesar Potencias para el Modal
-            let potBadges = p.Potencia ? p.Potencia.split(',').map(pot => `<span class="potencia-badge" style="background:var(--azul-neon); color:var(--azul-deep);">${pot.trim()}</span>`).join('') : '';
+        function changeModel(btn, delta) {
+            const card = btn.closest('.p-card');
+            const models = JSON.parse(card.dataset.models);
+            let index = parseInt(card.dataset.currentIndex);
+            index += delta;
+            if (index < 0) index = models.length - 1;
+            if (index >= models.length) index = 0;
+            renderCardContent(card, models, index);
+        }
 
-            let gridHTML = "";
-            const fields = [
-                { label: 'Modelo', val: p.Modelo, icon: 'fa-barcode' },
-                { label: 'Potencias', val: potBadges, isRaw: true, icon: 'fa-bolt' },
-                { label: 'Caudal (Q)', val: p.QMAX, icon: 'fa-droplet' },
-                { label: 'Altura (H)', val: p.HMAX, icon: 'fa-arrow-up-from-ground-water' },
-                { label: 'Voltaje', val: p.Voltaje, icon: 'fa-plug' },
-                { label: 'Succión/Desc.', val: p.Succ_Desc, icon: 'fa-ruler-combined' }
-            ];
-
-            fields.forEach(f => {
-                if(f.val) {
-                    gridHTML += `<div class="tech-item"><label><i class="fa-solid ${f.icon}"></i> ${f.label}</label><span>${f.val}</span></div>`;
+        function filterByCat(cat, btn) {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            const filtered = {};
+            Object.keys(groupedBySerie).forEach(serie => {
+                const group = groupedBySerie[serie];
+                if (cat === 'Todos' || (group[0].Categoria || group[0].Categoría) === cat) {
+                    filtered[serie] = group;
                 }
             });
+            renderGroups(filtered);
+        }
+
+        function verFichaComparativa(serieName) {
+            const models = groupedBySerie[serieName];
+            let rows = models.map(m => `
+                <tr>
+                    <td style="text-align:left; font-weight:700;">${m.Modelo}</td>
+                    <td>${m.Potencia}</td>
+                    <td>${m.HMAX || '-'}</td>
+                    <td>${m.QMAX || '-'}</td>
+                    <td>${m.Voltaje || '-'}</td>
+                </tr>
+            `).join('');
 
             Swal.fire({
                 customClass: { popup: 'intop-swal-popup' },
+                width: '850px',
                 confirmButtonText: 'CERRAR',
                 confirmButtonColor: '#00d2ff',
-                width: '600px',
                 html: `
                     <div class="modal-header-intop">
-                        <h2 style="color:white; font-weight:800; font-size:1.5rem; margin-bottom:5px;">${p.Producto || p.Nombre}</h2>
-                        <span style="color:var(--azul-neon); font-size:0.8rem; font-weight:600; letter-spacing:2px; text-transform:uppercase;">${p.Categoria || p.Categoría}</span>
+                        <h2 style="color:white; font-weight:800; text-transform:uppercase;">SERIE ${serieName}</h2>
+                        <p style="color:var(--azul-neon); font-size:0.75rem; letter-spacing:2px; font-weight:700;">${models[0].Producto}</p>
                     </div>
-                    <div class="modal-img-container"><img src="${p.Imagen_URL || p.Imagen}" alt="${p.Producto}"></div>
-                    <div class="tech-grid">${gridHTML}</div>
-                    ${(p.Descripcion || p.Descripción) ? `<div style="margin-top:20px; padding:15px; background:rgba(0,0,0,0.2); border-radius:15px; text-align:left; border:1px solid rgba(255,255,255,0.1);"><p style="color:#cbd5e1; font-size:0.85rem; line-height:1.4;">${p.Descripcion || p.Descripción}</p></div>` : ''}
+                    <div class="modal-img-container" style="background:white; border-radius:20px; padding:20px; margin-bottom:20px;">
+                        <img src="${models[0].Imagen_URL || models[0].Imagen}" style="max-height:180px;">
+                    </div>
+                    <div style="overflow-x:auto;">
+                        <table class="comp-table">
+                            <thead>
+                                <tr>
+                                    <th style="text-align:left;">Modelo Ref.</th>
+                                    <th>Potencia</th>
+                                    <th>Altura (H)</th>
+                                    <th>Caudal (Q)</th>
+                                    <th>Voltaje</th>
+                                </tr>
+                            </thead>
+                            <tbody>${rows}</tbody>
+                        </table>
+                    </div>
+                    <div style="margin-top:20px; text-align:left; padding:15px; background:rgba(255,255,255,0.05); border-radius:15px; border:1px solid rgba(255,255,255,0.1);">
+                        <p style="font-size:0.8rem; color:#cbd5e1; line-height:1.6;">${models[0].Descripcion || 'Información técnica sujeta a variaciones según el modelo seleccionado.'}</p>
+                    </div>
                 `
             });
         }
