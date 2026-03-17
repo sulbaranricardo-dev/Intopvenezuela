@@ -12,20 +12,28 @@
         :root { --azul-deep: #020d1c; --azul-primario: #004a99; --azul-neon: #00d2ff; --blanco: #ffffff; }
         body { background: var(--azul-deep); color: white; font-family: 'Montserrat', sans-serif; margin: 0; padding: 20px; }
         
-        .container { max-width: 1150px; margin: 0 auto; display: none; }
+        .container { max-width: 1200px; margin: 0 auto; display: none; }
         #login-box { height: 80vh; display: flex; flex-direction: column; justify-content: center; align-items: center; }
         
         .glass { background: rgba(255,255,255,0.05); backdrop-filter: blur(10px); border-radius: 25px; border: 1px solid rgba(255,255,255,0.1); padding: 30px; margin-bottom: 30px; overflow-x: auto; }
         
-        .btn { padding: 12px 25px; border-radius: 50px; border: none; font-weight: 700; cursor: pointer; transition: 0.3s; text-transform: uppercase; font-size: 0.75rem; }
+        .btn { padding: 12px 25px; border-radius: 50px; border: none; font-weight: 700; cursor: pointer; transition: 0.3s; text-transform: uppercase; font-size: 0.75rem; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
         .btn-neon { background: var(--azul-neon); color: var(--azul-deep); }
         .btn-neon:hover { box-shadow: 0 0 20px var(--azul-neon); transform: scale(1.05); }
-        .btn-add { font-size: 1rem; padding: 15px 40px; margin-bottom: 30px; display: block; width: fit-content; }
+        .btn-outline { background: transparent; border: 1px solid var(--azul-neon); color: var(--azul-neon); }
+        .btn-outline:hover { background: var(--azul-neon); color: var(--azul-deep); }
         
+        /* Contenedor de Botones Superiores */
+        .top-nav-actions { display: flex; gap: 15px; flex-wrap: wrap; justify-content: flex-end; }
+
         table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 0.85rem; min-width: 800px; }
         th { text-align: left; color: var(--azul-neon); padding: 15px; border-bottom: 2px solid rgba(255,255,255,0.1); white-space: nowrap; }
         td { padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); vertical-align: middle; }
         
+        /* Imagen en Tabla */
+        .td-img-wrapper { display: flex; align-items: center; gap: 15px; }
+        .table-img { width: 45px; height: 45px; object-fit: contain; background: white; border-radius: 8px; padding: 3px; }
+
         .badge { padding: 5px 10px; border-radius: 5px; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; }
         .bg-success { background: #22c55e; color: white; }
         .bg-danger { background: #ef4444; color: white; }
@@ -44,6 +52,10 @@
             border-radius: 8px; color: white; font-family: 'Montserrat'; box-sizing: border-box;
         }
         .full-width { grid-column: span 2; }
+
+        @media (max-width: 768px) {
+            .top-nav-actions { justify-content: flex-start; margin-top: 15px; }
+        }
     </style>
 </head>
 <body>
@@ -52,15 +64,20 @@
         <img src="https://i.postimg.cc/j5BPB72H/INTOP-BETTER-TOGETHER-transparente-copia.png" height="50">
         <h2 style="margin-top: 20px;">Panel de Administración</h2>
         <input type="password" id="pass" placeholder="Contraseña Maestra" style="width: 100%; max-width: 300px; padding: 12px; border-radius: 10px; border: none; text-align: center;">
-        <button class="btn btn-neon" style="margin-top: 15px; width: 300px;" onclick="checkPass()">Entrar al Panel</button>
+        <button class="btn btn-neon" style="margin-top: 15px; width: 300px;" onclick="iniciarSesion()">Entrar al Panel</button>
     </div>
 
     <div class="container" id="main-ui">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px;">
-            <img src="https://i.postimg.cc/j5BPB72H/INTOP-BETTER-TOGETHER-transparente-copia.png" height="35">
-            <button class="btn btn-neon btn-add" onclick="abrirFormulario()">
-                <i class="fa-solid fa-plus-circle"></i> AGREGAR PRODUCTO
-            </button>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; flex-wrap: wrap;">
+            <img src="https://i.postimg.cc/j5BPB72H/INTOP-BETTER-TOGETHER-transparente-copia.png" height="35" style="margin-bottom: 10px;">
+            
+            <div class="top-nav-actions">
+                <a href="index.html" class="btn btn-outline"><i class="fa-solid fa-house"></i> Ir a Inicio</a>
+                <a href="productos.html" class="btn btn-outline"><i class="fa-solid fa-eye"></i> Ver Catálogo</a>
+                <button class="btn btn-neon" onclick="abrirFormulario()">
+                    <i class="fa-solid fa-plus-circle"></i> Agregar Producto
+                </button>
+            </div>
         </div>
 
         <div class="glass">
@@ -86,29 +103,45 @@
         let allProducts = [];
         let categoriasDisponibles = [];
 
-        function checkPass() {
+        // Lógica de Autenticación con SessionStorage
+        window.onload = function() {
+            if(sessionStorage.getItem("intop_auth") === "true") {
+                mostrarPanel();
+            }
+        };
+
+        function iniciarSesion() {
             if(document.getElementById('pass').value === "intop2026") {
-                document.getElementById('login-box').style.display = 'none';
-                document.getElementById('main-ui').style.display = 'block';
-                cargarProductos();
-            } else { Swal.fire('Error', 'Clave incorrecta', 'error'); }
+                sessionStorage.setItem("intop_auth", "true");
+                mostrarPanel();
+            } else { 
+                Swal.fire('Error', 'Clave incorrecta', 'error'); 
+            }
+        }
+
+        function mostrarPanel() {
+            document.getElementById('login-box').style.display = 'none';
+            document.getElementById('main-ui').style.display = 'block';
+            cargarProductos();
         }
 
         async function cargarProductos() {
-            const res = await fetch(API_URL);
-            const data = await res.json();
-            
-            allProducts = data.map(p => ({
-                ...p,
-                Descripcion: p.Descripcion || p.Descripción || "",
-                Visible: String(p.Visible).toUpperCase() === "TRUE" ? "TRUE" : "FALSE",
-                Stock: p.Stock === "AGOTADO" ? "AGOTADO" : "EN STOCK"
-            }));
+            try {
+                const res = await fetch(API_URL);
+                const data = await res.json();
+                
+                allProducts = data.map(p => ({
+                    ...p,
+                    Descripcion: p.Descripcion || p.Descripción || "",
+                    Visible: String(p.Visible).toUpperCase() === "TRUE" ? "TRUE" : "FALSE",
+                    Stock: p.Stock === "AGOTADO" ? "AGOTADO" : "EN STOCK"
+                }));
 
-            // Extraer categorías únicas de los datos reales
-            categoriasDisponibles = [...new Set(allProducts.map(p => p.Categoria || p.Categoría).filter(c => c))];
-
-            renderTable();
+                categoriasDisponibles = [...new Set(allProducts.map(p => p.Categoria || p.Categoría).filter(c => c))];
+                renderTable();
+            } catch (e) {
+                console.error("Error cargando productos", e);
+            }
         }
 
         function renderTable() {
@@ -116,8 +149,13 @@
             body.innerHTML = allProducts.map(p => `
                 <tr>
                     <td>
-                        <b style="font-size: 1.1rem; color: var(--azul-neon);">${p.Modelo}</b><br>
-                        <small style="opacity:0.7; font-weight: 600;">${p.Producto || p.Nombre}</small>
+                        <div class="td-img-wrapper">
+                            <img src="${p.Imagen_URL || p.Imagen || 'https://via.placeholder.com/150'}" class="table-img" alt="IMG">
+                            <div>
+                                <b style="font-size: 1.1rem; color: var(--azul-neon);">${p.Modelo}</b><br>
+                                <small style="opacity:0.7; font-weight: 600;">${p.Producto || p.Nombre}</small>
+                            </div>
+                        </div>
                     </td>
                     <td style="font-weight: 600;">${p.Serie || '-'}</td>
                     <td>${p.Categoria || p.Categoría}</td>
@@ -156,7 +194,6 @@
             const isEdit = existingData !== null;
             const currentCat = isEdit ? (existingData.Categoria || existingData.Categoría) : '';
 
-            // Generar opciones de categoría dinámicamente
             let catOptions = categoriasDisponibles.map(cat => 
                 `<option value="${cat}" ${cat === currentCat ? 'selected' : ''}>${cat}</option>`
             ).join('');
@@ -187,7 +224,9 @@
                         <div class="swal-form-group"><label>QMAX</label><input id="f-qmax" value="${isEdit ? (existingData.QMAX || '') : ''}"></div>
                         <div class="swal-form-group"><label>Voltaje</label><input id="f-vol" value="${isEdit ? (existingData.Voltaje || '') : ''}"></div>
                         <div class="swal-form-group"><label>AMP</label><input id="f-amp" value="${isEdit ? (existingData.AMP || '') : ''}"></div>
-                        <div class="swal-form-group full-width"><label>URL Imagen (PostImages)</label><input id="f-img" value="${isEdit ? (existingData.Imagen_URL || '') : ''}"></div>
+                        <div class="swal-form-group"><label>Succión / Descarga</label><input id="f-succ" value="${isEdit ? (existingData.Succ_Desc || '') : ''}" placeholder="Ej: 1 x 1"></div>
+                        
+                        <div class="swal-form-group full-width"><label>URL Imagen (PostImages)</label><input id="f-img" value="${isEdit ? (existingData.Imagen_URL || existingData.Imagen || '') : ''}"></div>
                         <div class="swal-form-group full-width"><label>Descripción</label><textarea id="f-desc" rows="3">${isEdit ? existingData.Descripcion : ''}</textarea></div>
                     </div>
                 `,
@@ -198,7 +237,6 @@
                     const prod = document.getElementById('f-prod').value;
                     const mod = document.getElementById('f-mod').value;
                     
-                    // Lógica para capturar categoría (existente o nueva)
                     const selectCat = document.getElementById('f-cat').value;
                     const inputNuevaCat = document.getElementById('f-nueva-cat').value;
                     const finalCat = selectCat === 'nueva_cat' ? inputNuevaCat : selectCat;
@@ -217,6 +255,7 @@
                         QMAX: document.getElementById('f-qmax').value,
                         Voltaje: document.getElementById('f-vol').value,
                         AMP: document.getElementById('f-amp').value,
+                        Succ_Desc: document.getElementById('f-succ').value,
                         Imagen_URL: document.getElementById('f-img').value,
                         Descripcion: document.getElementById('f-desc').value
                     }
@@ -230,7 +269,6 @@
             });
         }
 
-        // Función auxiliar para mostrar el campo de texto si se elige "Nueva Categoría"
         function checkNuevaCategoria() {
             const select = document.getElementById('f-cat');
             const input = document.getElementById('f-nueva-cat');
