@@ -193,6 +193,8 @@
         function abrirFormulario(existingData = null) {
             const isEdit = existingData !== null;
             const currentCat = isEdit ? (existingData.Categoria || existingData.Categoría) : '';
+            // Validamos la marca actual, asumiendo 'Intop' por defecto
+            const currentMarca = isEdit ? (existingData.Marca || 'Intop') : 'Intop';
 
             let catOptions = categoriasDisponibles.map(cat => 
                 `<option value="${cat}" ${cat === currentCat ? 'selected' : ''}>${cat}</option>`
@@ -209,6 +211,14 @@
                     <div class="swal-form-container">
                         <div class="swal-form-group full-width"><label>Nombre del Producto</label><input id="f-prod" value="${isEdit ? (existingData.Producto || existingData.Nombre) : ''}" placeholder="Ej: Bomba Periférica"></div>
                         
+                        <div class="swal-form-group">
+                            <label>Marca</label>
+                            <select id="f-marca">
+                                <option value="Intop" ${String(currentMarca).toLowerCase() === 'intop' ? 'selected' : ''}>Intop</option>
+                                <option value="Luckypro" ${String(currentMarca).toLowerCase() === 'luckypro' ? 'selected' : ''}>Luckypro</option>
+                            </select>
+                        </div>
+
                         <div class="swal-form-group">
                             <label>Categoría</label>
                             <select id="f-cat" onchange="checkNuevaCategoria()">
@@ -248,6 +258,7 @@
                         action: isEdit ? 'edit' : 'add',
                         Producto: prod,
                         Modelo: mod,
+                        Marca: document.getElementById('f-marca').value, // Capturamos la marca
                         Categoria: finalCat,
                         Serie: document.getElementById('f-serie').value,
                         Potencia: document.getElementById('f-pot').value,
