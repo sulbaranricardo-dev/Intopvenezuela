@@ -229,50 +229,68 @@
         }
 
         function verFichaComparativa(serieName) {
-            const models = groupedBySerie[serieName];
-            let rows = models.map(m => `
-                <tr>
-                    <td style="text-align:left; font-weight:700;">${m.Modelo}</td>
-                    <td>${m.Potencia}</td>
-                    <td>${m.HMAX || '-'}</td>
-                    <td>${m.QMAX || '-'}</td>
-                    <td>${m.Voltaje || '-'}</td>
-                </tr>
-            `).join('');
+    const models = groupedBySerie[serieName];
+    
+    // Generamos las filas incluyendo Succ/Desc y AMP
+    let rows = models.map(m => `
+        <tr>
+            <td style="text-align:left; font-weight:700; color:var(--azul-neon);">${m.Modelo}</td>
+            <td>${m.Potencia || '-'}</td>
+            <td>${m.HMAX || '-'}</td>
+            <td>${m.QMAX || '-'}</td>
+            <td>${m.Succ_Desc || '-'}</td>
+            <td>${m.AMP || '-'}</td>
+            <td>${m.Voltaje || '-'}</td>
+        </tr>
+    `).join('');
 
-            Swal.fire({
-                customClass: { popup: 'intop-swal-popup' },
-                width: '850px',
-                confirmButtonText: 'CERRAR',
-                confirmButtonColor: '#00d2ff',
-                html: `
-                    <div class="modal-header-intop">
-                        <h2 style="color:white; font-weight:800; text-transform:uppercase;">SERIE ${serieName}</h2>
-                        <p style="color:var(--azul-neon); font-size:0.75rem; letter-spacing:2px; font-weight:700; padding:10;">${models[0].Producto}</p>
-                    </div>
-                    <div class="modal-img-container" style="background:white; border-radius:20px; padding:20px; margin-bottom:20px;">
-                        <img src="${models[0].Imagen_URL || models[0].Imagen}" style="max-height:180px;">
-                    </div>
-                    <div style="overflow-x:auto;">
-                        <table class="comp-table">
-                            <thead>
-                                <tr>
-                                    <th style="text-align:left;">Modelo Ref.</th>
-                                    <th>Potencia</th>
-                                    <th>Altura (H)</th>
-                                    <th>Caudal (Q)</th>
-                                    <th>Voltaje</th>
-                                </tr>
-                            </thead>
-                            <tbody>${rows}</tbody>
-                        </table>
-                    </div>
-                    <div style="margin-top:20px; text-align:left; padding:15px; background:rgba(255,255,255,0.05); border-radius:15px; border:1px solid rgba(255,255,255,0.1);">
-                        <p style="font-size:0.8rem; color:#cbd5e1; line-height:1.6;">${models[0].Descripcion || 'Información técnica sujeta a variaciones según el modelo seleccionado.'}</p>
-                    </div>
-                `
-            });
-        }
+    Swal.fire({
+        customClass: { popup: 'intop-swal-popup' },
+        width: '950px', // Aumentamos un poco el ancho para las nuevas columnas
+        confirmButtonText: 'ENTENDIDO',
+        confirmButtonColor: '#00d2ff',
+        html: `
+            <div class="modal-header-intop">
+                <h2 style="color:white; font-weight:800; text-transform:uppercase;">SERIE ${serieName}</h2>
+                <p style="color:var(--azul-neon); font-size:0.75rem; letter-spacing:2px; font-weight:700;">${models[0].Producto}</p>
+            </div>
+            
+            <div class="modal-img-container" style="background:white; border-radius:20px; padding:20px; margin-bottom:20px;">
+                <img src="${models[0].Imagen_URL || models[0].Imagen}" style="max-height:180px;">
+            </div>
+
+            <div style="overflow-x:auto; margin-bottom:20px;">
+                <table class="comp-table">
+                    <thead>
+                        <tr>
+                            <th style="text-align:left;">Modelo Ref.</th>
+                            <th>Potencia</th>
+                            <th>Altura (H)</th>
+                            <th>Caudal (Q)</th>
+                            <th>Succión / Desc.</th>
+                            <th>AMP</th>
+                            <th>Voltaje</th>
+                        </tr>
+                    </thead>
+                    <tbody>${rows}</tbody>
+                </table>
+            </div>
+            
+            <div style="text-align:left; padding:15px; background:rgba(255,255,255,0.05); border-radius:15px; border: 1px solid rgba(0, 210, 255, 0.2);">
+                <label style="color:var(--azul-neon); font-size:0.65rem; font-weight:800; text-transform:uppercase; display:block; margin-bottom:8px;">
+                    <i class="fa-solid fa-circle-info"></i> Información del Producto:
+                </label>
+                <p style="font-size:0.85rem; color:#cbd5e1; line-height:1.6; font-weight:400;">
+                    ${models[0].Descripcion || 'Esta serie está diseñada bajo los más altos estándares de calidad INTOP para garantizar eficiencia y durabilidad en aplicaciones industriales.'}
+                </p>
+            </div>
+            
+            <div class="modal-footer-info" style="margin-top:15px;">
+                * Las especificaciones de Succión y Amperaje pueden variar según la instalación.
+            </div>
+        `
+    });
+}
 
         fetchProducts();
     </script>
