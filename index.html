@@ -140,6 +140,20 @@
         .b2b-card h4 { font-size: 1.1rem; color: var(--azul-deep); margin-bottom: 10px; font-weight: 700; }
         .b2b-card p { font-size: 0.9rem; color: var(--text-light); }
 
+        /* --- COBERTURA NACIONAL (NUEVA SECCIÓN) --- */
+        .cobertura { padding: 80px 5%; background-color: var(--gris-bg); }
+        .cobertura-container { display: flex; align-items: center; max-width: 1200px; margin: 0 auto; gap: 50px; }
+        .cobertura-mapa { flex: 1; text-align: center; }
+        .cobertura-mapa img { max-width: 100%; width: 500px; filter: drop-shadow(0 20px 30px rgba(0, 74, 153, 0.15)); }
+        .cobertura-texto { flex: 1; }
+        .cobertura-texto h2 { font-size: 2.2rem; color: var(--azul-deep); margin-bottom: 20px; font-weight: 800; }
+        .cobertura-texto span { color: var(--azul-primario); }
+        .cobertura-texto p { font-size: 1.05rem; color: var(--text-light); margin-bottom: 25px; line-height: 1.6; }
+        .cobertura-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .stat-box { background: white; padding: 20px; border-radius: 15px; border: 1px solid rgba(0,0,0,0.05); text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.02); }
+        .stat-box h4 { font-size: 2rem; color: var(--azul-primario); margin-bottom: 5px; font-weight: 800; }
+        .stat-box p { font-size: 0.85rem; color: var(--text-dark); font-weight: 600; text-transform: uppercase; }
+
         /* --- SOPORTE Y GARANTÍA --- */
         .soporte { padding: 80px 5%; background: var(--azul-deep); color: white; }
         .soporte-container { display: flex; flex-direction: column; max-width: 1200px; gap: 40px; margin: 0 auto; }
@@ -220,6 +234,10 @@
             .row-2 { grid-template-columns: 1fr; }
             .form-container { padding: 30px 15px; }
             .section-title { font-size: 2rem; }
+            
+            /* Ajustes Cobertura Móvil */
+            .cobertura-container { flex-direction: column; text-align: center; }
+            .cobertura-mapa img { width: 100%; max-width: 350px; }
         }
     </style>
 </head>
@@ -335,6 +353,30 @@
         </div>
     </section>
 
+    <section class="cobertura">
+        <div class="cobertura-container">
+            <div class="cobertura-mapa" data-aos="fade-right">
+                <img src="https://firebasestorage.googleapis.com/v0/b/d-clan-athletes.firebasestorage.app/o/Intop%2FMap.png?alt=media&token=03ce3504-068e-4d32-90e6-9a598c5ec6b4" alt="Mapa de Cobertura INTOP Venezuela">
+            </div>
+            <div class="cobertura-texto" data-aos="fade-left">
+                <h2>Cobertura <span>Nacional</span></h2>
+                <p>Desde nuestro Hub Logístico ubicado estratégicamente en <strong>Maturín, Estado Monagas</strong>, garantizamos la distribución eficiente de tecnología hidroneumática hacia todos los rincones del país.</p>
+                <p>Nuestra red logística está diseñada para atender la demanda industrial y ferretera con tiempos de respuesta que mantienen tu negocio siempre abastecido.</p>
+                
+                <div class="cobertura-stats">
+                    <div class="stat-box">
+                        <h4>Stock</h4>
+                        <p>Entrega Inmediata</p>
+                    </div>
+                    <div class="stat-box">
+                        <h4>100%</h4>
+                        <p>Alcance Nacional</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <section class="soporte">
         <div class="soporte-container">
             <div class="soporte-text" data-aos="fade-up">
@@ -355,7 +397,7 @@
         </div>
     </section>
 
-    <section id="unete" class="captacion">
+    <section id="contacto" class="captacion">
         <div class="form-container" data-aos="fade-up">
             <h2>Únete a la Red INTOP</h2>
             <p>Solicita acceso a nuestra lista de precios para distribuidores.</p>
@@ -364,34 +406,34 @@
                 <div class="row-2">
                     <div class="form-group">
                         <label>Nombre de la Empresa</label>
-                        <input type="text" class="form-control" required placeholder="Ej. Bombas C.A.">
+                        <input type="text" id="empresa" class="form-control" required placeholder="Ej. Bombas C.A.">
                     </div>
                     <div class="form-group">
                         <label>RIF</label>
-                        <input type="text" class="form-control" required placeholder="J-12345678-9">
+                        <input type="text" id="rif" class="form-control" required placeholder="J-12345678-9">
                     </div>
                 </div>
                 <div class="row-2">
                     <div class="form-group">
                         <label>Estado / Ciudad</label>
-                        <input type="text" class="form-control" required placeholder="Ej. Maturín">
+                        <input type="text" id="ciudad" class="form-control" required placeholder="Ej. Maturín">
                     </div>
                     <div class="form-group">
                         <label>Teléfono Corporativo</label>
-                        <input type="tel" class="form-control" required placeholder="+58 414 000 0000">
+                        <input type="tel" id="telefono" class="form-control" required placeholder="+58 414 000 0000">
                     </div>
                 </div>
                 <div class="form-group">
                     <label>Correo Electrónico</label>
-                    <input type="email" class="form-control" required placeholder="compras@tuempresa.com">
+                    <input type="email" id="correo" class="form-control" required placeholder="compras@tuempresa.com">
                 </div>
                 <div class="form-group" style="margin-bottom: 25px;">
                     <label>Volumen Estimado (Mensual)</label>
-                    <select class="form-control" required style="appearance: none;">
+                    <select id="volumen" class="form-control" required style="appearance: none;">
                         <option value="" disabled selected>Selecciona un rango...</option>
-                        <option value="1">10 - 50 Unidades</option>
-                        <option value="2">50 - 200 Unidades</option>
-                        <option value="3">Más de 200 Unidades</option>
+                        <option value="10 - 50 Unidades">10 - 50 Unidades</option>
+                        <option value="50 - 200 Unidades">50 - 200 Unidades</option>
+                        <option value="Más de 200 Unidades">Más de 200 Unidades</option>
                     </select>
                 </div>
                 <button type="submit" class="btn btn-neon"><i class="fa-solid fa-paper-plane" style="margin-right: 8px;"></i> Solicitar Acceso</button>
@@ -399,7 +441,7 @@
         </div>
     </section>
 
-    <footer id="contacto">
+    <footer>
         <div class="footer-grid">
             <div>
                 <img src="https://firebasestorage.googleapis.com/v0/b/d-clan-athletes.firebasestorage.app/o/Intop%2FIntopLogo.png?alt=media&token=a6a89a04-48c6-4e95-b9d0-fed975fd8c49" height="35" alt="INTOP" style="margin: 0 auto 15px auto; display: block;">
@@ -412,7 +454,7 @@
             <div>
                 <h4>Atención Comercial</h4>
                 <p>Lun-Vie 08:00 - 17:00</p>
-                <p>distribuidores@intop.com</p>
+                <p>ventasintop@gmail.com</p>
             </div>
             <div>
                 <h4>Sede Principal</h4>
@@ -453,21 +495,63 @@
             }
         }
 
-        // Lógica del Formulario
-        function enviarFormulario(event) {
+        // Lógica del Formulario con Envío Real a Correo
+        async function enviarFormulario(event) {
             event.preventDefault(); 
+            
             Swal.fire({
-                title: '¡Solicitud Recibida!',
-                text: 'Nuestro equipo evaluará tu perfil comercial y te contactará pronto.',
-                icon: 'success',
-                confirmButtonColor: '#004a99',
-                width: '90%'
+                title: 'Enviando solicitud...',
+                text: 'Por favor espera un momento',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
             });
-            document.getElementById('b2bForm').reset();
+
+            const datos = {
+                Empresa: document.getElementById('empresa').value,
+                RIF: document.getElementById('rif').value,
+                Ciudad: document.getElementById('ciudad').value,
+                Telefono: document.getElementById('telefono').value,
+                Correo: document.getElementById('correo').value,
+                Volumen_Estimado: document.getElementById('volumen').value,
+                _subject: "Nuevo Distribuidor B2B - INTOP" 
+            };
+
+            try {
+                const response = await fetch("https://formsubmit.co/ajax/ventasintop@gmail.com", {
+                    method: "POST",
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(datos)
+                });
+
+                if (response.ok) {
+                    Swal.fire({
+                        title: '¡Solicitud Recibida!',
+                        text: 'Nuestro equipo evaluará tu perfil comercial y te contactará pronto.',
+                        icon: 'success',
+                        confirmButtonColor: '#004a99',
+                        width: '90%'
+                    });
+                    document.getElementById('b2bForm').reset();
+                } else {
+                    throw new Error("Error en el servidor");
+                }
+            } catch (error) {
+                Swal.fire({
+                    title: 'Error de conexión',
+                    text: 'No pudimos enviar tu solicitud en este momento. Por favor, intenta de nuevo más tarde.',
+                    icon: 'error',
+                    confirmButtonColor: '#ef4444'
+                });
+            }
         }
 
         // ---------------------------------------------------------
-        // NUEVA LÓGICA: CARGAR 3 PRODUCTOS ALEATORIOS DESDE GOOGLE SHEETS
+        // CARGAR 3 PRODUCTOS ALEATORIOS DESDE GOOGLE SHEETS
         // ---------------------------------------------------------
         const API_URL = "https://script.google.com/macros/s/AKfycbywQxhAKkPPGE6CCXzcECj7qP1ikcbyzJ7loHa_IikFKVaA-BpILMHlczyXuiq51ndy4A/exec";
         
@@ -476,13 +560,8 @@
                 const response = await fetch(API_URL);
                 const data = await response.json();
                 
-                // Filtramos solo los productos visibles
                 const visibles = data.filter(p => String(p.Visible).toUpperCase() === "TRUE");
-                
-                // Barajamos el array (Shuffle)
                 const shuffled = visibles.sort(() => 0.5 - Math.random());
-                
-                // Tomamos solo los 3 primeros
                 const selectedProducts = shuffled.slice(0, 3);
                 
                 renderRandomProducts(selectedProducts);
@@ -494,7 +573,7 @@
 
         function renderRandomProducts(products) {
             const grid = document.getElementById('random-products-grid');
-            grid.innerHTML = ""; // Limpiamos el spinner de carga
+            grid.innerHTML = ""; 
 
             products.forEach((p, index) => {
                 const card = document.createElement('div');
@@ -506,10 +585,8 @@
                 card.setAttribute('data-aos', 'fade-up');
                 card.setAttribute('data-aos-delay', (index * 100).toString());
 
-                // Extraer la primera potencia si hay varias
                 const primeraPotencia = p.Potencia ? p.Potencia.split(',')[0].trim() : 'N/A';
 
-                // Generar HTML de especificaciones de forma segura
                 let specsHTML = "";
                 if(p.Potencia) specsHTML += `<tr><td><i class="fa-solid fa-gauge-high"></i>Potencia</td><td>${primeraPotencia}</td></tr>`;
                 if(p.QMAX) specsHTML += `<tr><td><i class="fa-solid fa-water"></i>Caudal Máx.</td><td>${p.QMAX}</td></tr>`;
@@ -531,10 +608,8 @@
                 grid.appendChild(card);
             });
 
-            // Refrescar AOS para que los nuevos elementos se animen
             AOS.refresh();
 
-            // Re-inicializar Vanilla Tilt en los nuevos elementos (Solo en PC)
             if (window.innerWidth > 992) {
                 VanillaTilt.init(document.querySelectorAll(".product-card"), {
                     max: 10,
@@ -545,7 +620,6 @@
             }
         }
 
-        // Iniciar la carga de productos tan pronto como la página esté lista
         document.addEventListener('DOMContentLoaded', loadRandomProducts);
 
     </script>
