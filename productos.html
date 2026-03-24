@@ -56,7 +56,7 @@
         /* --- FILTROS --- */
         .filter-section { padding: 40px 5% 30px; background: white; text-align: center; }
         
-        /* Nuevos Filtros de Marca */
+        /* Filtros de Marca */
         .brand-filters { display: flex; justify-content: center; gap: 20px; margin: 20px 0; flex-wrap: wrap; }
         .brand-btn { 
             background: white; border: 2px solid #e2e8f0; border-radius: 15px; padding: 10px 25px; 
@@ -87,11 +87,9 @@
         .btn-nav-model:hover { background: var(--azul-neon); color: var(--azul-deep); }
 
         .p-category-tag { font-size: 0.6rem; font-weight: 700; color: var(--azul-primario); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 5px; }
-        .stock-badge { position: absolute; top: 20px; right: 20px; background: var(--rojo-alert); color: white; padding: 5px 12px; border-radius: 50px; font-size: 0.6rem; font-weight: 800; z-index: 5; text-transform: uppercase; }
 
         .p-img { height: 200px; display: flex; align-items: center; justify-content: center; margin-bottom: 15px; transition: 0.3s; }
         .p-img img { max-width: 85%; max-height: 85%; object-fit: contain; }
-        .p-img.out-stock { opacity: 0.4; filter: grayscale(1); }
 
         .p-info h3 { font-size: 1.1rem; color: var(--azul-deep); margin-bottom: 2px; font-weight: 800; }
         .serie-label { font-size: 0.85rem; color: var(--azul-primario); font-weight: 700; margin-bottom: 15px; display: block; }
@@ -149,10 +147,10 @@
     <script>
         const API_URL = "https://script.google.com/macros/s/AKfycbywQxhAKkPPGE6CCXzcECj7qP1ikcbyzJ7loHa_IikFKVaA-BpILMHlczyXuiq51ndy4A/exec";
         
-        let allVisibleProducts = []; // Guarda todos los productos crudos
-        let currentBrand = 'Todas';  // Marca seleccionada actualmente
-        let currentCat = 'Todos';    // Categoría seleccionada actualmente
-        let groupedBySerie = {};     // Productos agrupados (se recalcula)
+        let allVisibleProducts = []; 
+        let currentBrand = 'Todas';  
+        let currentCat = 'Todos';    
+        let groupedBySerie = {};     
 
         async function fetchProducts() {
             try {
@@ -172,13 +170,12 @@
             }
         }
 
-        // NUEVA FUNCIÓN: Aplica ambos filtros (Marca y Categoría)
+        // Aplica ambos filtros (Marca y Categoría)
         function applyFilters() {
             // 1. Filtrar por Marca
             let filteredArray = allVisibleProducts;
             if (currentBrand !== 'Todas') {
                 filteredArray = filteredArray.filter(p => {
-                    // Verificamos si la columna existe y coincide (ignorando mayúsculas/minúsculas)
                     const brand = String(p.Marca || "").toLowerCase();
                     return brand === currentBrand.toLowerCase();
                 });
@@ -211,12 +208,6 @@
             currentBrand = brandName;
             currentCat = 'Todos'; // Resetear categoría al cambiar de marca
             
-            // Visualmente resetear el botón de categoría a "Todos"
-            const catContainer = document.getElementById('category-filters');
-            if (catContainer.firstElementChild) {
-                 // Dejar el estado visual para después de renderFilters
-            }
-            
             applyFilters();
         }
 
@@ -225,7 +216,7 @@
             document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
             if(btnElement) btnElement.classList.add('active');
             else {
-                // Si se llama sin botón (reseteo interno), buscamos el botón "Todos"
+                // Si se llama sin botón, buscamos el botón "Todos"
                 const allBtn = document.querySelector('.filter-btn');
                 if(allBtn) allBtn.classList.add('active');
             }
@@ -274,13 +265,11 @@
         function renderCardContent(card, models, index) {
             const p = models[index];
             const hasMultiple = models.length > 1;
-            const isOut = p.Stock === "AGOTADO";
 
             // Procesar potencias en badges
             const potenciasHTML = p.Potencia ? p.Potencia.split(',').map(pot => `<span class="potencia-badge">${pot.trim()}</span>`).join('') : 'N/A';
 
             card.innerHTML = `
-                ${isOut ? '<div class="stock-badge">Agotado</div>' : ''}
                 <span class="p-category-tag">${p.Categoria || p.Categoría}</span>
                 
                 ${hasMultiple ? `
@@ -291,7 +280,7 @@
                 </div>
                 ` : '<div style="height:40px"></div>'}
 
-                <div class="p-img ${isOut ? 'out-stock' : ''}">
+                <div class="p-img">
                     <img src="${p.Imagen_URL || p.Imagen}" alt="${p.Producto}">
                 </div>
 
@@ -307,7 +296,7 @@
                     </table>
 
                     <button class="btn-ficha" onclick='verFichaComparativa("${p.Serie}")'>
-                        <i class="fa-solid fa-table-list" style="margin-right:8px;"></i> VER FICHA TECNICA
+                        <i class="fa-solid fa-table-list" style="margin-right:8px;"></i> VER FICHA TÉCNICA
                     </button>
                 </div>
             `;
