@@ -89,7 +89,6 @@
                         <th>Serie</th>
                         <th>Categoría</th>
                         <th>Estado</th>
-                        <th>Disponibilidad</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
@@ -133,8 +132,7 @@
                 allProducts = data.map(p => ({
                     ...p,
                     Descripcion: p.Descripcion || p.Descripción || "",
-                    Visible: String(p.Visible).toUpperCase() === "TRUE" ? "TRUE" : "FALSE",
-                    Stock: p.Stock === "AGOTADO" ? "AGOTADO" : "EN STOCK"
+                    Visible: String(p.Visible).toUpperCase() === "TRUE" ? "TRUE" : "FALSE"
                 }));
 
                 categoriasDisponibles = [...new Set(allProducts.map(p => p.Categoria || p.Categoría).filter(c => c))];
@@ -160,11 +158,9 @@
                     <td style="font-weight: 600;">${p.Serie || '-'}</td>
                     <td>${p.Categoria || p.Categoría}</td>
                     <td><span class="badge ${p.Visible === 'TRUE' ? 'bg-success' : 'bg-danger'}">${p.Visible === 'TRUE' ? 'Público' : 'Oculto'}</span></td>
-                    <td><span class="badge ${p.Stock === 'EN STOCK' ? 'bg-success' : 'bg-warning'}">${p.Stock}</span></td>
                     <td class="action-btns">
                         <button onclick="editarProducto('${p.Modelo}')" title="Editar"><i class="fa-solid fa-pen-to-square"></i></button>
                         <button onclick="toggleAction('${p.Modelo}', 'toggle_visible', '${p.Visible === 'TRUE' ? 'FALSE' : 'TRUE'}')" title="Ocultar/Mostrar"><i class="fa-solid ${p.Visible === 'TRUE' ? 'fa-eye' : 'fa-eye-slash'}"></i></button>
-                        <button onclick="toggleAction('${p.Modelo}', 'toggle_stock', '${p.Stock === 'EN STOCK' ? 'AGOTADO' : 'EN STOCK'}')" title="Marcar Agotado"><i class="fa-solid fa-boxes-stacked"></i></button>
                         <button onclick="borrarProducto('${p.Modelo}')" title="Borrar"><i class="fa-solid fa-trash" style="color:#ef4444"></i></button>
                     </td>
                 </tr>
@@ -193,7 +189,6 @@
         function abrirFormulario(existingData = null) {
             const isEdit = existingData !== null;
             const currentCat = isEdit ? (existingData.Categoria || existingData.Categoría) : '';
-            // Validamos la marca actual, asumiendo 'Intop' por defecto
             const currentMarca = isEdit ? (existingData.Marca || 'Intop') : 'Intop';
 
             let catOptions = categoriasDisponibles.map(cat => 
@@ -236,7 +231,7 @@
                         <div class="swal-form-group"><label>AMP</label><input id="f-amp" value="${isEdit ? (existingData.AMP || '') : ''}"></div>
                         <div class="swal-form-group"><label>Succión / Descarga</label><input id="f-succ" value="${isEdit ? (existingData.Succ_Desc || '') : ''}" placeholder="Ej: 1 x 1"></div>
                         
-                        <div class="swal-form-group full-width"><label>URL Imagen (PostImages)</label><input id="f-img" value="${isEdit ? (existingData.Imagen_URL || existingData.Imagen || '') : ''}"></div>
+                        <div class="swal-form-group full-width"><label>URL Imagen (Firebase/PostImages)</label><input id="f-img" value="${isEdit ? (existingData.Imagen_URL || existingData.Imagen || '') : ''}"></div>
                         <div class="swal-form-group full-width"><label>Descripción</label><textarea id="f-desc" rows="3">${isEdit ? existingData.Descripcion : ''}</textarea></div>
                     </div>
                 `,
@@ -258,7 +253,7 @@
                         action: isEdit ? 'edit' : 'add',
                         Producto: prod,
                         Modelo: mod,
-                        Marca: document.getElementById('f-marca').value, // Capturamos la marca
+                        Marca: document.getElementById('f-marca').value,
                         Categoria: finalCat,
                         Serie: document.getElementById('f-serie').value,
                         Potencia: document.getElementById('f-pot').value,
